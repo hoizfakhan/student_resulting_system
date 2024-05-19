@@ -1,0 +1,43 @@
+.content{
+   display:flex;
+
+  }
+
+  body{
+
+   margin-top: 0;
+
+  }
+
+
+  aside{
+    flex:3;
+
+
+  }
+
+  main{
+    flex:9;
+  }
+
+   #parentM li a:hover{
+    background-color: blue;
+  }
+
+  a{
+   text-decoration: none;
+  }
+
+  #link{
+   font-size: 15px;
+
+  }
+
+   nav{
+    width: 1481px;
+    margin-left: 222px;
+    position: absolute;
+    margin-top: 0;
+   }
+
+
