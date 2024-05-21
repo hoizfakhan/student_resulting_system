@@ -7,7 +7,7 @@ import Pagination from '@/Components/Pagination';
 
 
 
-export default function({auth,success,facultys}){
+export default function Index({auth,success,facultys}){
 
    const deletefaculty = (faculty) =>{
 
@@ -40,8 +40,7 @@ export default function({auth,success,facultys}){
               <div className='bg-emerald-500 py-2 px-4 text-white rounded mb-4'>
                {success}
               </div>
-
-            )}
+        )}
         <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className='row'>
             <div className='col-md-6'>

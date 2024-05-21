@@ -389,8 +389,8 @@ export default function Authenticated({ user, header, children }) {
      <i className='bi bi-house'></i>
      <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-         Department
+      <NavLink href={route('manager.index')} active={route('').current('manager.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+         Faculty Manager
      </NavLink>
 
       </span>
@@ -398,18 +398,9 @@ export default function Authenticated({ user, header, children }) {
 </a>
 </li>
 
-<li class="nav-item  my-1 py-2 py-sm-0">
-  <a class="nav-link text-white text-center text-sm-start" aria-current="page"
-    >
-     <i className='bi bi-people'></i>
-     <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-       CE Department
-     </NavLink>
- </span>
-</a>
-</li>
+
+
 </ul> ):null
     }
 

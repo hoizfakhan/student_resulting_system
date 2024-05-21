@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\ManagerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,7 +33,9 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('faculty',FacultyController::class);
+    Route::resource('manager',ManagerController::class);
 
+   // Super Admin routes
 });
 
 
