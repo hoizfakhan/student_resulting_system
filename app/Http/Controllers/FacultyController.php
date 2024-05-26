@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\StoreFacultyRequest;
+use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\FacultyResource;
+use App\Models\Department;
 use App\Models\Faculty;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,6 +23,7 @@ class FacultyController extends Controller
         return Inertia('SuperAdmin/faculty/Index',[
             'usertype' => $usertype,
             'success' => session('success'),
+            'error' => session('error'),
             'facultys' => FacultyResource::collection($facultys),
 
         ]);
@@ -61,9 +64,22 @@ class FacultyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Faculty $faculty)
     {
-        //
+        $fname=$faculty->faculty_name;
+
+        $departments  = $faculty->departments();
+        $departments  = $departments->paginate(4);
+
+         $usertype=Auth()->user()->usertype;
+
+        return inertia("SuperAdmin/faculty/Departmentshow",[
+            'usertype' => $usertype,
+            'success' => session('success'),
+            'departments'=>DepartmentResource::collection($departments),
+            'fname' => $fname,
+
+        ]);
     }
 
     /**
@@ -91,10 +107,25 @@ class FacultyController extends Controller
      */
     public function destroy(Faculty $faculty)
     {
-         $name=$faculty->faculty_name;
-        $faculty->delete();
-        return to_route('faculty.index')->with('success',"Faculty \"$name\" deleted successfully!");
 
+
+       try{
+          $name=$faculty->faculty_name;
+          $faculty->delete();
+          return to_route('faculty.index')->with('success',"Faculty \"$name\" deleted successfully!");
+       }  catch(QueryException $e){
+
+           $errorCode = $e->errorInfo[1];
+           if($errorCode == 1451){ // this code is used when a column has child rows
+
+               return to_route("faculty.index")
+                            ->with('error','cannot delete the faculty, it has associated departments!');
+           }
+           else{
+              return to_route("faculty.index")->with('error','An error occured while deleteting faculty');
+           }
+
+       }
 
     }
 }

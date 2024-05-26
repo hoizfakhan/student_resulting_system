@@ -4,10 +4,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\DepartmentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
+use App\Models\Department;
 use Psy\CodeCleaner\ReturnTypePass;
 
 //Route::middleware(['auth','verified'])->group(function(){
@@ -34,6 +36,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 Route::middleware(['auth'])->group(function(){
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
+    Route::resource('department',DepartmentController::class);
 
    // Super Admin routes
 });
