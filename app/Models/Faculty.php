@@ -12,4 +12,9 @@ class Faculty extends Model
 
     protected $fillable = ['faculty_name','faculty_boss'];
 
+    public function departments(){
+
+        return $this->hasMany(Department::class);
+    }
+
 }

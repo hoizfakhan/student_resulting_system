@@ -19,10 +19,21 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
+
         'name',
         'email',
         'password',
+        'usertype',
+        'email_verified_at',
+        'faculty_id',
+
     ];
+
+
+    public function faculty(){
+
+        return $this->belongsTo(Faculty::class,'faculty_id','id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

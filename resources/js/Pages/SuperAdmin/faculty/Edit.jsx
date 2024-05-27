@@ -7,33 +7,36 @@ import { Head, Link, useForm } from '@inertiajs/react';
 export default function Edit({auth,faculty}){
 
    const {data,setData,post,errors,reset} =  useForm({
+    
+            name:faculty.name,
+            boss:faculty.boss,
 
-           name:faculty.name || "",
-           boss:faculty.boss || "",
 
         });
 
+    console.log(data.name);
+    console.log(faculty);
      const onSubmit = (e) =>{
 
       e.preventDefault();
+      post(route("faculty.update"));
 
-      post(route("faculty.store"));
      }
 
  return (
    <AuthenticatedLayout
    user={auth.user}
-   header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit Faculty "{faculty.name}"</h2>}
+   header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit faculty</h2>}
    >
-     <Head title=" Edit Faculty" />
+  <Head title=" Edit Faculty" />
 
- <div className="py-12">
-  <pre>
+   <div className="py-12">
+   <pre>
     {JSON.stringify(faculty)}
-  </pre>
-   <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
+   </pre>
+    <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
      <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-     <div className='mt-4 ms-5'><p className='lead text-gray-600'>Edit Faculty </p></div>
+     <div className='mt-4 ms-5'><p className='lead text-gray-600'>Edit Faculty {faculty.name} </p></div>
 
                         <form
                           onSubmit={onSubmit}
@@ -48,7 +51,7 @@ export default function Edit({auth,faculty}){
                                name="name"
                                value={data.name}
                                isFocused={true}
-                              onChange={(e) => setData("name",e.target.value)}
+                              onChange={(e) => setData('name',e.target.value)}
                               />
                               <InputError message={errors.name} className='mt-2'/>
                           </div>
@@ -60,7 +63,7 @@ export default function Edit({auth,faculty}){
                              type="text"
                              name="boss"
                              value={data.boss}
-                             onChange={(e) => setData("boss",e.target.value)}
+                             onChange={(e) => setData('boss',e.target.value)}
 
                            />
                              <InputError message={errors.boss} className='mt-2'/>
@@ -84,8 +87,6 @@ export default function Edit({auth,faculty}){
      </div>
 
    </AuthenticatedLayout>
-
-
  );
 
 }

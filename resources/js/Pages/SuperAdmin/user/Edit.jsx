@@ -6,16 +6,20 @@ import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Create({ auth,facultys,error}) {
+export default function Edit({ auth,manager,facultys}) {
 
      const {data,setData,post,errors,reset} =  useForm({
 
-              name:'',
-              email:'',
+              name:manager.name || '',
+              email:manager.email || '',
+              faculty: manager.faculty_id || '',
               password:'',
-              password_confirmation:''
+              password_confirmation:'',
+              _method:'PUT',
 
           });
+
+    console.log(manager.name);
 
    const onSubmit = (e) =>{
     e.preventDefault();
@@ -24,23 +28,17 @@ export default function Create({ auth,facultys,error}) {
 
    }
 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Add Faculty Manager</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit Faculty Manager</h2>}
         >
-            <Head title="Add Manager" />
+            <Head title="Edit Manager" />
 
             <div className="py-12">
-              {error && (
-                  <div className='bg-amber-400 py-2 px-5 text-white rounded mb-4 ms-4 me-4  '>
-                  {error}
-                 </div>
-                  )}
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100 ms-3 ">Add New Manager </div>
+                        <div className="p-6 text-gray-900 dark:text-gray-100 ms-3 ">Edit Manager {manager && <div>{manager.name}</div>}</div>
                         <form
                          onSubmit={onSubmit}
                          className='mb-5 mt-2 ms-4  me-4 w-50 p-3 sm:p-8 bg-white dark:bg-gray-800 '
@@ -52,6 +50,7 @@ export default function Create({ auth,facultys,error}) {
                                id="manager_name"
                                type="text"
                                name="name"
+                               value={data.name}
                                isFocused={true}
                                onChange={(e) => setData("name",e.target.value)}
 
@@ -64,6 +63,7 @@ export default function Create({ auth,facultys,error}) {
                            <SelectInput
                              id="manager_faculty_id"
                              name="faculty_id"
+                             value={data.faculty}
                              className="form-control"
                              onChange={(e) => setData("faculty_id",e.target.value)}
 
@@ -88,6 +88,7 @@ export default function Create({ auth,facultys,error}) {
                              id="manager_email"
                              type="email"
                              name="email"
+                             value={data.email}
                              onChange={(e) => setData("email",e.target.value)}
 
                            />
@@ -100,6 +101,7 @@ export default function Create({ auth,facultys,error}) {
                              id="manager_password"
                              type="password"
                              name="password"
+
                              onChange={(e) => setData("password",e.target.value)}
 
                            />
