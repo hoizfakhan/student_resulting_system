@@ -18,6 +18,13 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
+
+     const STUDENT = 0;
+     const ADMIN = 1;
+     const  TEACHER = 2;
+     const SUPERADMIN = 3;
+
+
     protected $fillable = [
 
         'name',
@@ -33,6 +40,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function faculty(){
 
         return $this->belongsTo(Faculty::class,'faculty_id','id');
+    }
+
+   static public function getTotalUser($user_type){
+
+         return self::select('users.id')
+                      ->where('usertype','=',$user_type)
+                      ->count();
+
+
     }
 
     /**

@@ -8,6 +8,8 @@ use App\Models\Department;
 use App\Models\Faculty;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 use Inertia\Inertia;
 
 class FacultyController extends Controller
@@ -17,7 +19,10 @@ class FacultyController extends Controller
      */
     public function index()
     {
-         $facultys= Faculty::paginate(4);
+
+        try{
+
+        $facultys= Faculty::paginate(4);
 
         $usertype=Auth()->user()->usertype;
         return Inertia('SuperAdmin/faculty/Index',[
@@ -27,6 +32,13 @@ class FacultyController extends Controller
             'facultys' => FacultyResource::collection($facultys),
 
         ]);
+
+    } catch(QueryException $e){
+
+      Log::error($e->getMessage());
+
+     return Inertia('SuperAdmin/faculty/Index')->with('error','An error occured while fetching faculty data!');
+    }
     }
 
     /**
@@ -36,7 +48,7 @@ class FacultyController extends Controller
     {
         $usertype=Auth()->user()->usertype;
         return Inertia('SuperAdmin/faculty/Create',[
-            'usertype' => $usertype,
+         'usertype' => $usertype,
         ]);
     }
 
@@ -45,6 +57,7 @@ class FacultyController extends Controller
      */
     public function store(StoreFacultyRequest $request)
     {
+       try {
        $request->validate([
               'name' => 'required|unique:faculties,faculty_name',
               'boss' => 'required',
@@ -58,6 +71,13 @@ class FacultyController extends Controller
         $faculty->save();
 
         return to_route('faculty.index')->with('success','New Faculty Successfully added!');
+    } catch(QueryException $e){
+         Log::error($e->getMessage());
+
+        return redirect()->back()
+                        ->with('error','An error occured while creating new faculty!');
+
+      }
 
     }
 

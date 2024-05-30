@@ -4,7 +4,7 @@ import Pagination from '@/Components/Pagination';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
 
-export default function Dashboard({ auth,success,managers }) {
+export default function Dashboard({ auth,success,error,managers }) {
 
     const deletemanager = (manager) =>{
 
@@ -31,7 +31,11 @@ export default function Dashboard({ auth,success,managers }) {
                        </div>
                         )}
 
-              
+               {error && (
+                  <div className='bg-amber-400 py-2 px-5 text-white rounded mb-4 ms-4 me-4  '>
+                  {error}
+                 </div>
+                  )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 
                     <div className='row'>
@@ -69,7 +73,13 @@ export default function Dashboard({ auth,success,managers }) {
                           <tr className='bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200' key={manager.id}>
                            <td className='px-3 py-2'>{manager.name}</td>
                            <td className='px-3 py-2'>{manager.email}</td>
-                           <td className='px-3 py-2'>{manager.faculty.name}</td>
+                           <td className='px-3 py-2'>
+
+                            {manager && manager.faculty
+                             ? `${manager.faculty.name}`
+                                :'No Faculty' }
+                                
+                           </td>
                            <td className='px-3 py-2 text-nowrap'>
                             <Link
                               href={route("manager.edit",manager.id)}

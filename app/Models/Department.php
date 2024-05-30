@@ -16,4 +16,10 @@ class Department extends Model
         return $this->belongsTo(Faculty::class);
     }
 
+    static public function gettotaldepartment(){
+
+        return self::select('departments')
+                    ->count();
+    }
+
 }

@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ManagerController extends Controller
@@ -20,7 +21,7 @@ class ManagerController extends Controller
      */
     public function index()
     {
-
+       try {
         $managers = User::where('usertype','=',1)->paginate(4);
 
         $usertype=Auth()->user()->usertype;
@@ -28,7 +29,15 @@ class ManagerController extends Controller
             'usertype' => $usertype,
             'managers' => ManagerResource::collection($managers),
             'success' => session('success'),
+            'error' => session('error'),
         ]);
+
+    } catch(QueryException $e){
+        Log::error($e->getMessage());
+
+        return Inertia("SuperAdmin/user/Index")
+                        ->with('error','An error occured while fetching the managers data!');
+    }
     }
 
     /**
@@ -55,7 +64,7 @@ class ManagerController extends Controller
 
            $data = $request->validated();
            $data['password'] = bcrypt($data['password']);
-           $data['usertype'] = 1;
+           $data['usertype'] = User::ADMIN;
            $data['email_verified_at'] = time();
 
           User::create($data);
@@ -119,8 +128,17 @@ class ManagerController extends Controller
      */
     public function destroy(User $manager)
     {
-
+       try{
         $manager->delete();
         return to_route('manager.index')->with('success',"Manager deleted successfully!");
+
+       } catch(QueryException $e){
+           Log::error($e->getMessage());
+
+           return to_route('manager.index')->with('error',"Manager did not delete unfortunately!");
+
+       }
     }
+
+
 }

@@ -17,4 +17,11 @@ class Faculty extends Model
         return $this->hasMany(Department::class);
     }
 
+    static public function gettotalfaculty(){
+
+         return self::select('faculties.id')
+                     ->count();
+
+    }
+
 }

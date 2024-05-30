@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Inertia\Inertia;
+
+use function Laravel\Prompts\select;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
 
       if(Auth::check()){
@@ -21,13 +26,18 @@ class DashboardController extends Controller
 
         return Inertia('student/Dashboard',[
             'usertype' => $usertype,
+
         ]);
         }
 
         else if($usertype == 1){
 
+            $user =  $request->user();
+            $departments =  $user->faculty->departments()->get();
+
             return Inertia('admin/Dashboard',[
                 'usertype' => $usertype,
+                'departments' => $departments->toArray(),
             ]);
         }
 
@@ -40,8 +50,16 @@ class DashboardController extends Controller
 
         else if($usertype == 3){
 
-            return inertia('SuperAdmin/Dashboard',[
+              $totalfacultymanager = User::getTotalUser(1);
+              $totalfaculty = Faculty::gettotalfaculty();
+              $totaldepartment = Department::gettotaldepartment();
+
+
+               return inertia('SuperAdmin/Dashboard',[
                 'usertype' => $usertype,
+                'totalfacultymanager' => $totalfacultymanager,
+                'totalfaculty' => $totalfaculty,
+                'totaldepartment' => $totaldepartment,
             ]);
         }
       }

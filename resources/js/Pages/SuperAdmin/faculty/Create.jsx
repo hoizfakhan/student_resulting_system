@@ -5,7 +5,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 
-export default function Create({auth}){
+export default function Create({auth,error}){
 
    const {data,setData,post,errors,reset} =  useForm({
 
@@ -30,7 +30,12 @@ export default function Create({auth}){
    >
      <Head title=" Add Faculty" />
 
- <div className="py-12">
+  <div className="py-12">
+        {error && (
+              <div className='bg-red-500 py-2 px-4 text-white rounded mb-4'>
+               {error}
+               </div>
+          )}
    <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
      <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
      <div className='mt-4 ms-5'><p className='lead text-gray-600'>Add New Faculty </p></div>
@@ -58,7 +63,7 @@ export default function Create({auth}){
                              id="faculty_manager"
                              type="text"
                              name="boss"
-                            
+
                              onChange={(e) => setData("boss",e.target.value)}
 
                            />

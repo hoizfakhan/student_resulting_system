@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,7 +38,9 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 Route::middleware(['auth'])->group(function(){
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
+    Route::resource('student',StudentController::class);
     Route::resource('department',DepartmentController::class);
+    Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
 
    // Super Admin routes
 });
@@ -49,8 +53,8 @@ Route::middleware(['auth'])->group(function(){
  });
 
 Route::middleware(['auth'])->group(function(){
+    Route::resource('teacher',TeacherController::class);
 
-    // all teacher routes
 });
 
 

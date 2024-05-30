@@ -11,6 +11,7 @@ use App\Models\Faculty;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Events\QueryExecuted;
 use Inertia\Inertia;
+use Psy\CodeCleaner\ReturnTypePass;
 
 class DepartmentController extends Controller
 {
@@ -22,6 +23,17 @@ class DepartmentController extends Controller
 
 
      }
+
+     public function getDepartments($facultyid){
+        $usertype=Auth()->user()->usertype;
+        $departments = Department::where('faculty_id',$facultyid)->get();
+        return Inertia("SuperAdmin/teacher/Create",[
+            'departments' => DepartmentResource::collection($departments),
+            'usertype' => $usertype,
+        ]);
+
+
+      }
 
     /**
      * Show the form for creating a new resource.
@@ -102,7 +114,7 @@ class DepartmentController extends Controller
              if($errorCode == 1451){
 
                  return redirect()->back()
-                              ->with('error','cannot delete the department, it has associated records!');
+                              ->with('error','You cannot delete the department, it has associated records!');
              }
              else{
                 return redirect()->back()->with('error','An error occured while deleteting department');

@@ -4,16 +4,20 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
+import 'bootstrap/js/dist/dropdown';
 import './Layout.css';
 
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ user, header, children}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const {usertype} = usePage().props;
+    const {departments}  = usePage().props;
+
+
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900" dir=''>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-gray-200 dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700 ">
                 <div className="max-w-8xl  mx-auto px-4 sm:px-6 lg:px-8 ">
                     <div className="flex justify-between h-20  ">
@@ -133,78 +137,39 @@ export default function Authenticated({ user, header, children }) {
                      </span>
                 </a>
                 <hr className='text-white d-none d-sm-block'></hr>
-              {usertype == 1 ? (
-                 <ul
-                  class="nav nav-pills flex-column  mt-2 mt-sm-0"
-                  id='parentM'
-                 >
 
-            <li class="nav-item text-white my-1 py-2 py-sm-0">
+        {usertype == 1 ? (
+            <ul
+               class="nav nav-pills flex-column  mt-2 mt-sm-0   "
+
+            >
+
+            <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
             <a class="nav-link text-white text-center text-sm-start" aria-current="page"
               >
                <i className='bi bi-speedometer2'></i>
-              <NavLink href={route('dashboard')} active={route('').current('dashboard')}  className='fs-6 text-white   ms-3 d-none d-sm-inline'>
-                 Dashboard
-              </NavLink>
-          </a>
-          </li>
-
-          <li class="nav-item  my-1 py-2 py-sm-0">
-            <a href="#submenu" class="nav-link text-white text-center text-sm-start" data-bs-toggle="collapse" aria-current="page"
-              >
-               <i className='bi bi-grid'></i>
-               <NavLink href={route('teacher')} active={route('').current('teacher')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
-                 IS Department
-                </NavLink>
-               <i className='bi bi-arrow-down-short ms-0 ms-sm-0'></i>
-
-            </a>
-            <ul
-              class="nav collapse ms-2 flex-column"
-              id='submenu'
-              data-bs-parent = "#parentM"
-            >
-              <li class="nav-item">
-                <a class="nav-link text-white  " href="#" aria-current="page">
-                  <span className='d-none d-sm-inline'>Teacher</span></a>
-
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link text-white" href="#"><span className='d-none d-sm-inline'>Item 2</span></a>
-              </li>
-
-            </ul>
-
-              </li>
-
-
-          <li class="nav-item  my-1 py-2 py-sm-0">
-            <a class="nav-link text-white text-center text-sm-start" aria-current="page"
-              >
-               <i className='bi bi-house'></i>
                <span className='ms-2 d-none d-sm-inline'>
 
-                <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-                   NE Department
+                <NavLink href={route('dashboard')} active={route('').current('dashboard')}   className='fs-6 text-white  d-none d-sm-inline'>
+                   Dashboard
                </NavLink>
 
                 </span>
-
           </a>
           </li>
 
-          <li class="nav-item  my-1 py-2 py-sm-0">
-            <a class="nav-link text-white text-center text-sm-start" aria-current="page"
-              >
-               <i className='bi bi-people'></i>
-               <span className='ms-2 d-none d-sm-inline'>
 
-                <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-                 CE Department
-               </NavLink>
-           </span>
-          </a>
+       <li class="nav-item text-white my-1 py-2 py-sm-0">
+          <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+        >
+           <i className='bi bi-speedometer2'></i>
+             <NavLink href={route('student.index')} active={route('').current('student.index')}  className='fs-6 text-white   ms-3 d-none d-sm-inline'>
+              Student
+            </NavLink>
+           </a>
           </li>
+
+
           </ul> ): usertype == 0 ? (
            <ul
             class="nav nav-pills flex-column  mt-2 mt-sm-0"
@@ -223,7 +188,7 @@ export default function Authenticated({ user, header, children }) {
 
           <li class="nav-item  my-1 py-2 py-sm-0">
            <a href="#submenu" class="nav-link text-white text-center text-sm-start" data-bs-toggle="collapse" aria-current="page"
-         >
+             >
           <i className='bi bi-grid'></i>
             <NavLink href={route('teacher')} active={route('').current('teacher')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
              MySubjects
@@ -236,12 +201,12 @@ export default function Authenticated({ user, header, children }) {
       id='submenu'
       data-bs-parent = "#parentM"
      >
-    <li class="nav-item">
-      <a class="nav-link text-white  " href="#" aria-current="page">
+      <li class="nav-item">
+      <a class="nav-link text-white " href="#" aria-current="page">
         <span className='d-none d-sm-inline'>Teachers</span></a>
 
-    </li>
-    <li class="nav-item ">
+     </li>
+     <li class="nav-item ">
       <a class="nav-link text-white" href="#"><span className='d-none d-sm-inline'>Item 2</span></a>
     </li>
 
@@ -391,6 +356,37 @@ export default function Authenticated({ user, header, children }) {
 
       <NavLink href={route('manager.index')} active={route('').current('manager.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
          Faculty Manager
+     </NavLink>
+
+      </span>
+
+</a>
+</li>
+
+<li class="nav-item  my-1 py-2 py-sm-0">
+  <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+    >
+     <i className='bi bi-house'></i>
+     <span className='ms-2 d-none d-sm-inline'>
+
+      <NavLink href={route('student.index')} active={route('').current('student.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+        Student
+     </NavLink>
+
+      </span>
+
+</a>
+</li>
+
+
+<li class="nav-item  my-1 py-2 py-sm-0">
+  <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+    >
+     <i className='bi bi-house'></i>
+     <span className='ms-2 d-none d-sm-inline'>
+
+      <NavLink href={route('teacher.index')} active={route('').current('teacher.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+         Teacher
      </NavLink>
 
       </span>
