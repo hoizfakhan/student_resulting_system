@@ -1,10 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
-
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import SelectInput from "@/Components/SelectInput";
 
 export default function Index({auth}){
-     const {departments} = usePage().props;
-     console.log(departments);
+     const {facultys} = usePage().props;
 
  return (
 
@@ -35,12 +36,48 @@ export default function Index({auth}){
             </div>
             </div>
             </div>
+             <div>
 
-            <pre>
-              {JSON.stringify(departments)}
-            </pre>
+                <form
+                  className='mb-5 mt-2 ms-4 me-4 w-50 p-3 sm:p-8 bg-white dark:bg-gray-800 '
+                 >
+                       <div class="row">
+                        <div class='col-md-6 col-12'>
+                          <InputLabel htmlFor="faculty" className="mb-2 fw-bold">Faculty</InputLabel>
+                           <SelectInput
+                             id="faculty"
+                             name="faculty"
+                             className="form-control"
+
+                             >
+
+                             <option value="">Select Faculty</option>
+                             {facultys.data.map((faculty) => (
 
 
+                             <option value={faculty.id} key={faculty.id}>{faculty.name}</option>
+
+                             ))}
+
+                           </SelectInput>
+                           <InputError message="" className='mt-2'/>
+                           <InputError/>
+                          </div>
+                          <div class="col-md-6 col-12">
+                          <InputLabel htmlFor="department" className="mb-2 fw-bold"> Department</InputLabel>
+                           <SelectInput
+                              id="department"
+                              className="form-control"
+
+                           >
+                            <option vlaue="">Select department</option>
+                           </SelectInput>
+                           </div>
+
+                          </div>
+
+                     </form>
+           </div>
       </div>
      </div>
      </div>
