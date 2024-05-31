@@ -31,6 +31,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
  Route::middleware(['auth'])->group(function(){
     Route::get('/resutls',[DashboardController::class,'result']);
+    Route::resource('student',StudentController::class);
     // all admin routes
 
 });
@@ -38,7 +39,6 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 Route::middleware(['auth'])->group(function(){
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
-    Route::resource('student',StudentController::class);
     Route::resource('department',DepartmentController::class);
     Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
 
