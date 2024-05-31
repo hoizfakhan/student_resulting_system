@@ -23,7 +23,10 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $usertype=Auth()->user()->usertype;
+        return Inertia("admin/student/Create",[
+            'usertype' => $usertype,
+        ]);
     }
 
     /**
