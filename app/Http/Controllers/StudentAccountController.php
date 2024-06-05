@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Student;
-class StudentController extends Controller
+
+class StudentAccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,13 +13,9 @@ class StudentController extends Controller
     public function index()
     {
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/student/Index",[
+        return Inertia("admin/accounts/student/Index",[
             'usertype' => $usertype,
         ]);
-
-         // Fetch all students with only the first 7 columns
-         $students = Student::select('id', 'column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7')->get();
-         return Inertia::render('Students/Index', ['students' => $students]);
     }
 
     /**
@@ -28,7 +24,7 @@ class StudentController extends Controller
     public function create()
     {
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/student/Create",[
+        return Inertia("admin/accounts/student/Create",[
             'usertype' => $usertype,
         ]);
     }
@@ -44,12 +40,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)    // <-----this is Imran, I think we don't need string here
+    public function show(string $id)
     {
-        
-        // Fetch student with all 27 columns
-        $student = Student::find($id);
-        return Inertia::render('Students/Show', ['student' => $student]);
+        //
     }
 
     /**
@@ -74,5 +67,18 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         //
+        try{
+            $name=$account->name;
+            $account->delete();
+            return to_route('studentaccount.index')->with('success',"StudentAccount \"$name\" deleted successfully!");
+         }  catch(QueryException $e){
+  
+             $errorCode = $e->errorInfo[1];
+             
+             {
+                return to_route("studentaccount.index")->with('error','An error occured while deleteting account');
+             }
+  
+         }
     }
 }
