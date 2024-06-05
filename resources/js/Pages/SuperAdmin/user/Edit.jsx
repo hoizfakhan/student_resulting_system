@@ -10,21 +10,19 @@ export default function Edit({ auth,manager,facultys}) {
 
      const {data,setData,post,errors,reset} =  useForm({
 
-              name:manager.name || '',
-              email:manager.email || '',
-              faculty: manager.faculty_id || '',
+              name:manager.data.name || '',
+              email:manager.data.email || '',
+              faculty_id: manager.data.faculty_id || '',
               password:'',
               password_confirmation:'',
               _method:'PUT',
 
           });
 
-    console.log(manager.name);
-
    const onSubmit = (e) =>{
     e.preventDefault();
 
-    post(route("manager.store"));
+    post(route("manager.update",manager.data.id));
 
    }
 
@@ -38,7 +36,7 @@ export default function Edit({ auth,manager,facultys}) {
             <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100 ms-3 ">Edit Manager {manager && <div>{manager.name}</div>}</div>
+                        <div className="p-6 text-gray-900 dark:text-gray-100 ms-3 ">Edit Manager "{manager.data.name}" </div>
                         <form
                          onSubmit={onSubmit}
                          className='mb-5 mt-2 ms-4  me-4 w-50 p-3 sm:p-8 bg-white dark:bg-gray-800 '
@@ -63,7 +61,7 @@ export default function Edit({ auth,manager,facultys}) {
                            <SelectInput
                              id="manager_faculty_id"
                              name="faculty_id"
-                             value={data.faculty}
+                             defaultValue={data.faculty_id}
                              className="form-control"
                              onChange={(e) => setData("faculty_id",e.target.value)}
 
@@ -97,11 +95,11 @@ export default function Edit({ auth,manager,facultys}) {
 
                           <div className='mt-3'>
                            <InputLabel htmlFor="manager_password">Password: <span className='text-red-300 text-lg'>*</span></InputLabel>
+                           <span className='mb-1 text-gray-400'>If you want to change your password, create new password here!</span>
                            <TextInput className='form-control mt-1  '
                              id="manager_password"
                              type="password"
                              name="password"
-
                              onChange={(e) => setData("password",e.target.value)}
 
                            />

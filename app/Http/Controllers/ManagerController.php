@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreManagerRequest;
+use App\Http\Requests\UpdateManagerRequest;
 use App\Http\Resources\FacultyResource;
 use App\Http\Resources\ManagerResource;
 use App\Models\Faculty;
@@ -103,7 +104,6 @@ class ManagerController extends Controller
     public function edit(User $manager)
     {
 
-
          $facultys= Faculty::paginate(4);
           $usertype=Auth()->user()->usertype;
           return Inertia("SuperAdmin/user/Edit",[
@@ -118,14 +118,34 @@ class ManagerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateManagerRequest $request, User $manager)
     {
-        //
+
+
+         $data = $request->validated();
+         $password = $data['password'] ?? null;
+
+         try{
+         if($password){
+            $data['password'] = bcrypt($password);
+         } else{
+            unset($data['password']);
+         }
+
+         $manager->update($data);
+         return to_route("manager.index")
+                    ->with('success',"manager \"$manager->name\" acount was updated successfully!");
+         }catch(QueryException $e){
+                Log::error($e->getMessage());
+                return to_route('manager.index')
+                                ->with('error','An error occured while updateing this manager!');
+
+         }
+
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
+     * Remove the specified resource from storage. */
     public function destroy(User $manager)
     {
        try{

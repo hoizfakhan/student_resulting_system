@@ -12,7 +12,6 @@ import PrimaryButton from '@/Components/PrimaryButton';
 export default function Index({auth,success,facultys,error}){
 
    const deletefaculty = (faculty) =>{
-     console.log(faculty);
    if(!window.confirm("Are you sure to delete this faculty?")){
     return;
     }

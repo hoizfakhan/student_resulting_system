@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\StoreFacultyRequest;
+use App\Http\Requests\UpdateFacultyRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\FacultyResource;
 use App\Models\Department;
@@ -117,9 +118,25 @@ class FacultyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateFacultyRequest $request, Faculty $faculty)
     {
-        //
+       $data = $request->validated();
+
+       try{
+
+        $faculty->update($data);
+         return to_route("faculty.index")
+                        ->with('success',"Faculty\" $faculty->faculty_name \" was updated successfully!");
+
+       } catch(QueryException $e){
+
+        Log::error($e->getMessage());
+
+        return to_route("faculty.index")
+                        ->with('error','An error occured while updating this faculty!');
+
+
+       }
     }
 
     /**

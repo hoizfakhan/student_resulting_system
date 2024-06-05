@@ -30,8 +30,8 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
 
  Route::middleware(['auth'])->group(function(){
-    Route::get('/resutls',[DashboardController::class,'result']);
     Route::resource('student',StudentController::class);
+   
     // all admin routes
 
 });

@@ -10,6 +10,7 @@ use App\Http\Resources\FacultyResource;
 use App\Models\Faculty;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Psy\CodeCleaner\ReturnTypePass;
 
@@ -87,7 +88,16 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        dd($department);
+        $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
+        $usertype=Auth()->user()->usertype;
+        return Inertia("SuperAdmin/department/Edit",[
+            'department' => new DepartmentResource($department),
+            'facultys' => FacultyResource::collection($facultys),
+            'success' => session('success'),
+            'usertype' => $usertype,
+        ]);
+
+
     }
 
     /**
@@ -95,7 +105,20 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+
+             $data = $request->validated();
+             try{
+             $department->update($data);
+
+             return to_route('department.edit',$department->id)->with('success',"department \"$department->name\" was updated successfully!");
+             } catch(QueryException $e){
+
+                Log::error($e->getMessage());
+                return to_route('department.edit')
+                                ->with('error','An error occured while updateing this department!');
+             }
+
+
     }
 
     /**
