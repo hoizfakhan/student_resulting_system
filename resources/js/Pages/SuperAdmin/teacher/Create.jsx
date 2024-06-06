@@ -14,6 +14,7 @@ export default function Create({auth}){
     const [selectedFacultyid,setSelectedFacultyid] = useState('');
     const [departments,setDepartments] = useState([]);
 
+    console.log("==>",departments);
     useEffect(() => {
 
       if(selectedFacultyid){
@@ -21,20 +22,17 @@ export default function Create({auth}){
         get(route('department-selector',{facultyid:selectedFacultyid}),{
           onSuccess: (page) => {
           console.log("departmenst:",page.props.departments);
-          setDepartments(page.props.departments);
-
+          setDepartments("is");
+          console.log(departments);
          },
          onError:(errors) => {
-
            console.log('Error:',errors);
          },
-
        });
 
       } else{
         setDepartments([]);
       }
-
     },[selectedFacultyid]);
 
 

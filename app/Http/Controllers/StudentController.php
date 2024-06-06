@@ -19,17 +19,38 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-       $students = Student::paginate(10);
+       $query = Student::query();
 
+        if(request('kankor_id')){
+           $query->where("kankor_id",request("kankor_id"));
+
+        }
+        if(request('name')){
+            $query->where("name","like","%".request("name")."%");
+        }
+
+        if(request('department')){
+           $departmentname = $request->input('department');
+           $departmentid  = Department::where('name',$departmentname)->first()->id;
+           $query->whereHas('department',function($query) use ($departmentid){
+                                      $query->where('id',$departmentid);
+
+                            })->get();
+
+
+        }
+
+        $students =  $query->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Index",[
             'usertype' => $usertype,
             'success' => session('success'),
             'error' => session('error'),
             'students' => StudentResource::collection($students),
+            'queryparams' => request()->query() ?: null,
 
         ]);
     }

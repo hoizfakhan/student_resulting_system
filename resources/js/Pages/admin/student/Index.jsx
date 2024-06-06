@@ -1,9 +1,37 @@
 import DangerButton from "@/Components/DangerButton";
 import Pagination from "@/Components/Pagination";
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
-export default function ({ auth,success,error,students }) {
+export default function ({ auth,success,error,students,queryparams = null }) {
+
+  queryparams = queryparams || {}
+
+  console.log(queryparams.kankor_id);
+
+  const searchfeildchanged = (name,value)  =>{
+
+      if(value){
+       queryparams[name] = value;
+
+      } else{
+        delete queryparams[name]
+      }
+
+      router.get(route('student.index'),queryparams);
+    }
+
+  const onKeyPress = (name,e) => {
+     if(e.key !== "Enter") return;
+
+     searchfeildchanged(name,e.target.value);
+
+
+    }
+
+
+
 
   const deleteStudent = (student) =>{
     console.log(student);
@@ -40,12 +68,64 @@ export default function ({ auth,success,error,students }) {
                </div>
          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+          <div class="container">
           <div className='row'>
-            <div className='col-md-6'>
-              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl">Student List</div>
+           <div class="col-md-12">
+            <div class="row">
+            <div className='col-md-2'>
+              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
+                <h6 className="text-gray-500 mb-1">Kankor ID</h6>
+                  <TextInput
+                   className="form-control"
+                   placeholder="Search..."
+                   defaultValue={queryparams.kankor_id}
+                   onBlur={e => searchfeildchanged('kankor_id',e.target.value)}
+                   onKeyPress={e => onKeyPress('kankor_id',e)}
+
+                 />
+
+              </div>
+            </div>
+            <div className='col-md-2'>
+              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
+                <h6 className="text-gray-500 mb-1">Name</h6>
+                  <TextInput
+                   className="form-control"
+                   placeholder="Search..."
+                   defaultValue={queryparams.name}
+                   onBlur={e => searchfeildchanged('name',e.target.value)}
+                   onKeyPress={e => onKeyPress('name',e)}
+
+                 />
+
+              </div>
+            </div>
+            <div className='col-md-2'>
+              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
+                <h6 className="text-gray-500 mb-1">Department</h6>
+                  <TextInput
+                   className="form-control"
+                   placeholder="Search..."
+                   defaultValue={queryparams.department}
+                   onBlur={e => searchfeildchanged('department',e.target.value)}
+                   onKeyPress={e => onKeyPress('department',e)}
+
+                 />
+
+              </div>
+
             </div>
 
-             <div className='col-md-6 text-end '>
+            <div class="col-md-2 mt-5">
+               <Link
+                 className="btn btn-outline-primary"
+                 href={route("student.index")}
+               >
+                Reset
+               </Link>
+            </div>
+
+             <div className='col-md-4 text-end'>
               <div className='me-3 mt-4'>
               <Link
                  href={route('student.create')}
@@ -56,7 +136,9 @@ export default function ({ auth,success,error,students }) {
             </div>
             </div>
             </div>
-
+            </div>
+            </div>
+            </div>
             <div className='overflow-auto'>
                 <table className='w-full text-md text-left rtl:text-right
                      dark:bg-gray-700 dark:text-gray-300 '>
@@ -88,7 +170,7 @@ export default function ({ auth,success,error,students }) {
 
                            <Link
                               href={route("student.show",student.id)}
-                              className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-2 '
+                              className='font-meduim text-gray-600 dark:text-blue-500 hover:bg-gray-300 mx-2 '
 
                             >
                              Complete Info

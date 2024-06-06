@@ -78,7 +78,7 @@ export default function Dashboard({ auth,success,error,managers }) {
                             {manager && manager.faculty
                              ? `${manager.faculty.name}`
                                 :'No Faculty' }
-                                
+
                            </td>
                            <td className='px-3 py-2 text-nowrap'>
                             <Link
@@ -94,7 +94,7 @@ export default function Dashboard({ auth,success,error,managers }) {
                              className='ms-3'
                             >
 
-                              Delete
+                              Delete Acount
                             </DangerButton>
 
 
