@@ -7,6 +7,8 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentAccountController;
+use App\Http\Controllers\EmployeeAccountController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,9 +31,17 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
 
 
+
+    Route::middleware(['auth'])->group(function(){
+    Route::get('/resutls',[DashboardController::class,'result']);
+    Route::resource('student',StudentController::class);
+    Route::resource('studentaccount', StudentAccountController::class);
+    Route::resource('employeeaccount', EmployeeAccountController::class);
+
  Route::middleware(['auth'])->group(function(){
     Route::resource('student',StudentController::class);
    
+
     // all admin routes
 
 });
