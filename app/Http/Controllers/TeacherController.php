@@ -16,9 +16,11 @@ class TeacherController extends Controller
      */
     public function index()
     {
+        $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
         $usertype=Auth()->user()->usertype;
         return Inertia("SuperAdmin/teacher/Index",[
             'usertype' => $usertype,
+            'facultys' => FacultyResource::collection($facultys),
         ]);
     }
 

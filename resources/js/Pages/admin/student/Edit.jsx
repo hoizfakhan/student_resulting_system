@@ -1,3 +1,4 @@
+
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputLabel from "@/Components/InputLabel";
@@ -7,51 +8,50 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({ auth,departments}) {
+export default function Create({ auth,departments,student}) {
 
    const {data,setData,post,errors,reset} =  useForm({
 
-    name:"",
-    last_name:"",
-    father_name:"",
-    grandfather_name:"",
-    original_province:"",
-    original_district:"",
-    original_village:"",
-    current_province:"",
-    current_district:"",
-    current_village:"",
-    phone_number:"",
-    nic_number:"",
-    birth_date:"",
-    school_name:"",
-    school_graduation_year:"",
-    kankor_id:"",
-    kankor_marks:"",
-    admission_date:"",
-    current_semester:"",
-    number_maktob_sent_exam_commettee:"",
-    number_maktob_tajeel:"",
-    number_maktob_monfak:"",
-    number_maktob_lailia:'',
-    identity_cart_number:"",
-    image:"",
-    department_id:"",
+    name:student.data.name ||  "",
+    last_name:student.data.last_name ||  "",
+    father_name:student.data.father_name ||  "",
+    grandfather_name:student.data.grandfather_name ||  "",
+    original_province:student.data.original_province ||  "",
+    original_district:student.data.original_district ||  "",
+    original_village:student.data.original_village ||  "",
+    current_province:student.data.current_province ||  "",
+    current_district:student.data.current_district ||  "",
+    current_village:student.data.current_village ||  "",
+    phone_number:student.data.phone_number ||  "",
+    nic_number:student.data.nic_number ||  "",
+    birth_date:student.data.birth_date ||  "",
+    school_name:student.data.school_name ||  "",
+    school_graduation_year:student.data.school_graduation_year ||  "",
+    kankor_id:student.data.kankor_id ||  "",
+    kankor_marks:student.data.kankor_marks ||  "",
+    admission_date:student.data.admission_date ||  "",
+    current_semester:student.data.current_semester ||  "",
+    number_maktob_sent_exam_commettee:student.data. number_maktob_sent_exam_commettee ||  "",
+    number_maktob_tajeel:student.data. number_maktob_tajeel || "",
+    number_maktob_monfak:student.data. number_maktob_monfak || "",
+    number_maktob_lailia:student.data.number_maktob_lailia || "",
+    identity_cart_number:student.data.identity_cart_number || " ",
+    department_id:student.data.department_id || "",
+    image:'',
+    _method:'PUT',
 
 
      });
 
+     console.log(data.department_id);
 
+     const onSubmit = (e) =>{
 
+      e.preventDefault();
+      post(route("student.update",student.data.id));
 
-  const onSubmit = (e) => {
+     }
 
-    e.preventDefault();
-
-    console.log(e);
-    post(route("student.store"));
-
-  };
 
 
   return (
@@ -59,21 +59,20 @@ export default function Create({ auth,departments}) {
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-          Add Student
+          Student Edit Form
         </h2>
       }
     >
-      <Head title="Add Student" />
+      <Head title="Edit Student" />
 
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="mt-4 ms-5">
-              <p className="lead text-gray-800"> Student Registration Form</p>
+              <p className="lead text-gray-800"> Edit "{student.data.name} {student.data.last_name}" Information</p>
             </div>
 
             <form
-              action=""
               onSubmit={onSubmit}
               className="container mb-5 mt-2 ms-4 me-4 w-75 p-3 sm:p-8 bg-white dark:bg-gray-800"
             >
@@ -88,6 +87,7 @@ export default function Create({ auth,departments}) {
                       id="name"
                       type="text"
                       name="name"
+                      value={data && data.name}
                       onChange={(e) => setData("name",e.target.value)}
                     />
                     <InputError message={errors.name} className='mt-2'/>
@@ -104,6 +104,7 @@ export default function Create({ auth,departments}) {
                       id="last_name"
                       name="last_name"
                       type="text"
+                      value={data && data.last_name}
                       onChange={(e) => setData("last_name",e.target.value)}
                     />
                     <InputError message={errors.last_name} className='mt-2'/>
@@ -121,6 +122,7 @@ export default function Create({ auth,departments}) {
                      id="father_name"
                      name="father_name"
                      type="text"
+                     value={data && data.father_name}
                       className="form-control mt-1"
                       onChange={(e) => setData("father_name",e.target.value)}
                     />
@@ -138,6 +140,7 @@ export default function Create({ auth,departments}) {
                      id="grandfather_name"
                      name="grandfather_name"
                      type="text"
+                     value={data && data.grandfather_name}
                      className="form-control mt-1"
                       onChange={(e) => setData("grandfather_name",e.target.value)}
                     />
@@ -147,48 +150,7 @@ export default function Create({ auth,departments}) {
                 </div>
               </div>
 
-  {/*         <div className="row form-row">
-                <div className="form-group col-md-6">
-                  <div className="mt-3">
-                    <InputLabel htmlFor="gender">Gender:</InputLabel>
-                    <div className="d-flex">
-                      <div className="form-check col-md-3">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="gender"
-                          id="genderMale"
-                          value="male"
-                          {...register("gender")}
-                          defaultChecked
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="genderMale"
-                        >
-                          Male
-                        </label>
-                      </div>
-                      <div className="form-check col-md-3">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="gender"
-                          id="genderFemale"
-                          value="female"
-                          {...register("gender")}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="genderFemale"
-                        >
-                          Female
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-               */}
+
                <div class="row form-row">
                 <div className="form-group col-md-6">
                   <div className="mt-3">
@@ -200,6 +162,7 @@ export default function Create({ auth,departments}) {
                        id="original_province"
                        name="original_province"
                        type="text"
+                       value={data && data.original_province}
                       className="form-control mt-1"
                       onChange={(e) => setData("original_province",e.target.value)}
                     />
@@ -218,6 +181,7 @@ export default function Create({ auth,departments}) {
                        id="original_district"
                        name="original_district"
                        type="text"
+                       value={data && data.original_district}
                       className="form-control mt-1"
                       onChange={(e) => setData("original_district",e.target.value)}
                     />
@@ -239,6 +203,7 @@ export default function Create({ auth,departments}) {
                        id="original_village"
                        name="original_village"
                        type="text"
+                       value={data && data.original_village}
                       className="form-control mt-1"
                       onChange={(e) => setData("original_village",e.target.value)}
                     />
@@ -251,15 +216,16 @@ export default function Create({ auth,departments}) {
                     <InputLabel>
                       Department:<span className="text-red-300 text-lg">*</span>
                      </InputLabel>
-                      <SelectInput
+                       <SelectInput
                              id="department_id"
                              name="department_id"
                              className="form-control"
+                             value={data && data.department_id}
                              onChange={(e) => setData("department_id",e.target.value)}
                             >
 
                           <option value="">Select department</option>
-                          {departments.map((department) => (
+                           {departments.map((department) => (
                                <option value={department.id} key={department.id}>{department.name}</option>
 
                           ))}
@@ -282,6 +248,7 @@ export default function Create({ auth,departments}) {
                         id="current_province"
                         name="current_province"
                         type="text"
+                        value={data && data.current_province}
                       className="form-control mt-1"
                       onChange={(e) => setData("current_province",e.target.value)}
                     />
@@ -299,6 +266,7 @@ export default function Create({ auth,departments}) {
                        id="current_district"
                        name="current_district"
                        type="text"
+                       value={data && data.current_district}
                       className="form-control mt-1"
                       onChange={(e) => setData("current_district",e.target.value)}
                     />
@@ -319,6 +287,7 @@ export default function Create({ auth,departments}) {
                        id="current_village"
                        name="current_village"
                        type="text"
+                       value={data && data.current_village}
                       className="form-control mt-1"
                       onChange={(e) => setData("current_village",e.target.value)}
                     />
@@ -336,6 +305,7 @@ export default function Create({ auth,departments}) {
                       id="phone_number"
                       type="text"
                       name="phone_number"
+                      value={data && data.phone_number}
                       className="form-control mt-1"
                       onChange={(e) => setData("phone_number",e.target.value)}
 
@@ -359,6 +329,7 @@ export default function Create({ auth,departments}) {
                       type="text"
                       id="nic_number"
                       name="nic_number"
+                      value={data && data.nic_number}
                       className="form-control mt-1"
                       onChange={(e) => setData("nic_number",e.target.value)}
                     />
@@ -375,6 +346,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="date"
                       name="birth_date"
+                      value={data && data.birth_date}
                       className="form-control mt-1"
                       onChange={(e) => setData("birth_date",e.target.value)}
                     />
@@ -395,6 +367,7 @@ export default function Create({ auth,departments}) {
                       id="school_name"
                       type="text"
                       name="school_name"
+                      value={data && data.school_name}
                       className="form-control mt-1"
                       onChange={(e) => setData("school_name",e.target.value)}
                     />
@@ -411,6 +384,7 @@ export default function Create({ auth,departments}) {
                       type="text"
                       id="school_graduation_year"
                       name="school_graduation_year"
+                      value={data && data.school_graduation_year}
                       className="form-control mt-1"
                       onChange={(e) => setData("school_graduation_year",e.target.value)}
                     />
@@ -430,6 +404,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="kankor_id"
+                      value={data && data.kankor_id}
                       className="form-control mt-1"
                       onChange={(e) => setData("kankor_id",e.target.value)}
                     />
@@ -446,6 +421,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="kankor_marks"
+                      value={data && data.kankor_marks}
                       className="form-control mt-1"
                       onChange={(e) => setData("kankor_marks",e.target.value)}
                     />
@@ -465,6 +441,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="date"
                       name="admission_date"
+                      value={data && data.admission_date}
                       className="form-control mt-1"
                       onChange={(e) => setData("admission_date",e.target.value)}
                     />
@@ -483,6 +460,7 @@ export default function Create({ auth,departments}) {
                     <select
                       id="semester"
                       name="current_semester"
+                      value={data && data.current_semester}
                       className="form-control mt-1"
                       onChange={(e) => setData("current_semester",e.target.value)}
                     >
@@ -508,6 +486,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="number_maktob_sent_exam_commettee"
+                      value={data && data.number_maktob_sent_exam_commettee}
                       className="form-control mt-1"
                       onChange={(e) => setData("number_maktob_sent_exam_commettee",e.target.value)}
                     />
@@ -522,6 +501,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="number_maktob_tajeel"
+                      value={data && data.number_maktob_tajeel}
                       className="form-control mt-1"
                       onChange={(e) => setData("number_maktob_tajeel",e.target.value)}
                     />
@@ -539,6 +519,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="number_maktob_monfak"
+                      value={data && data.number_maktob_monfak}
                       className="form-control mt-1"
                       onChange={(e) => setData("number_maktob_monfak",e.target.value)}
                     />
@@ -552,6 +533,7 @@ export default function Create({ auth,departments}) {
                     <input
                       type="number"
                       name="number_maktob_lailia"
+                      value={data && data.number_maktob_lailia}
                       className="form-control mt-1"
                       onChange={(e) => setData("number_maktob_lailia",e.target.value)}
                     />
@@ -571,6 +553,7 @@ export default function Create({ auth,departments}) {
                     <TextInput
                       type="text"
                       name="identity_cart_number"
+                      value={data && data.identity_cart_number}
                       className="form-control mt-1"
                       onChange={(e) => setData("identity_cart_number",e.target.value)}
                     />
@@ -578,10 +561,19 @@ export default function Create({ auth,departments}) {
 
                   </div>
                 </div>
-                <div className="from-group col-md-6">
+                <div className="from-group col-md-6 mt-3">
+                  <div>
+                  <InputLabel>
+                      Image:
+                    </InputLabel>
+                    {student.data.image_path && <div>
+                      <img src={ student.data.image_path} className="w-64 mb-2"></img>
+                      </div>}
+                  </div>
+
                   <div className="mt-3">
                     <InputLabel>
-                      Image:
+                     Choose new image
                     </InputLabel>
                     <TextInput
                       id="student_image"
@@ -605,7 +597,7 @@ export default function Create({ auth,departments}) {
                   Cancel
                </Link>
               <button className="btn btn-success">
-                Submit
+                Update
               </button>
               </div>
             </form>

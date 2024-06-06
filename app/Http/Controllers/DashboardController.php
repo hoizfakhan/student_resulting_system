@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
         else if($usertype == 1){
 
-            $user =  $request->user();
+            $user =  $request->user();  //this code, retrive the currently authenticated user from http request
             $departments =  $user->faculty->departments()->get();
 
             return Inertia('admin/Dashboard',[

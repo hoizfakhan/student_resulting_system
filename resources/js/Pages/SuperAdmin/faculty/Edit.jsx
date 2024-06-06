@@ -7,19 +7,19 @@ import { Head, Link, useForm } from '@inertiajs/react';
 export default function Edit({auth,faculty}){
 
    const {data,setData,post,errors,reset} =  useForm({
-    
-            name:faculty.name,
-            boss:faculty.boss,
+
+            name:faculty.data.name || "",
+            boss:faculty.data.boss || "",
+            _method:'PUT',
 
 
         });
 
-    console.log(data.name);
-    console.log(faculty);
+
      const onSubmit = (e) =>{
 
       e.preventDefault();
-      post(route("faculty.update"));
+      post(route("faculty.update",faculty.data.id));
 
      }
 
@@ -31,9 +31,6 @@ export default function Edit({auth,faculty}){
   <Head title=" Edit Faculty" />
 
    <div className="py-12">
-   <pre>
-    {JSON.stringify(faculty)}
-   </pre>
     <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
      <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
      <div className='mt-4 ms-5'><p className='lead text-gray-600'>Edit Faculty {faculty.name} </p></div>

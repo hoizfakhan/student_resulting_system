@@ -12,17 +12,16 @@ export default function Create({auth}){
     const {facultys} = usePage().props;
     const { get } = useForm();
     const [selectedFacultyid,setSelectedFacultyid] = useState('');
-    const [department,setDepartment] = useState([]);
-
+    const [departments,setDepartments] = useState([]);
 
     useEffect(() => {
 
       if(selectedFacultyid){
-        console.log('usereffec triggerd');
+
         get(route('department-selector',{facultyid:selectedFacultyid}),{
-          onSuccess:(page) => {
-            console.log('responsed data:',page.props);
-            setDepartment(page.props.departments);
+          onSuccess: (page) => {
+          console.log("departmenst:",page.props.departments);
+          setDepartments(page.props.departments);
 
          },
          onError:(errors) => {
@@ -31,11 +30,13 @@ export default function Create({auth}){
          },
 
        });
+
+      } else{
+        setDepartments([]);
       }
 
     },[selectedFacultyid]);
 
-    console.log(department);
 
 
  return (
@@ -79,12 +80,14 @@ export default function Create({auth}){
                           <InputLabel htmlFor="department"> Department: <span className='text-red-300 text-lg'>*</span></InputLabel>
                            <SelectInput
                               id="department"
+                              className="form-control mt-1"
+
                            >
-                           <option vlaue="">Select department</option>
+                            <option vlaue="">Select department</option>
 
-                            {department.length > 0 ? (
+                             {departments.length > 0 ? (
 
-                                  department.data.map((department) => (
+                                  departments.data.map((department) => (
                                   <option value={department.id} key={department.id}>{department.name}</option>
 
                                 ))
@@ -150,7 +153,7 @@ export default function Create({auth}){
                           </div>
                            <div className='mt-4 text-right'>
                              <Link
-                               href=""
+                               href={route("teacher.index")}
                                className='bg-gray-300 py-1 px-3 text-gray-800 rounded  transition-all hover:bg-gray-200 mr-2'
                               >
                                Cancel

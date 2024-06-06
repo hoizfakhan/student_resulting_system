@@ -3,8 +3,6 @@ import DangerButton from '@/Components/DangerButton';
 import Pagination from '@/Components/Pagination';
 import { Head, Link, router } from '@inertiajs/react';
 
-
-
 export default function Departmentshow({auth,success,departments,fname}){
 
   const deletedepartment = (department) => {
@@ -25,9 +23,6 @@ export default function Departmentshow({auth,success,departments,fname}){
 
    >
      <Head title="Faculty Department" />
-    <pre>
-      {JSON.stringify(fname)}
-    </pre>
     <div className="py-12">
      <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
       {success && (
@@ -78,8 +73,8 @@ export default function Departmentshow({auth,success,departments,fname}){
                            <td className='px-3 py-2'>{department.created_at}</td>
                            <td className='px-3 py-2 text-nowrap'>
                             <Link
-                              href=""
-                              className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1  btn btn-outline-primary'
+                              href={route("department.edit",department.id)}
+                              className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-2   btn btn-outline-primary'
                             >
                              Edit
                             </Link>
