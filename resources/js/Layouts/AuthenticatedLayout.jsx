@@ -13,9 +13,7 @@ export default function Authenticated({ user, header, children}) {
 
     const {usertype} = usePage().props;
     const {departments}  = usePage().props;
-
-
-
+    
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-gray-200 dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700 ">
@@ -140,7 +138,7 @@ export default function Authenticated({ user, header, children}) {
 
         {usertype == 1 ? (
             <ul
-               class="nav nav-pills flex-column  mt-2 mt-sm-0   "
+               class="nav nav-pills flex-column  mt-2 mt-sm-0"
 
             >
 

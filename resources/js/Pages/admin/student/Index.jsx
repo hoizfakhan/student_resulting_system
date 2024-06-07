@@ -1,8 +1,10 @@
-import DangerButton from "@/Components/DangerButton";
+
 import Pagination from "@/Components/Pagination";
-import TextInput from "@/Components/TextInput";
+import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router } from "@inertiajs/react";
+import DangerButton from "@/Components/DangerButton";
+import TextInput from "@/Components/TextInput";
+import { Head, Link, router,usePage } from "@inertiajs/react";
 
 export default function ({ auth,success,error,students,queryparams = null }) {
 
@@ -53,7 +55,7 @@ export default function ({ auth,success,error,students,queryparams = null }) {
         </h2>
       }
     >
-      <Head title="Faculty" />
+      <Head title="Student" />
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
         {success && (
@@ -199,8 +201,8 @@ export default function ({ auth,success,error,students,queryparams = null }) {
                 <Pagination links={students.meta.links}></Pagination>
            </div>
           </div>
+          </div>
         </div>
-      </div>
     </AuthenticatedLayout>
   );
 }

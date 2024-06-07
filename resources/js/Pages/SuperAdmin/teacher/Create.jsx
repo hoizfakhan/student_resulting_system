@@ -15,6 +15,8 @@ export default function Create({auth}){
     const [departments,setDepartments] = useState([]);
 
     console.log("==>",departments);
+
+
     useEffect(() => {
 
       if(selectedFacultyid){
@@ -22,7 +24,9 @@ export default function Create({auth}){
         get(route('department-selector',{facultyid:selectedFacultyid}),{
           onSuccess: (page) => {
           console.log("departmenst:",page.props.departments);
+
           setDepartments("is");
+
           console.log(departments);
          },
          onError:(errors) => {
