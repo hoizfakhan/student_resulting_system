@@ -9,6 +9,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,10 +38,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::resource('student',StudentController::class);
     Route::resource('studentaccount', StudentAccountController::class);
     Route::resource('employeeaccount', EmployeeAccountController::class);
-
- Route::middleware(['auth'])->group(function(){
-    Route::resource('student',StudentController::class);
-   
+    Route::resource('subject',SubjectController::class);
 
     // all admin routes
 
