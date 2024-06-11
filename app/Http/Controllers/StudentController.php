@@ -10,8 +10,6 @@ use App\Models\Student;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
-use App\Models\Student;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -37,8 +35,8 @@ class StudentController extends Controller
         ]);
 
          // Fetch all students with only the first 7 columns
-         $students = Student::select('id', 'column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7')->get();
-         return Inertia::render('Students/Index', ['students' => $students]);
+        //  $students = Student::select('id', 'column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7')->get();
+        //  return Inertia::render('Students/Index', ['students' => $students]);
     }
 
     /**
@@ -90,19 +88,13 @@ class StudentController extends Controller
      * Display the specified resource.
      */
 
-    public function show(string $id)    // <-----this is Imran, I think we don't need string here
+    public function show(Student $student )    // <-----this is Imran, I think we don't need string here
     {
-        
-        // Fetch student with all 27 columns
-        $student = Student::find($id);
-        return Inertia::render('Students/Show', ['student' => $student]);
-
-    public function show(Student $student)
-    {
+     
 
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/student/StudentDetails",[
-          'student' => new StudentResource($student),
+        return Inertia("admin/student/StudentDetails",props: [
+          'student' => new StudentResource(resource: $student),
           'usertype' => $usertype,
 
         ]);
