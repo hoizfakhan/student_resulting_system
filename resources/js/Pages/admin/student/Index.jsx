@@ -1,4 +1,3 @@
-
 import Pagination from "@/Components/Pagination";
 import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -31,8 +30,6 @@ export default function ({ auth,success,error,students,queryparams = null }) {
     }
 
 
-
-
   const deleteStudent = (student) =>{
 
     if(!window.confirm("Are you sure to delete this student from system?")){
@@ -56,17 +53,17 @@ export default function ({ auth,success,error,students,queryparams = null }) {
       <Head title="Student" />
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
-        {success && (
-              <div className='bg-emerald-500 py-2 px-4 text-white rounded mb-4'>
-               {success}
-              </div>
-        )}
+          {success && (
+            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
+              {success}
+            </div>
+          )}
 
-         {error && (
-              <div className='bg-red-500 py-2 px-4 text-white rounded mb-4'>
-               {error}
-               </div>
-         )}
+          {error && (
+            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
+              {error}
+            </div>
+          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
           <div class="container">
           <div className='row'>

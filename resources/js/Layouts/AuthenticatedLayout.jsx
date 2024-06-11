@@ -207,6 +207,21 @@ export default function Authenticated({ user, header, children}) {
           )}
 
 
+      <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
+            <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
+              >
+               <i className='bi bi-speedometer2'></i>
+               <span className='ms-2 d-none d-sm-inline'>
+
+                <NavLink href={route('subject.index')} active={route('').current('subject.index')}   className='fs-6 text-white  d-none d-sm-inline'>
+                   subject
+               </NavLink>
+
+                </span>
+          </a>
+          </li>
+
+
           </ul> ): usertype == 0 ? (
            <ul
             class="nav nav-pills flex-column  mt-2 mt-sm-0"

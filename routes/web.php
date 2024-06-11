@@ -9,12 +9,10 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
-use App\Http\Resources\StudentAccountResource;
-use App\Models\Department;
-use Psy\CodeCleaner\ReturnTypePass;
 
 //Route::middleware(['auth','verified'])->group(function(){
   //  Route::get('/dashboard',fn() => Inertia::render('Dashboard'))->name('dashboard');
@@ -36,6 +34,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::resource('studentaccount', StudentAccountController::class);
     Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
+    Route::resource('subject',SubjectController::class);
     // all admin routes
 
 });

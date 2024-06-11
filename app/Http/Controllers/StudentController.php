@@ -55,7 +55,6 @@ class StudentController extends Controller
 
         ]);
 
-
     }
 
     /**
@@ -111,9 +110,10 @@ class StudentController extends Controller
     public function show(Student $student)
     {
 
+
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/student/StudentDetails",[
-          'student' => new StudentResource($student),
+        return Inertia("admin/student/StudentDetails",props: [
+          'student' => new StudentResource(resource: $student),
           'usertype' => $usertype,
 
         ]);
