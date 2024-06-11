@@ -23,10 +23,12 @@ class StudentController extends Controller
     public function index(Request $request)
     {
 
-       $query = Student::query();
+        $user =  $request->user();
+        $query =  $user->faculty->students();
+
 
         if(request('kankor_id')){
-           $query->where("kankor_id",request("kankor_id"));
+           $query->where("students.kankor_id",request("kankor_id"));
 
         }
         if(request('name')){
@@ -40,11 +42,9 @@ class StudentController extends Controller
                                       $query->where('id',$departmentid);
 
                             })->get();
-
-
         }
 
-        $students =  $query->paginate(10);
+        $students = $query->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Index",[
             'usertype' => $usertype,
@@ -55,9 +55,7 @@ class StudentController extends Controller
 
         ]);
 
-         // Fetch all students with only the first 7 columns
-         $students = Student::select('id', 'column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7')->get();
-         return Inertia::render('Students/Index', ['students' => $students]);
+
     }
 
     /**
@@ -177,6 +175,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+
         try{
             $name=$student->name;
             $student->delete();

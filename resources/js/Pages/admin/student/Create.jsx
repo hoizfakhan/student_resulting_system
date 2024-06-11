@@ -427,8 +427,8 @@ export default function Create({ auth,departments}) {
                     <InputLabel>
                       Kankor ID:<span className="text-red-300 text-lg">*</span>
                     </InputLabel>
-                    <input
-                      type="number"
+                    <TextInput
+                      type="text"
                       name="kankor_id"
                       className="form-control mt-1"
                       onChange={(e) => setData("kankor_id",e.target.value)}

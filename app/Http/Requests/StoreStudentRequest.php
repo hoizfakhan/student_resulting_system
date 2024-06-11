@@ -38,7 +38,7 @@ class StoreStudentRequest extends FormRequest
             'birth_date' => ['nullable','date'],
             'school_name' => ['nullable','string','max:255'],
             'school_graduation_year' => ['nullable','string','max:255'],
-            'kankor_id' => ['required','integer'],
+            'kankor_id' => ['required','string','max:255'],
             'kankor_marks' => ['required','integer'],
             'admission_date' => ['required','date'],
             'department_id' => ['required','integer'],

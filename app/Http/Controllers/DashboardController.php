@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 use function Laravel\Prompts\select;
@@ -19,15 +21,20 @@ class DashboardController extends Controller
 
       if(Auth::check()){
 
-        $usertype=Auth()->user()->usertype;
+        $usertype = Auth()->user()->usertype;
+        $status = Auth()->user()->status;
 
-        if($usertype == 0){
+        if($usertype == 0 ){
 
 
-        return Inertia('student/Dashboard',[
-            'usertype' => $usertype,
 
-        ]);
+              return Inertia('student/Dashboard',[
+             'usertype' => $usertype,
+          ]);
+
+       
+
+
         }
 
         else if($usertype == 1){

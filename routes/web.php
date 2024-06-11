@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeAccountController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
+use App\Http\Resources\StudentAccountResource;
 use App\Models\Department;
 use Psy\CodeCleaner\ReturnTypePass;
 
@@ -33,6 +34,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
  Route::middleware(['auth'])->group(function(){
     Route::resource('student',StudentController::class);
     Route::resource('studentaccount', StudentAccountController::class);
+    Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
     // all admin routes
 

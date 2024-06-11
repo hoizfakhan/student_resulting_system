@@ -24,4 +24,8 @@ class Faculty extends Model
 
     }
 
+    public function students(){
+        return $this->hasManyThrough(Student::class,Department::class);
+    }
+
 }

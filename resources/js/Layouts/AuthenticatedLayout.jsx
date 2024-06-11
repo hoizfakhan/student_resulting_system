@@ -4,16 +4,22 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/js/dist/dropdown';
 import './Layout.css';
+import { faEnvelope, faPenNib } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function Authenticated({ user, header, children}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [showSubNav,setShowSubNav] = useState(false);
 
     const {usertype} = usePage().props;
     const {departments}  = usePage().props;
-    
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-gray-200 dark:bg-gray-600 border-b border-gray-200 dark:border-gray-700 ">
@@ -139,11 +145,10 @@ export default function Authenticated({ user, header, children}) {
         {usertype == 1 ? (
             <ul
                class="nav nav-pills flex-column  mt-2 mt-sm-0"
-
             >
 
             <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
-            <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+            <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
               >
                <i className='bi bi-speedometer2'></i>
                <span className='ms-2 d-none d-sm-inline'>
@@ -158,14 +163,48 @@ export default function Authenticated({ user, header, children}) {
 
 
        <li class="nav-item text-white my-1 py-2 py-sm-0">
-          <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+          <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
         >
-           <i className='bi bi-speedometer2'></i>
-             <NavLink href={route('student.index')} active={route('').current('student.index')}  className='fs-6 text-white   ms-3 d-none d-sm-inline'>
+            <FontAwesomeIcon icon={faGraduationCap} />
+             <NavLink href={route('student.index')} active={route('').current('student.index')}  className='fs-6 text-white ms-3 d-none d-sm-inline'>
               Student
             </NavLink>
            </a>
           </li>
+
+          <li class="nav-item text-white my-1 py-2 py-sm-0">
+          <a class="nav-link  nav-link-hover text-white text-center text-sm-start" aria-current="page"
+            onClick={() => setShowSubNav(!showSubNav)}
+            >
+           <FontAwesomeIcon icon={faUserCircle}/>
+             <span className='fs-6 text-white ms-3 d-none d-sm-inline nab-link'>
+              Accounts
+             </span>
+             <i className='bi bi-arrow-down-short ms-sm-0'></i>
+           </a>
+          </li>
+          {showSubNav && (
+           <>
+
+         <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('studentaccount.index')} active={route('').current('studentaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
+              <FontAwesomeIcon icon={faGraduationCap}  className='me-2'/>
+               Student
+             </NavLink>
+
+          </li>
+
+          <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('employeeaccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+              <FontAwesomeIcon icon={faUser}  className='me-2'/>
+               Employee
+             </NavLink>
+
+          </li>
+
+           </>
+
+          )}
 
 
           </ul> ): usertype == 0 ? (
@@ -188,7 +227,7 @@ export default function Authenticated({ user, header, children}) {
            <a href="#submenu" class="nav-link text-white text-center text-sm-start" data-bs-toggle="collapse" aria-current="page"
              >
           <i className='bi bi-grid'></i>
-            <NavLink href={route('teacher')} active={route('').current('teacher')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
+            <NavLink href={route('dashboard')} active={route('').current('dashboard')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
              MySubjects
           </NavLink>
          <i className='bi bi-arrow-down-short ms-0 ms-sm-0'></i>
@@ -219,7 +258,7 @@ export default function Authenticated({ user, header, children}) {
      <i className='bi bi-house'></i>
      <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+      <NavLink href={route('dashboard')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
          Exams
      </NavLink>
 
@@ -234,7 +273,7 @@ export default function Authenticated({ user, header, children}) {
      <i className='bi bi-people'></i>
      <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+      <NavLink href={route('dashboard')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
        Class
      </NavLink>
    </span>

@@ -10,8 +10,6 @@ export default function ({ auth,success,error,students,queryparams = null }) {
 
   queryparams = queryparams || {}
 
-  console.log(queryparams.kankor_id);
-
   const searchfeildchanged = (name,value)  =>{
 
       if(value){
@@ -36,7 +34,7 @@ export default function ({ auth,success,error,students,queryparams = null }) {
 
 
   const deleteStudent = (student) =>{
-    console.log(student);
+
     if(!window.confirm("Are you sure to delete this student from system?")){
      return;
      }
