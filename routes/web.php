@@ -9,12 +9,10 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
-use App\Models\Department;
-use Psy\CodeCleaner\ReturnTypePass;
 
 //Route::middleware(['auth','verified'])->group(function(){
   //  Route::get('/dashboard',fn() => Inertia::render('Dashboard'))->name('dashboard');
@@ -31,18 +29,12 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
 
 
-
-    Route::middleware(['auth'])->group(function(){
-    Route::get('/resutls',[DashboardController::class,'result']);
-    Route::resource('student',StudentController::class);
-    Route::resource('studentaccount', StudentAccountController::class);
-    Route::resource('employeeaccount', EmployeeAccountController::class);
-    
-
  Route::middleware(['auth'])->group(function(){
     Route::resource('student',StudentController::class);
-   
-
+    Route::resource('studentaccount', StudentAccountController::class);
+    Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
+    Route::resource('employeeaccount', EmployeeAccountController::class);
+    Route::resource('subject',SubjectController::class);
     // all admin routes
 
 });
@@ -65,6 +57,8 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('teacher',TeacherController::class);
+
+    // all teacher routes
 
 });
 

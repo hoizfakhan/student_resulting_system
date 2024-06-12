@@ -21,6 +21,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+
         ]);
     }
 
@@ -31,7 +32,24 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $request->session()->regenerate();
+        $user =  Auth::user();
+
+        if($user->status === 'active'){
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+
+        else{
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+              'email' => 'Your account is has been blocked,please contact the administrator!',
+            ]);
+        }
+
+
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

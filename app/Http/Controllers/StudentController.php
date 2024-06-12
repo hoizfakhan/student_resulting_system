@@ -10,8 +10,6 @@ use App\Models\Student;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
-use App\Models\Student;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -22,23 +20,41 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-       $students = Student::paginate(10);
+        $user =  $request->user();
+        $query =  $user->faculty->students();
 
+
+        if(request('kankor_id')){
+           $query->where("students.kankor_id",request("kankor_id"));
+
+        }
+        if(request('name')){
+            $query->where("name","like","%".request("name")."%");
+        }
+
+        if(request('department')){
+           $departmentname = $request->input('department');
+           $departmentid  = Department::where('name',$departmentname)->first()->id;
+           $query->whereHas('department',function($query) use ($departmentid){
+                                      $query->where('id',$departmentid);
+
+                            })->get();
+        }
+
+        $students = $query->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Index",[
             'usertype' => $usertype,
             'success' => session('success'),
             'error' => session('error'),
             'students' => StudentResource::collection($students),
+            'queryparams' => request()->query() ?: null,
 
         ]);
 
-         // Fetch all students with only the first 7 columns
-         $students = Student::select('id', 'column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7')->get();
-         return Inertia::render('Students/Index', ['students' => $students]);
     }
 
     /**
@@ -90,19 +106,14 @@ class StudentController extends Controller
      * Display the specified resource.
      */
 
-    public function show(string $id)    // <-----this is Imran, I think we don't need string here
-    {
-        
-        // Fetch student with all 27 columns
-        $student = Student::find($id);
-        return Inertia::render('Students/Show', ['student' => $student]);
 
     public function show(Student $student)
     {
 
+
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/student/StudentDetails",[
-          'student' => new StudentResource($student),
+        return Inertia("admin/student/StudentDetails",props: [
+          'student' => new StudentResource(resource: $student),
           'usertype' => $usertype,
 
         ]);
@@ -164,6 +175,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+
         try{
             $name=$student->name;
             $student->delete();

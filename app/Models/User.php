@@ -33,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'usertype',
         'email_verified_at',
         'faculty_id',
+        'status',
 
     ];
 

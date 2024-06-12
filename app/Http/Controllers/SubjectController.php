@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class EmployeeAccountController extends Controller
+class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,10 +12,9 @@ class EmployeeAccountController extends Controller
     public function index()
     {
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/accounts/employee/Index",[
+        return Inertia("admin/subject/Index",[
             'usertype' => $usertype,
         ]);
-
     }
 
     /**
@@ -24,7 +23,7 @@ class EmployeeAccountController extends Controller
     public function create()
     {
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/accounts/employee/Create",[
+        return Inertia("admin/subject/Create",[
             'usertype' => $usertype,
         ]);
     }
@@ -64,9 +63,8 @@ class EmployeeAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(string $id)
     {
         //
-
     }
 }

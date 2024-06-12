@@ -85,7 +85,7 @@ export default function Edit ({auth,success,error,facultys,department}){
                            <SelectInput
                              id="faculty_id"
                              name="faculty_id"
-                            defaultValue={data.faculty_id}
+                             defaultValue={data.faculty_id}
                              className="form-control"
                              onChange={(e) => setData("faculty_id",e.target.value)}
 

@@ -26,6 +26,7 @@ class DepartmentController extends Controller
      }
 
      public function getDepartments($facultyid){
+        
         $usertype=Auth()->user()->usertype;
         $departments = Department::where('faculty_id',$facultyid)->get();
         return Inertia("SuperAdmin/teacher/Create",[

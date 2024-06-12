@@ -69,7 +69,7 @@ class ManagerController extends Controller
            $data['email_verified_at'] = time();
 
           User::create($data);
-         return to_route("manager.index")->with('success','Faculty Manager successfully registered!');
+          return to_route("manager.index")->with('success','Faculty Manager successfully registered!');
          } catch(QueryException $e){
 
              $errorCode = $e->errorInfo[1];
