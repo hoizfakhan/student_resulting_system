@@ -60,7 +60,7 @@ export default function ({ auth,users }) {
                     <th className="px-3 py-2">Action</th>
                   </tr>
                 </thead>
-             {/*  <tbody>
+              <tbody>
                   {users.data.map((user) => (
                     <tr
                       className="bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200"
@@ -88,9 +88,9 @@ export default function ({ auth,users }) {
                       </td>
                     </tr>
                   ))}
-                </tbody>*/}
+                </tbody>
               </table>
-              {/* <Pagination links={users.meta.links}></Pagination> */}
+              <Pagination links={users.meta.links}></Pagination>
             </div>
           </div>
         </div>
