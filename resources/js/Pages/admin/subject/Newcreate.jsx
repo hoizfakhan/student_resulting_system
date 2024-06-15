@@ -5,7 +5,7 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
-export default function Create({ auth }) {
+export default function Create({ auth,departments }) {
   const { data, setData, post, errors, reset } = useForm({
     name: "",
     faculty_id: "",
@@ -14,13 +14,13 @@ export default function Create({ auth }) {
     credit: "",
     subject_type: "",
     practical_credit: "",
-    theoretical_credit: "",
+    therical_credit: "",
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log(e);
+
     post(route("subject.store"));
   };
   return (
@@ -38,11 +38,10 @@ export default function Create({ auth }) {
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="mt-4 ms-5">
-              <p className="lead text-gray-800"> Subject Registration Form</p>
+              <p className="lead text-gray-800 "> Subject Registration Form</p>
             </div>
 
             <form
-              action=""
               onSubmit={onSubmit}
               className="container mb-5 mt-2 ms-4 me-4 w-75 p-3 sm:p-8 bg-white dark:bg-gray-800"
             >
@@ -57,26 +56,39 @@ export default function Create({ auth }) {
                       id="name"
                       type="text"
                       name="name"
+                      isFocused={true}
                       onChange={(e) => setData("name", e.target.value)}
                     />
                     <InputError message={errors.name} className="mt-2" />
                   </div>
                 </div>
+
                 <div className="form-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>
-                      Faculty:<span className="text-red-300 text-lg">*</span>
+                      Subject Type:
+                      <span className="text-red-300 text-lg">*</span>
                     </InputLabel>
-                    <TextInput
+                    <SelectInput
+                      id="subject_type"
+                      name="subject_type"
                       className="form-control mt-1"
-                      id="faculty"
-                      name="faculty_id"
-                      type="text"
-                      onChange={(e) => setData("faculty_id", e.target.value)}
+                      onChange={(e) => setData("subject_type", e.target.value)}
+                    >
+                     <option value=""> Subject type</option>
+                     <option value="core">Core Subject</option>
+                     <option value="project">Project Subject</option>
+                     <option value="basic">Basic Subject</option>
+                     <option value="general">General Subject</option>
+
+                    </SelectInput>
+                    <InputError
+                      message={errors.subject_type}
+                      className="mt-2"
                     />
-                    <InputError message={errors.faculty_id} className="mt-2" />
                   </div>
                 </div>
+
               </div>
               <div className="row form-row">
                 <div className="form-group col-md-6">
@@ -85,13 +97,22 @@ export default function Create({ auth }) {
                       Department:{" "}
                       <span className="text-red-300 text-lg">*</span>
                     </InputLabel>
-                    <TextInput
+                    <SelectInput
                       id="department"
                       name="department_id"
-                      type="text"
                       className="form-control mt-1"
                       onChange={(e) => setData("department_id", e.target.value)}
-                    />
+                    >
+                     <option value="">Select Department </option>
+
+                     {departments.map((department) => (
+                      <option value={department.id} key={department.id}>{department.name} </option>
+
+
+                    ))}
+
+
+                    </SelectInput>
                     <InputError
                       message={errors.department_id}
                       className="mt-2"
@@ -109,7 +130,7 @@ export default function Create({ auth }) {
                       className="form-control mt-1"
                       onChange={(e) => setData("semester", e.target.value)}
                     >
-                      <option value="">Select a semester</option>
+                      <option value="">Select Semester</option>
                       {[...Array(10)].map((_, index) => (
                         <option key={index + 1} value={index + 1}>
                           {index + 1}
@@ -137,26 +158,28 @@ export default function Create({ auth }) {
                     <InputError message={errors.credit} className="mt-2" />
                   </div>
                 </div>
-
-                <div className="form-group col-md-6">
+                <div className="from-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>
-                      Subject Type:
-                      <span className="text-red-300 text-lg">*</span>
+                    Thoeritical Credit:
+                    
                     </InputLabel>
                     <TextInput
-                      id="subject_type"
-                      name="subject_type"
-                      type="text"
+                      id="therical_credit"
+                      name="therical_credit"
+                      type="number"
                       className="form-control mt-1"
-                      onChange={(e) => setData("subject_type", e.target.value)}
+                      onChange={(e) =>
+                        setData("therical_credit", e.target.value)
+                      }
                     />
                     <InputError
-                      message={errors.subject_type}
+                      message={errors. therical_credit}
                       className="mt-2"
                     />
                   </div>
                 </div>
+
               </div>
 
               <div className="row form-row">
@@ -164,7 +187,7 @@ export default function Create({ auth }) {
                   <div className="mt-3">
                     <InputLabel>
                       Practical Credit:
-                      <span className="text-red-300 text-lg">*</span>
+
                     </InputLabel>
                     <TextInput
                       id="practical_credit"
@@ -182,27 +205,7 @@ export default function Create({ auth }) {
                   </div>
                 </div>
 
-                <div className="from-group col-md-6">
-                  <div className="mt-3">
-                    <InputLabel>
-                      Theoretical Credit:
-                      <span className="text-red-300 text-lg">*</span>
-                    </InputLabel>
-                    <TextInput
-                      id="theoretical_credit"
-                      name="theoretical_credit"
-                      type="number"
-                      className="form-control mt-1"
-                      onChange={(e) =>
-                        setData("theoretical_credit", e.target.value)
-                      }
-                    />
-                    <InputError
-                      message={errors.theoretical_credit}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
+
               </div>
               <div className="text-end mt-4">
                 <Link
@@ -211,7 +214,7 @@ export default function Create({ auth }) {
                 >
                   Cancel
                 </Link>
-                <button className="btn btn-primary">Submit</button>
+                <button className="btn btn-success">Submit</button>
               </div>
             </form>
           </div>

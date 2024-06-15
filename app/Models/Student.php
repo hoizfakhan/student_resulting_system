@@ -47,6 +47,4 @@ class Student extends Model
     }
 
 
-
-
 }

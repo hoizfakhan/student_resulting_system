@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
     Route::resource('department',DepartmentController::class);
+    Route::get("/alldepartments",[DepartmentController::class,"getDepartments"])->name("alldepartments");
     Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
 
    // Super Admin routes

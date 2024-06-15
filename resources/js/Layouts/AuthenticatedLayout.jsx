@@ -5,9 +5,11 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/js/dist/dropdown';
 import './Layout.css';
 import { faEnvelope, faPenNib } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +18,7 @@ import { faEnvelope, faPenNib } from '@fortawesome/free-solid-svg-icons';
 export default function Authenticated({ user, header, children}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [showSubNav,setShowSubNav] = useState(false);
+    const [showSubjectSubNav,setShowSubjectSubNav] = useState(false);
 
     const {usertype} = usePage().props;
     const {departments}  = usePage().props;
@@ -150,10 +153,9 @@ export default function Authenticated({ user, header, children}) {
             <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
             <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
               >
-               <i className='bi bi-speedometer2'></i>
+               <i className='bi bi-speedometer2 ms-2'></i>
                <span className='ms-2 d-none d-sm-inline'>
-
-                <NavLink href={route('dashboard')} active={route('').current('dashboard')}   className='fs-6 text-white  d-none d-sm-inline'>
+                <NavLink href={route('dashboard')} active={route('').current('dashboard')}   className='fs-6 text-white ms-1  d-none d-sm-inline'>
                    Dashboard
                </NavLink>
 
@@ -165,10 +167,12 @@ export default function Authenticated({ user, header, children}) {
        <li class="nav-item text-white my-1 py-2 py-sm-0">
           <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
         >
+            <span className='ms-2 d-none d-sm-inline'>
             <FontAwesomeIcon icon={faGraduationCap} />
-             <NavLink href={route('student.index')} active={route('').current('student.index')}  className='fs-6 text-white ms-3 d-none d-sm-inline'>
+             <NavLink href={route('student.index')} active={route('').current('student.index')}  className='fs-6 text-white ms-2 d-none d-sm-inline'>
               Student
             </NavLink>
+            </span>
            </a>
           </li>
 
@@ -176,7 +180,8 @@ export default function Authenticated({ user, header, children}) {
           <a class="nav-link  nav-link-hover text-white text-center text-sm-start" aria-current="page"
             onClick={() => setShowSubNav(!showSubNav)}
             >
-           <FontAwesomeIcon icon={faUserCircle}/>
+
+           <FontAwesomeIcon icon={faUserCircle} className='ms-2'/>
              <span className='fs-6 text-white ms-3 d-none d-sm-inline nab-link'>
               Accounts
              </span>
@@ -188,7 +193,7 @@ export default function Authenticated({ user, header, children}) {
 
          <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
              <NavLink href={route('studentaccount.index')} active={route('').current('studentaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
-              <FontAwesomeIcon icon={faGraduationCap}  className='me-2'/>
+             <span className='me-2'>*</span>
                Student
              </NavLink>
 
@@ -196,31 +201,48 @@ export default function Authenticated({ user, header, children}) {
 
           <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
              <NavLink href={route('employeeaccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
-              <FontAwesomeIcon icon={faUser}  className='me-2'/>
+             <span className='me-2'>*</span>
                Employee
              </NavLink>
 
           </li>
-
            </>
 
           )}
 
 
-      <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
+       <li class="nav-item  my-1 mb-0 py-2  py-sm-0">
             <a class="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
+                onClick={() => setShowSubjectSubNav(!showSubjectSubNav)}
               >
-               <i className='bi bi-speedometer2'></i>
-               <span className='ms-2 d-none d-sm-inline'>
-
-                <NavLink href={route('subject.index')} active={route('').current('subject.index')}   className='fs-6 text-white  d-none d-sm-inline'>
-                   subject
-               </NavLink>
-
-                </span>
+               <FontAwesomeIcon icon={faBook} className='ms-2'/>
+                 <span className='fs-6 text-white ms-3 d-none d-sm-inline nab-link'>
+                  Subject
+                 </span>
+               <i className='bi bi-arrow-down-short ms-sm-0'></i>
           </a>
+        </li>
+        {showSubjectSubNav && (
+           <>
+
+         <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('subject.index')} active={route('').current('studentaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
+               <span className='me-2'>*</span>
+                Subjects
+             </NavLink>
+
           </li>
 
+          <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('employeeaccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+             <span className='me-2'>*</span>
+               Assign Subjects
+             </NavLink>
+
+          </li>
+           </>
+
+          )}
 
           </ul> ): usertype == 0 ? (
            <ul
@@ -385,9 +407,8 @@ export default function Authenticated({ user, header, children}) {
 <li class="nav-item  my-1 py-2 py-sm-0">
   <a class="nav-link text-white text-center text-sm-start" aria-current="page"
     >
-     <i className='bi bi-house'></i>
+      <FontAwesomeIcon icon={ faEnvelope}/>
      <span className='ms-2 d-none d-sm-inline'>
-
       <NavLink href={route('faculty.index')} active={route('').current('faculty.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
          Faculty
      </NavLink>
@@ -402,13 +423,11 @@ export default function Authenticated({ user, header, children}) {
 <li class="nav-item  my-1 py-2 py-sm-0">
   <a class="nav-link text-white text-center text-sm-start" aria-current="page"
     >
-     <i className='bi bi-house'></i>
+      <FontAwesomeIcon icon={faUser}/>
      <span className='ms-2 d-none d-sm-inline'>
-
-      <NavLink href={route('manager.index')} active={route('').current('manager.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-         Faculty Manager
+      <NavLink href={route('manager.index')} active={route('').current('manager.index')}   className='fs-6 text-white  ms-2 d-none d-sm-inline'>
+          Faculty manager
      </NavLink>
-
       </span>
 
 </a>
@@ -418,13 +437,11 @@ export default function Authenticated({ user, header, children}) {
 <li class="nav-item  my-1 py-2 py-sm-0">
   <a class="nav-link text-white text-center text-sm-start" aria-current="page"
     >
-     <i className='bi bi-house'></i>
+     <FontAwesomeIcon icon={fas.faChalkboardTeacher}/>
      <span className='ms-2 d-none d-sm-inline'>
-
       <NavLink href={route('teacher.index')} active={route('').current('teacher.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
          Teacher
      </NavLink>
-
       </span>
 
 </a>

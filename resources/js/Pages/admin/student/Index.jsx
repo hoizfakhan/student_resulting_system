@@ -5,7 +5,7 @@ import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, router,usePage } from "@inertiajs/react";
 
-export default function ({ auth,success,error,students,queryparams = null }) {
+export default function Index({ auth,success,error,students,queryparams = null }) {
 
   queryparams = queryparams || {}
 
@@ -40,7 +40,6 @@ export default function ({ auth,success,error,students,queryparams = null }) {
 
     }
 
-
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -65,7 +64,7 @@ export default function ({ auth,success,error,students,queryparams = null }) {
             </div>
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="container">
+          <div class="container mb-4">
           <div className='row'>
            <div class="col-md-12">
             <div class="row">
@@ -106,20 +105,25 @@ export default function ({ auth,success,error,students,queryparams = null }) {
                    defaultValue={queryparams.department}
                    onBlur={e => searchfeildchanged('department',e.target.value)}
                    onKeyPress={e => onKeyPress('department',e)}
+                 />
 
+              </div>
+            </div>
+
+            <div class="col-md-2 ">
+            <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
+                <h6 className="text-gray-500 mb-1">semester</h6>
+                  <TextInput
+                   className="form-control"
+                   type="number"
+                   placeholder="Search..."
+                   defaultValue={queryparams.semester}
+                   onBlur={e => searchfeildchanged('semester',e.target.value)}
+                   onKeyPress={e => onKeyPress('semester',e)}
                  />
 
               </div>
 
-            </div>
-
-            <div class="col-md-2 mt-5">
-               <Link
-                 className="btn btn-outline-primary"
-                 href={route("student.index")}
-               >
-                Reset
-               </Link>
             </div>
 
              <div className='col-md-4 text-end'>
@@ -131,7 +135,16 @@ export default function ({ auth,success,error,students,queryparams = null }) {
                Add New Student
             </Link>
             </div>
+            <div className=" mt-3 me-4">
+             <Link
+                className="btn btn-outline-secondary py-1 px-3  rounded shadow transition-all hover:bg-gray-600"
+                href={route("student.index")}
+               >
+                Reset page
+               </Link>
+               </div>
             </div>
+
             </div>
             </div>
             </div>
@@ -155,14 +168,14 @@ export default function ({ auth,success,error,students,queryparams = null }) {
                     <tbody>
                       {students.data.map((student) => (
 
-                          <tr className='bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 align-middle' key={student.id}>
+                          <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={student.id}>
                            <td className='px-3 py-2'>{student.id}</td>
                            <td className='px-3 py-2'>{student.name}</td>
-                           <td className='px-3 py-2'>{student.father_name}</td>
-                           <td className='px-3 py-2'>{student.department.name}</td>
-                           <td className='px-3 py-2'>{student.current_semester}</td>
+                           <td className='px-3 py-2 text-center'>{student.father_name}</td>
+                           <td className='px-3 py-2 text-center'>{student.department.name}</td>
+                           <td className='px-3 py-2 text-center'>{student.current_semester}</td>
                            <td className='px-3 py-2'>{student.phone_number}</td>
-                           <td className='px-3 py-2'>{student.kankor_id}</td>
+                           <td className='px-3 py-2 text-center'>{student.kankor_id}</td>
                            <td className='px-3 py-2 text-nowrap'>
 
                            <Link

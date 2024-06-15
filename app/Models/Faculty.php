@@ -21,11 +21,23 @@ class Faculty extends Model
 
          return self::select('faculties.id')
                      ->count();
-
     }
 
     public function students(){
         return $this->hasManyThrough(Student::class,Department::class);
     }
 
+
+    public function subjects(){
+
+      return $this->hasMany(Subject::class);
+    }
+
+
+    public function teachers(){
+
+        return $this->hasManyThrough(Teacher::class,Department::class);
+    }
+
 }
+

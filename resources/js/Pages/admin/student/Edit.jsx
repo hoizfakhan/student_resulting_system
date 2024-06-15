@@ -43,8 +43,6 @@ export default function Create({ auth,departments,student}) {
 
      });
 
-     console.log(data.department_id);
-
      const onSubmit = (e) =>{
 
       e.preventDefault();

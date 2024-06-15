@@ -27,12 +27,13 @@ class StudentController extends Controller
         $query =  $user->faculty->students();
 
 
+
         if(request('kankor_id')){
            $query->where("students.kankor_id",request("kankor_id"));
 
         }
         if(request('name')){
-            $query->where("name","like","%".request("name")."%");
+            $query->where("students.name","like","%".request("name")."%");
         }
 
         if(request('department')){
@@ -44,6 +45,11 @@ class StudentController extends Controller
                             })->get();
         }
 
+        if(request('semester')){
+            $query->where('students.current_semester',request("semester"));
+          }
+
+
         $students = $query->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Index",[
@@ -54,6 +60,7 @@ class StudentController extends Controller
             'queryparams' => request()->query() ?: null,
 
         ]);
+
 
     }
 

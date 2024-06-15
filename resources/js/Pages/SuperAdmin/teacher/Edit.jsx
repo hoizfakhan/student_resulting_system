@@ -4,98 +4,62 @@ import InputLabel from "@/Components/InputLabel";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Inertia } from "@inertiajs/inertia";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
 
-export default function Create({auth}){
+export default function Edit({auth,teacher,departments}){
 
-    const {facultys} = usePage().props;
-    const { get } = useForm();
-    const [facultyid,setFacultyid] = useState('');
-    const [departments,setDepartments] = useState(2);
+  const {data,setData,post,errors,reset}=  useForm({
 
-    console.log(departments);
+    department_id:teacher.data.department_id || "",
+    name:teacher.data.name || "",
+    last_name:teacher.data.last_name || "",
+    father_name:teacher.data.father_name || "",
+    phone:teacher.data.phone || "",
+    _method:'PUT',
 
-    useEffect(() => {
-
-      if(facultyid){
-
-           Inertia.get('/alldepartments',{
-
-             onSuccess:(response) => {
-              console.log(response.data.departments);
-              console.log("hi")
-              setDepartments(3);
-             }
-
-           });
-
-      } else{
-        setDepartments([]);
-        console.log("hey");
-      }
-    },[facultyid]);
+ });
 
 
+ const onSubmit = (e) =>{
+
+   e.preventDefault();
+   post(route("teacher.update",teacher.data.id));
+  }
 
  return (
 
   <AuthenticatedLayout
    user={auth.user}
-   header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Add New Teacher</h2>}
+   header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit{teacher.name} Teacher</h2>}
   >
 
     <Head title="Add Teacher" />
+
     <div className="py-12">
       <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div className='mt-4 ms-5'><p className='lead text-gray-600'>Add Teacher </p></div>
+        <div className='mt-4 ms-5'><p className='lead text-gray-600'>Edit Teacher </p></div>
                          <form
-
+                           onSubmit={onSubmit}
                            className='mb-5 mt-2 ms-4 me-4 w-50 p-3 sm:p-8 bg-white dark:bg-gray-800 '
                           >
-                        <div className='mt-3'>
-                          <InputLabel htmlFor="faculty">Faculty: <span className='text-red-300 text-lg'>*</span></InputLabel>
-                           <SelectInput
-                             id="faculty"
-                             name="faculty"
-                             value={facultyid}
-                             className="form-control"
-                             onChange={(e) => setFacultyid(e.target.value)}
-
-                             >
-                             <option value="">Select Faculty</option>
-                              {facultys.data.map((faculty) => (
-
-                              <option value={faculty.id} key={faculty.id}>{faculty.name}</option>
-
-                               ))}
-
-                           </SelectInput>
-                           <InputError message="" className='mt-2'/>
-                           <InputError/>
-                          </div>
 
                           <InputLabel htmlFor="department"> Department: <span className='text-red-300 text-lg'>*</span></InputLabel>
                            <SelectInput
-                              id="department"
+                              id="department_id"
                               className="form-control mt-1"
+                              name="department_id"
+                              isFocused={true}
+                              value={data.department_id}
+                              onChange={(e) => setData("department_id",e.target.value)}
 
                            >
-                            <option vlaue="">Select department</option>
+                            <option value="">Select department</option>
+                            {departments.map((department) => (
 
-                             {departments.length > 0 ? (
+                            <option value={department.id} key={department.id}>{department.name}</option>
 
-                                  departments.data.map((department) => (
-                                  <option value={department.id} key={department.id}>{department.name}</option>
-
-                                ))
-
-                              ) : (
-
-                                <option value="">Select a faculty fisrt</option>
-                               )}
+                            ))}
 
                            </SelectInput>
 
@@ -106,8 +70,8 @@ export default function Create({auth}){
                                id="teacher_name"
                                type="text"
                                name="name"
-
-                              isFocused={true}
+                               value={data.name}
+                               onChange={(e) => setData("name",e.target.value)}
 
                               />
                               <InputError message="" className='mt-2'/>
@@ -119,7 +83,8 @@ export default function Create({auth}){
                              id="last_name"
                              type="text"
                              name="last_name"
-
+                             value={data.last_name}
+                             onChange={(e) => setData("last_name",e.target.value)}
 
 
                            />
@@ -132,8 +97,8 @@ export default function Create({auth}){
                              id="father_name"
                              type="text"
                              name="father_name"
-
-
+                             value={data.father_name}
+                             onChange={(e) => setData("father_name",e.target.value)}
 
                            />
                              <InputError message="" className='mt-2'/>
@@ -145,8 +110,8 @@ export default function Create({auth}){
                              id="phone_number"
                              type="text"
                              name="phone"
-
-
+                             value={data.phone}
+                             onChange={(e) => setData("phone",e.target.value)}
 
                            />
                              <InputError message="" className='mt-2'/>
@@ -162,7 +127,7 @@ export default function Create({auth}){
                                className='bg-emerald-500 py-1 px-3 text-white rounded transition-all hover:bg-emerald-600'
 
                               >
-                                Submit
+                                Update
                               </button>
                            </div>
                         </form>
@@ -170,7 +135,6 @@ export default function Create({auth}){
       </div>
      </div>
      </div>
-
 
   </AuthenticatedLayout>
 
