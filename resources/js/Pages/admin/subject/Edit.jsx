@@ -6,7 +6,10 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 export default function Create({ auth,departments,subject }) {
+
+  console.log(subject);
   const { data, setData, post, errors, reset } = useForm({
+
     name: subject.data.name || "",
     department_id:subject.data.department_id || "",
     semester:subject.data.semester || "",

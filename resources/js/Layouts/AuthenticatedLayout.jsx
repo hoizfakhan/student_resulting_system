@@ -234,7 +234,7 @@ export default function Authenticated({ user, header, children}) {
           </li>
 
           <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
-             <NavLink href={route('employeeaccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+             <NavLink href={route('assginsubject.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
              <span className='me-2'>*</span>
                Assign Subjects
              </NavLink>
