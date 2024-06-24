@@ -150,6 +150,7 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
 
+         
          $data = $request->validated();
          $image = $data['image'] ?? null;
 

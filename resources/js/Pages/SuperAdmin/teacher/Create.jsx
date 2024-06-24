@@ -4,7 +4,6 @@ import InputLabel from "@/Components/InputLabel";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Inertia } from "@inertiajs/inertia";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
@@ -12,30 +11,26 @@ export default function Create({auth}){
 
     const {facultys} = usePage().props;
     const { get } = useForm();
-    const [facultyid,setFacultyid] = useState('');
-    const [departments,setDepartments] = useState(2);
+    const [selectedFacultyid,setSelectedFacultyid] = useState('');
+    const [departments,setDepartments] = useState([]);
 
     console.log(departments);
-
     useEffect(() => {
 
-      if(facultyid){
+      if(selectedFacultyid){
+           get(route('department-selector',{facultyid:selectedFacultyid}),{
+            onSuccess:(page) => {
+              console.log('responsed data:',page.props.departments);
 
-           Inertia.get('/alldepartments',{
+              setDepartments(page.props.departments);
 
-             onSuccess:(response) => {
-              console.log(response.data.departments);
-              console.log("hi")
-              setDepartments(3);
-             }
-
+            },
+            onError:(errors) => {
+              console.log('Error:',errors);
+            }
            });
-
-      } else{
-        setDepartments([]);
-        console.log("hey");
       }
-    },[facultyid]);
+    },[selectedFacultyid]);
 
 
 
@@ -60,9 +55,9 @@ export default function Create({auth}){
                            <SelectInput
                              id="faculty"
                              name="faculty"
-                             value={facultyid}
+                             value={selectedFacultyid}
                              className="form-control"
-                             onChange={(e) => setFacultyid(e.target.value)}
+                             onChange={(e) => setSelectedFacultyid(e.target.value)}
 
                              >
                              <option value="">Select Faculty</option>
@@ -87,7 +82,7 @@ export default function Create({auth}){
 
                              {departments.length > 0 ? (
 
-                                  departments.data.map((department) => (
+                                  page.props.departments.data.map((department) => (
                                   <option value={department.id} key={department.id}>{department.name}</option>
 
                                 ))
@@ -132,9 +127,7 @@ export default function Create({auth}){
                              id="father_name"
                              type="text"
                              name="father_name"
-
-
-
+                             
                            />
                              <InputError message="" className='mt-2'/>
                           </div>
@@ -145,8 +138,6 @@ export default function Create({auth}){
                              id="phone_number"
                              type="text"
                              name="phone"
-
-
 
                            />
                              <InputError message="" className='mt-2'/>

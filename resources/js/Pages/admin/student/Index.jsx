@@ -123,8 +123,9 @@ export default function Index({ auth,success,error,students,queryparams = null }
                  />
 
               </div>
-
             </div>
+
+
 
              <div className='col-md-4 text-end'>
               <div className='me-3 mt-4'>
@@ -135,14 +136,14 @@ export default function Index({ auth,success,error,students,queryparams = null }
                Add New Student
             </Link>
             </div>
-            <div className=" mt-3 me-4">
+            <div className="mt-3 me-4">
              <Link
                 className="btn btn-outline-secondary py-1 px-3  rounded shadow transition-all hover:bg-gray-600"
                 href={route("student.index")}
                >
                 Reset page
                </Link>
-               </div>
+              </div>
             </div>
 
             </div>
@@ -202,11 +203,22 @@ export default function Index({ auth,success,error,students,queryparams = null }
                             </DangerButton>
                            </td>
                          </tr>
-
                       ))}
                     </tbody>
                 </table>
+                {/* {students.current_semester === 1 ? (<div className="text-end">
+                             <Link href="" className="btn btn-primary m-3">
+                                 Export to Excel
+                            </Link>
+                           </div>
+                           ):(
+                                null
+                          )
+                              }
+                */}
                 <Pagination links={students.meta.links}></Pagination>
+
+
            </div>
           </div>
           </div>

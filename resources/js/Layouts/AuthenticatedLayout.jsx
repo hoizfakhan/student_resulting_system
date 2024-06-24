@@ -19,6 +19,7 @@ export default function Authenticated({ user, header, children}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [showSubNav,setShowSubNav] = useState(false);
     const [showSubjectSubNav,setShowSubjectSubNav] = useState(false);
+    const [showTeacherSubNav,setShowTeacherSubNav] = useState(false);
 
     const {usertype} = usePage().props;
     const {departments}  = usePage().props;
@@ -234,7 +235,7 @@ export default function Authenticated({ user, header, children}) {
           </li>
 
           <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
-             <NavLink href={route('employeeaccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+             <NavLink href={route('assginsubject.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
              <span className='me-2'>*</span>
                Assign Subjects
              </NavLink>
@@ -336,7 +337,7 @@ export default function Authenticated({ user, header, children}) {
   <a href="#submenu" class="nav-link text-white text-center text-sm-start" data-bs-toggle="collapse" aria-current="page"
     >
      <i className='bi bi-grid'></i>
-     <NavLink href={route('teacher')} active={route('').current('teacher')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
+     <NavLink active={route('').current('teacher')}  className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
        Class
       </NavLink>
      <i className='bi bi-arrow-down-short ms-0 ms-sm-0'></i>
@@ -366,7 +367,7 @@ export default function Authenticated({ user, header, children}) {
      <i className='bi bi-house'></i>
      <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+      <NavLink active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
          NE Department
      </NavLink>
 
@@ -381,7 +382,7 @@ export default function Authenticated({ user, header, children}) {
      <i className='bi bi-people'></i>
      <span className='ms-2 d-none d-sm-inline'>
 
-      <NavLink href={route('teacher')} active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+      <NavLink active={route('').current('dashboard')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
        CE Department
      </NavLink>
  </span>
@@ -436,18 +437,40 @@ export default function Authenticated({ user, header, children}) {
 
 <li class="nav-item  my-1 py-2 py-sm-0">
   <a class="nav-link text-white text-center text-sm-start" aria-current="page"
+     onClick={() => setShowTeacherSubNav(!showTeacherSubNav)}
     >
      <FontAwesomeIcon icon={fas.faChalkboardTeacher}/>
      <span className='ms-2 d-none d-sm-inline'>
-      <NavLink href={route('teacher.index')} active={route('').current('teacher.index')}   className='fs-6 text-white   ms-2 d-none d-sm-inline'>
-         Teacher
-     </NavLink>
+     <span className='fs-6 text-white ms-3 d-none d-sm-inline nab-link'>
+              Teachers
+             </span>
+             <i className='bi bi-arrow-down-short ms-sm-0'></i>
       </span>
 
 </a>
 </li>
 
+{showTeacherSubNav && (
+           <>
 
+         <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('teacher.index')} active={route('').current('studentaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
+             <span className='me-2'>*</span>
+               Teacher List
+             </NavLink>
+
+          </li>
+
+          <li class="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+             <NavLink href={route('teacheraccount.index')} active={route('').current('employeeaccount.index')}  className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+             <span className='me-2'>*</span>
+               Teacher Account
+             </NavLink>
+
+          </li>
+           </>
+
+          )}
 
 
 </ul> ):null
