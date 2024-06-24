@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherAccountController;
 use App\Http\Controllers\TeacherSubjectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -53,7 +54,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('department',DepartmentController::class);
     Route::get("/alldepartments",[DepartmentController::class,"getDepartments"])->name("alldepartments");
     Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
-
+    Route::resource("teacheraccount",TeacherAccountController::class);
+    Route::get("blockteacheraccount/{teacheraccountid}",[TeacherAccountController::class,"BlockTeacherAccount"])->name("blockteacheraccount");
    // Super Admin routes
 });
 

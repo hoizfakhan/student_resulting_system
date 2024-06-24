@@ -125,7 +125,7 @@ export default function Index({ auth,success,error,students,queryparams = null }
               </div>
             </div>
 
-            
+
 
              <div className='col-md-4 text-end'>
               <div className='me-3 mt-4'>
@@ -203,11 +203,22 @@ export default function Index({ auth,success,error,students,queryparams = null }
                             </DangerButton>
                            </td>
                          </tr>
-
                       ))}
                     </tbody>
                 </table>
+                {/* {students.current_semester === 1 ? (<div className="text-end">
+                             <Link href="" className="btn btn-primary m-3">
+                                 Export to Excel
+                            </Link>
+                           </div>
+                           ):(
+                                null
+                          )
+                              }
+                */}
                 <Pagination links={students.meta.links}></Pagination>
+
+
            </div>
           </div>
           </div>
