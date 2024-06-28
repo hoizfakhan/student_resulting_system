@@ -61,10 +61,10 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
           )}
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="container mb-4">
+        <div className="container mb-4">
           <div className='row'>
-           <div class="col-md-12">
-            <div class="row">
+           <div className="col-md-12">
+            <div className="row">
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">name</h6>
@@ -117,7 +117,7 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
               </div>
             </div>
 
-            <div class="col-md-2 mt-5">
+            <div className="col-md-2 mt-5">
                <Link
                  className="btn btn-outline-secondary"
                  href={route("subject.index")}

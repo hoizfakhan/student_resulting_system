@@ -66,10 +66,10 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
           )}
       <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-       <div class="container mb-4">
+       <div className="container mb-4">
           <div className='row'>
-           <div class="col-md-12">
-            <div class="row">
+           <div className="col-md-12">
+            <div className="row">
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">name</h6>
@@ -130,8 +130,7 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
 
               </div>
             </div>
-
-            <div class="col-md-2 mt-5">
+            <div className="col-md-2 mt-5">
                <Link
                  className="btn btn-outline-secondary"
                  href={route("teacher.index")}
@@ -150,14 +149,10 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
             </Link>
             </div>
             </div>
-
             </div>
             </div>
             </div>
             </div>
-
-
-
        <div className='overflow-auto'>
                 <table className='w-full text-md text-left rtl:text-right
                      dark:bg-gray-700 dark:text-gray-300 '>
@@ -184,15 +179,12 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
                            <td className='px-3 py-2 text-center'>{teacher.department.name}</td>
                            <td className='px-3 py-2 text-center'>{teacher.phone}</td>
                            <td className='px-3 py-2 text-nowrap'>
-
                             <Link
                               href={route("teacher.edit",teacher.id)}
                               className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary'
-
                             >
                              Edit
                             </Link>
-
                             <DangerButton
                              onClick={(e) => deleteTeacher(teacher)}
                              className='mx-3'
@@ -204,21 +196,13 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
 
                       ))}
                     </tbody>
-
                 </table>
                <Pagination links={teachers.meta.links}></Pagination>
            </div>
       </div>
      </div>
      </div>
-
-
   </AuthenticatedLayout>
-
-
-
-
-
  );
 
 }

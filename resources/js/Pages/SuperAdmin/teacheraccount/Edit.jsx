@@ -16,9 +16,6 @@ const {data,setData,post,errors,reset}  =   useForm({
           password_confirmation:"",
           status:teacheraccount.data.status || "",
           _method:'PUT',
-
-
-
       });
 
       const onSubmit = (e) =>{
@@ -147,20 +144,20 @@ const {data,setData,post,errors,reset}  =   useForm({
                 </div>
 
               </div>
+              <div className='mt-4 text-right bg-gray-300 p-2'>
+                             <Link
+                               href={route("teacheraccount.index")}
+                               className='bg-gray-300 py-1 px-3 mb-2 text-gray-700 rounded-sm bg-gray-400  transition-all hover:bg-gray-100 mr-2'
+                              >
+                               Cancel
+                              </Link>
+                              <button
+                               className='bg-emerald-500 py-1 px-3 text-white rounded-sm  me-3 transition-all hover:bg-emerald-600'
 
-
-              <div class="text-center mt-4 bg-gray-200">
-              <Link
-               href={route("teacheraccount.index")}
-               className='bg-gray-400 py-1  px-3  text-gray-800  rounded transition-all hover:bg-gray-300 mr-2'
-              >
-                Cancel
-              </Link>
-              <button className="btn btn-success mb-1 mt-1 mt-1" type="submit">
-                update
-              </button>
-
-              </div>
+                              >
+                               Update
+                              </button>
+                           </div>
               </form>
           </div>
         </div>
