@@ -1,9 +1,28 @@
 import { Head, Link, router } from "@inertiajs/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
 import Pagination from "@/Components/Pagination";
-export default function ({ auth,users }) {
+import SuccessModal from "@/Pages/SuccessModal";
+import ErrorModal from "@/Pages/ErrorModal";
 
+export default function ({ auth,users, success, error }) {
+
+       // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
   const deleteUser = (user) =>{
     console.log(account);
   if(!window.confirm("Are you sure to delete this faculty?")){
@@ -26,6 +45,20 @@ export default function ({ auth,users }) {
 
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
+        {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
+
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
+
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
           <div className="row">
             <div className='col-md-6'>
@@ -59,7 +92,7 @@ export default function ({ auth,users }) {
                     <th className="px-3 py-2">Action</th>
                   </tr>
                 </thead>
-                {/* <tbody>
+                <tbody>
                   {users.data.map((user) => (
                     <tr
                       className="bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200"
@@ -87,7 +120,7 @@ export default function ({ auth,users }) {
                       </td>
                     </tr>
                   ))}
-                </tbody> */}
+                </tbody>
               </table>
               {/* <Pagination links={users.meta.links}></Pagination> */}
             </div>
