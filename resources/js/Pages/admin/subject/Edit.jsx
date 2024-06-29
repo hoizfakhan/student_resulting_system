@@ -6,7 +6,10 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 export default function Create({ auth,departments,subject }) {
+
+  console.log(subject);
   const { data, setData, post, errors, reset } = useForm({
+
     name: subject.data.name || "",
     department_id:subject.data.department_id || "",
     semester:subject.data.semester || "",
@@ -146,7 +149,7 @@ export default function Create({ auth,departments,subject }) {
                   </div>
                 </div>
               </div>
-              <div class="row form-row">
+              <div className="row form-row">
                 <div className="form-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>

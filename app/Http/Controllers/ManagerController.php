@@ -86,7 +86,6 @@ class ManagerController extends Controller
                                  ->with('error','An error occured while creating the manager!');
              }
 
-
          }
     }
 

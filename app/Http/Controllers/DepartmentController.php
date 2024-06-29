@@ -7,7 +7,9 @@ use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\FacultyResource;
+use App\Http\Resources\StudentResource;
 use App\Models\Faculty;
+use App\Models\Student;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Log;
@@ -25,10 +27,12 @@ class DepartmentController extends Controller
 
      }
 
-     public function getDepartments(){
+     public function getDepartments($facultyid){
 
         $usertype=Auth()->user()->usertype;
         $departments = Department::all();
+       
+        $departments = Department::where('faculty_id',$facultyid)->get();
         return Inertia("SuperAdmin/teacher/Create",[
             'departments' => DepartmentResource::collection($departments),
             'usertype' => $usertype,
@@ -43,12 +47,14 @@ class DepartmentController extends Controller
     public function create()
     {
         $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
-
         $usertype=Auth()->user()->usertype;
+        $departments = Department::all();
+      
         return Inertia("SuperAdmin/department/Create",[
             'usertype' => $usertype,
             'success' => session('success'),
             'facultys' => FacultyResource::collection($facultys),
+            'Departments' => DepartmentResource::collection($departments),
 
         ]);
     }
@@ -89,6 +95,7 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
+
         $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
         $usertype=Auth()->user()->usertype;
         return Inertia("SuperAdmin/department/Edit",[

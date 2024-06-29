@@ -10,6 +10,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherAccountController;
+use App\Http\Controllers\TeacherSubjectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
@@ -35,6 +37,13 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
     Route::resource('subject',SubjectController::class);
+    Route::resource('assginsubject',TeacherSubjectController::class);
+    Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
+    Route::get('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/edit', [TeacherSubjectController::class, 'edit'])
+    ->name('assignsubject.edit');
+
+    Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
+     ->name('assignsubject.update');
     // all admin routes
 
 });
@@ -45,7 +54,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('department',DepartmentController::class);
     Route::get("/alldepartments",[DepartmentController::class,"getDepartments"])->name("alldepartments");
     Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
-
+    Route::resource("teacheraccount",TeacherAccountController::class);
+    Route::get("blockteacheraccount/{teacheraccountid}",[TeacherAccountController::class,"BlockTeacherAccount"])->name("blockteacheraccount");
    // Super Admin routes
 });
 
@@ -58,6 +68,7 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('teacher',TeacherController::class);
+    Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
 
     // all teacher routes
 

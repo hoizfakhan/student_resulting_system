@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\FacultyResource;
+use App\Http\Resources\SubjectResource;
 use App\Http\Resources\TeacherResource;
+use App\Http\Resources\TeacherSubjectResource;
 use App\Models\Department;
 use App\Models\Faculty;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -83,9 +87,14 @@ class TeacherController extends Controller
     {
         $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
         $usertype=Auth()->user()->usertype;
+        $Departments =   Department::all();
+        $teacherusers = User::where("usertype",2)->get();
+
         return Inertia("SuperAdmin/teacher/Create",[
             'usertype' => $usertype,
+            'teacherusers' => $teacherusers->toArray(),
             'facultys' => FacultyResource::collection($facultys),
+            'Departments' => DepartmentResource::collection($Departments),
         ]);
     }
 
@@ -94,7 +103,25 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
-        //
+
+
+         $data =  $request->validated();
+
+
+         try{
+
+            Teacher::create($data);
+
+            return to_route("teacher.index")
+                           ->with("success","New Teacher has been successfully added!");
+         } catch(QueryException $e){
+
+            Log::error($e->getMessage());
+            return to_route('teacher.index')
+                          ->with('error','An error occured while creating new teacher!');
+
+         }
+
     }
 
     /**
@@ -102,7 +129,7 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
-        //
+
     }
 
     /**
@@ -111,9 +138,11 @@ class TeacherController extends Controller
     public function edit(Teacher $teacher)
     {
         $departments  = Department::all();
+        $teacherusers = User::where("usertype",2)->get();
         $usertype=Auth()->user()->usertype;
         return Inertia("SuperAdmin/teacher/Edit",[
             'teacher' => new TeacherResource($teacher),
+            'teacherusers' => $teacherusers->toArray(),
             'departments' => $departments->toArray(),
             'usertype' => $usertype,
         ]);
@@ -124,6 +153,8 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
+
+
        $data =  $request->validated();
        $name =  $teacher->name;
 
@@ -162,4 +193,21 @@ class TeacherController extends Controller
 
         }
     }
+
+    // teacher part
+
+    public function TeacherSubjects(Request $request){
+
+               $user =  $request->user();
+               $teacher = $user->teacher;
+
+               $teachersubjects = $teacher->subjects()->get();
+
+        $usertype=Auth()->user()->usertype;
+        return Inertia("teacher/TeacherSubject",[
+          'teachersubjects' => SubjectResource::collection($teachersubjects),
+          'usertype' => $usertype,
+        ]);
+    }
+
 }

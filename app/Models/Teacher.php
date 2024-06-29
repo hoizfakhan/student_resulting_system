@@ -16,6 +16,7 @@ class Teacher extends Model
         'father_name',
         'phone',
         'department_id',
+        'user_id'
 
     ];
 
@@ -24,8 +25,14 @@ class Teacher extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function faculty(){
+    public function user(){
 
-        return $this->belongsTo(Faculty::class);
+        return $this->belongsTo(User::class);
     }
+
+   public function subjects(){
+
+     return $this->belongsToMany(Subject::class,TeacherSubject::class);
+   }
+
 }

@@ -25,7 +25,7 @@ class StudentController extends Controller
 
         $user =  $request->user();
         $query =  $user->faculty->students();
-
+        $departments = $user->faculty->departments()->get();
 
 
         if(request('kankor_id')){
@@ -42,7 +42,8 @@ class StudentController extends Controller
            $query->whereHas('department',function($query) use ($departmentid){
                                       $query->where('id',$departmentid);
 
-                            })->get();
+                })->get();
+            // $query->where("students.current_semester",1);
         }
 
         if(request('semester')){
@@ -57,6 +58,7 @@ class StudentController extends Controller
             'success' => session('success'),
             'error' => session('error'),
             'students' => StudentResource::collection($students),
+            'departments' => $departments->toArray(),
             'queryparams' => request()->query() ?: null,
 
         ]);
@@ -149,6 +151,7 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, Student $student)
     {
+
 
          $data = $request->validated();
          $image = $data['image'] ?? null;

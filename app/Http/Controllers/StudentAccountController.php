@@ -122,7 +122,7 @@ class StudentAccountController extends Controller
      */
     public function update(UpdateStudentAccountRequest $request, User $studentaccount)
     {
-
+          
         $data = $request->validated();
         $password = $data['password'] ?? null;
 

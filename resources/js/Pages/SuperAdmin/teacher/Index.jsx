@@ -6,70 +6,92 @@ import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import DangerButton from "@/Components/DangerButton";
 import Pagination from "@/Components/Pagination";
+import SuccessModal from "@/Pages/SuccessModal";
+import ErrorModal from "@/Pages/ErrorModal";
+import { useEffect, useState } from "react";
 
-export default function Index({auth,teachers,success,error,queryparams = null,departments,facultys}){
+export default function Index({
+  auth,
+  teachers,
+  success,
+  error,
+  queryparams = null,
+  departments,
+  facultys,
+}) {
+  // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
 
-   queryparams = queryparams || {}
-   const searchfeildchanged = (name,value) => {
-    if(value){
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
 
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
+  queryparams = queryparams || {};
+  const searchfeildchanged = (name, value) => {
+    if (value) {
       queryparams[name] = value;
-
-    } else{
+    } else {
       delete queryparams[name];
     }
 
-    router.get(route('teacher.index'),queryparams);
+    router.get(route("teacher.index"), queryparams);
+  };
+
+  const onKeyPress = (name, e) => {
+    if (e.key !== "Enter") return;
+    searchfeildchanged(name, e.target.value);
+  };
+
+  const deleteTeacher = (teacher) => {
+    if (!window.confirm("Are you sure to delete this teacher from system?")) {
+      return;
     }
 
-   const onKeyPress = (name,e) =>{
-
-    if(e.key !== 'Enter') return;
-    searchfeildchanged(name,e.target.value);
-
-   }
-
-
-     const deleteTeacher = (teacher) => {
-
-      if(!window.confirm("Are you sure to delete this teacher from system?")){
-       return;
-      }
-
-      router.delete(route("teacher.destroy",teacher.id));
-
-     }
+    router.delete(route("teacher.destroy", teacher.id));
+  };
 
 
  return (
 
   <AuthenticatedLayout
-  user={auth.user}
-  header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Teacher</h2>}
+    user={auth.user}
+    header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Teacher</h2>}
 
   >
 
     <Head title="Teacher" />
 
-    <div className="py-12">
+     
+      <div className="py-12">
+        {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
 
-    {success && (
-            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
-              {success}
-            </div>
-          )}
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
 
-          {error && (
-            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
-              {error}
-            </div>
-          )}
       <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-       <div class="container mb-4">
+       <div className="container mb-4">
           <div className='row'>
-           <div class="col-md-12">
-            <div class="row">
+           <div className="col-md-12">
+            <div className="row">
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">name</h6>
@@ -130,8 +152,7 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
 
               </div>
             </div>
-
-            <div class="col-md-2 mt-5">
+            <div className="col-md-2 mt-5">
                <Link
                  className="btn btn-outline-secondary"
                  href={route("teacher.index")}
@@ -150,14 +171,10 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
             </Link>
             </div>
             </div>
-
             </div>
             </div>
             </div>
             </div>
-
-
-
        <div className='overflow-auto'>
                 <table className='w-full text-md text-left rtl:text-right
                      dark:bg-gray-700 dark:text-gray-300 '>
@@ -184,15 +201,12 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
                            <td className='px-3 py-2 text-center'>{teacher.department.name}</td>
                            <td className='px-3 py-2 text-center'>{teacher.phone}</td>
                            <td className='px-3 py-2 text-nowrap'>
-
                             <Link
                               href={route("teacher.edit",teacher.id)}
                               className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary'
-
                             >
                              Edit
                             </Link>
-
                             <DangerButton
                              onClick={(e) => deleteTeacher(teacher)}
                              className='mx-3'
@@ -204,22 +218,14 @@ export default function Index({auth,teachers,success,error,queryparams = null,de
 
                       ))}
                     </tbody>
-
                 </table>
                <Pagination links={teachers.meta.links}></Pagination>
            </div>
       </div>
      </div>
      </div>
-
-
   </AuthenticatedLayout>
-
-
-
-
-
  );
 
-}
 
+}

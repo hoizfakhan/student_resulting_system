@@ -20,6 +20,8 @@ class FacultyController extends Controller
      */
     public function index()
     {
+        // hi, i want to make attendence for students , i have student list, and the user can search them by their department and semester, when the user retrive the students of first semester, he should be able to to export the students name and father name to excel and arrange them by their kankor_marks, i dont save attendence , just i want to export the retirved students data to excel, iam using laravel with react using inertia, can you give the complete code
+
 
         try{
 

@@ -120,6 +120,8 @@ class SubjectController extends Controller
      */
     public function update(UpdateSubjectRequest $request, Subject $subject)
     {
+
+        
          $data = $request->validated();
           $name = $subject->name;
 
