@@ -75,7 +75,6 @@ export default function Create({ auth,facultys,error}) {
 
 
                                ))}
-
                            </SelectInput>
                            <InputError message={errors.faculty_id}  className='mt-2'/>
                            <InputError/>
@@ -116,14 +115,15 @@ export default function Create({ auth,facultys,error}) {
                              <InputError message={errors.password_confirmation} className='mt-2'/>
                           </div>
 
-                           <div className='mt-4 text-right'>
+                          <div className='mt-4 text-right bg-gray-300 p-2'>
                              <Link
                                href={route("manager.index")}
-                               className='bg-gray-300 py-1 px-3 text-gray-800 rounded  transition-all hover:bg-gray-200 mr-2'
+                               className='bg-gray-300 py-1 px-3 mb-2 text-gray-700 rounded-sm bg-gray-400  transition-all hover:bg-gray-100 mr-2'
                               >
-                              Cancel</Link>
+                               Cancel
+                              </Link>
                               <button
-                               className='bg-emerald-500 py-1 px-3 text-white rounded transition-all hover:bg-emerald-600'
+                               className='bg-emerald-500 py-1 px-3 text-white rounded-sm  me-3 transition-all hover:bg-emerald-600'
 
                               >
                                 Submit

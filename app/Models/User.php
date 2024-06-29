@@ -43,13 +43,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Faculty::class,'faculty_id','id');
     }
 
+   public function teacher(){
+
+      return $this->hasOne(Teacher::class);
+   }
+
    static public function getTotalUser($user_type){
 
          return self::select('users.id')
                       ->where('usertype','=',$user_type)
                       ->count();
-
-
     }
 
     /**

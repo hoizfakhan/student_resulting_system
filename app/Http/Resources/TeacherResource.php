@@ -24,6 +24,8 @@ class TeacherResource extends JsonResource
               'phone' => $this->phone,
               'department_id' => $this->department_id,
               'department' => new DepartmentResource($this->department),
+              'user_id' => $this->user_id,
+              'user' => new UserResource($this->user),
 
 
         ];

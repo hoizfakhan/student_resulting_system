@@ -161,7 +161,7 @@ export default function Edit({ auth,studentaccount }) {
 
 
 
-              <div class="text-center mt-4 bg-gray-200">
+              <div className="text-center mt-4 bg-gray-200">
               <Link
                href={route("studentaccount.index")}
                className='bg-gray-400 py-1  px-3  text-gray-800  rounded transition-all hover:bg-gray-300 mr-2'

@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('teacher',TeacherController::class);
+    Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
 
     // all teacher routes
 

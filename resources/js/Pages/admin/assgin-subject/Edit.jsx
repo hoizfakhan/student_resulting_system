@@ -247,7 +247,7 @@ export default function Edit({ auth,teachers,departments,subjects,teacherSubject
               </div>
 
 
-              <div class="text-center mt-4 bg-gray-200">
+              <div className="text-center mt-4 bg-gray-200">
               <Link
                href={route("assginsubject.index")}
                className='bg-gray-300 py-1  px-3  text-gray-800  rounded transition-all hover:bg-gray-400 mr-2'

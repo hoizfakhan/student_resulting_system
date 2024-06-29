@@ -20,9 +20,9 @@ export default function StudentDetails({auth,student}){
        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 
            <div className="p-6 text-gray-900 dark:text-gray-100">
-            <div class="container-fluid">
-                     <div class="row">
-                         <div class="col text-center bg-secondary h-[200px]">
+            <div className="container-fluid">
+                     <div className="row">
+                         <div className="col text-center bg-secondary h-[200px]">
                           <img src={student.data.image_path} className="img-fluid img-thumbnail object-cover rounded h-[200px] w-64" alt="Thumbnail"></img>
                          </div>
                      </div>

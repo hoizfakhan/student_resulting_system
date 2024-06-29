@@ -21,20 +21,18 @@ const {data,setData,post,errors,reset}  =   useForm({
           name:"",
           email:"",
           password:"",
-         password_confirmation:"",
+          password_confirmation:"",
           status:"",
 
 
 
       });
 
-      const onSubmit = (e) =>{
+  const onSubmit = (e) =>{
 
         e.preventDefault();
-
         post(route("teacheraccount.store"));
        }
-
 
   return (
     <AuthenticatedLayout
@@ -150,22 +148,23 @@ const {data,setData,post,errors,reset}  =   useForm({
                    <InputError message={errors.status} className='mt-2'/>
                   </div>
                 </div>
-
               </div>
 
 
-              <div class="text-center mt-4 bg-gray-200">
-              <Link
-               href={route("teacheraccount.index")}
-               className='bg-gray-400 py-1  px-3  text-gray-800  rounded transition-all hover:bg-gray-300 mr-2'
-              >
-                Cancel
-              </Link>
-              <button className="btn btn-success mb-1 mt-1 mt-1" type="submit">
-                Submit
-              </button>
+                    <div className='mt-4 text-right bg-gray-300 p-2'>
+                             <Link
+                               href={route("teacheraccount.index")}
+                               className='bg-gray-300 py-1 px-3 mb-2 text-gray-700 rounded-sm bg-gray-400  transition-all hover:bg-gray-100 mr-2'
+                              >
+                               Cancel
+                              </Link>
+                              <button
+                               className='bg-emerald-500 py-1 px-3 text-white rounded-sm  me-3 transition-all hover:bg-emerald-600'
 
-              </div>
+                              >
+                                Submit
+                              </button>
+                           </div>
               </form>
           </div>
         </div>

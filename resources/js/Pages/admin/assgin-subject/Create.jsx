@@ -8,6 +8,10 @@ import React, { useEffect, useState } from "react";
 export default function Create({ auth,teachers,departments,subjects,error }) {
 
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [Subjects,setSubjects] = useState([]);
+
+  const [selectedDepartmentid,setselectedDepartmentid] = useState('');
+  const [selectedSemester,setSelectedSemester] = useState('');
 
   const handleCheckboxChange = (event) => {
     const selectedId = parseInt(event.target.value);
@@ -20,7 +24,7 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
 
 
 
-const {data,setData,post,errors,reset}  =   useForm({
+  const {data,setData,post,errors,reset}  =   useForm({
 
           teacher_id:"",
           department_id:"",
@@ -35,11 +39,27 @@ const {data,setData,post,errors,reset}  =   useForm({
       }, [selectedSubjects]);
 
 
+      useEffect(() => {
+        if(selectedDepartmentid && selectedSemester){
+
+          let filteredSub = subjects.data.filter(sub => {
+            return sub.department_id == selectedDepartmentid && sub.semester == selectedSemester
+          })
+          setSubjects(filteredSub);
+          setData({...data,department_id:selectedDepartmentid,semester:selectedSemester});
+        }
+      }, [selectedDepartmentid,selectedSemester]);
+
+
+
       const onSubmit = (e) =>{
 
         e.preventDefault();
 
-        post(route("assginsubject.store"));
+        post(route("assginsubject.store"),{
+          ...data,
+          subject_id:selectedSubjects,
+        });
        }
 
 
@@ -63,7 +83,7 @@ const {data,setData,post,errors,reset}  =   useForm({
          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="mt-4 ms-5">
-              <p className="lead text-gray-600">Assgin Subject Form</p>
+              <p className="lead text-gray-600 ">Assgin Subject Form</p>
             </div>
 
             <form
@@ -107,7 +127,8 @@ const {data,setData,post,errors,reset}  =   useForm({
                       className="form-control mt-1"
                       id="department_id"
                       name="department_id"
-                      onChange={(e) => setData("department_id",e.target.value)}
+                      value={selectedDepartmentid}
+                      onChange={(e) => setselectedDepartmentid(e.target.value)}
                     >
                     <option>Select department</option>
                      {departments.data.map((department) => (
@@ -134,7 +155,8 @@ const {data,setData,post,errors,reset}  =   useForm({
                       id="semester"
                       name="semester"
                       type="number"
-                      onChange={(e) => setData("semester",e.target.value)}
+                      valu={selectedSemester}
+                      onChange={(e) => setSelectedSemester(e.target.value)}
                     />
                    <InputError message={errors.semester} className='mt-2'/>
                   </div>
@@ -146,7 +168,9 @@ const {data,setData,post,errors,reset}  =   useForm({
                       <span className="text-red-300 text-lg">*</span>
                     </InputLabel>
                      <ul>
-                      {subjects.data.map((subject) => (
+                  {Subjects.length > 0 ? (
+
+                      Subjects.map((subject) => (
                         <li key={subject.id} className="mr-2">
                           <input
                             type="checkbox"
@@ -158,7 +182,12 @@ const {data,setData,post,errors,reset}  =   useForm({
 
                         </li>
 
-                      ))}
+                      ))
+                  ) : (
+                    <span className="text-gray-300 text-sm">No Subjects</span>
+                  )
+
+                      }
 
                      </ul>
                   </div>
@@ -178,6 +207,7 @@ const {data,setData,post,errors,reset}  =   useForm({
                       name="status"
                       onChange={(e) => setData("status",e.target.value)}
                      >
+                     <option value="">Select Status</option>
                      <option value="active">Active</option>
                      <option value="inactive">Inactive</option>
 
@@ -190,7 +220,7 @@ const {data,setData,post,errors,reset}  =   useForm({
               </div>
 
 
-              <div class="text-center mt-4 bg-gray-200">
+              <div className="text-center mt-4 bg-gray-200">
               <Link
                href={route("assginsubject.index")}
                className='bg-gray-300 py-1  px-3  text-gray-800  rounded transition-all hover:bg-gray-400 mr-2'
