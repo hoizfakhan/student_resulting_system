@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
 import Pagination from "@/Components/Pagination";
 import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
+import SuccessModal from "@/Pages/SuccessModal";
+import ErrorModal from "@/Pages/ErrorModal";
+
 export default function Index({ auth,users,success,error,studentaccounts,queryparams = null }) {
+
+       // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
   queryparams = queryparams || {}
 
  const searchfeildchanged = (name,value) => {
@@ -49,17 +69,19 @@ export default function Index({ auth,users,success,error,studentaccounts,querypa
 
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
-        {success && (
-              <div className='bg-emerald-500 py-2 px-4 text-white rounded mb-4'>
-               {success}
-              </div>
+        {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
         )}
 
-         {error && (
-              <div className='bg-red-500 py-2 px-4 text-white rounded mb-4'>
-               {error}
-               </div>
-         )}
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
           <div className="container">
           <div className='row'>

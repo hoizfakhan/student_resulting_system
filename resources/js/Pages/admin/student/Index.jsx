@@ -4,9 +4,28 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, router,usePage } from "@inertiajs/react";
+
 import SelectInput from "@/Components/SelectInput";
 
+
 export default function Index({ auth,success,error,students,departments,queryparams = null }) {
+
+          // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
 
   queryparams = queryparams || {}
 
@@ -64,17 +83,19 @@ export default function Index({ auth,success,error,students,departments,querypar
       <Head title="Student" />
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
-          {success && (
-            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
-              {success}
-            </div>
-          )}
+          {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
 
-          {error && (
-            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
-              {error}
-            </div>
-          )}
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
           <div className="container mb-4">
           <div className='row'>

@@ -3,9 +3,28 @@ import DangerButton from '@/Components/DangerButton';
 import Pagination from '@/Components/Pagination';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
+import SuccessModal from '@/Pages/SuccessModal';
+import ErrorModal from '@/Pages/ErrorModal';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard({ auth,success,error,managers }) {
 
+    // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
     const deletemanager = (manager) =>{
 
       if(!window.confirm("Are you sure to delete this manager?")){
@@ -25,17 +44,20 @@ export default function Dashboard({ auth,success,error,managers }) {
 
             <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
-                     {success && (
-                        <div className='bg-emerald-500 py-2 px-4 text-white rounded mb-4'>
-                         {success}
-                       </div>
-                        )}
+                {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
 
-               {error && (
-                  <div className='bg-amber-400 py-2 px-5 text-white rounded mb-4 ms-4 me-4  '>
-                  {error}
-                 </div>
-                  )}
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
+
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 
                     <div className='row'>

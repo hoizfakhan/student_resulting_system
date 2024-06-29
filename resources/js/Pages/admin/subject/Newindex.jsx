@@ -4,7 +4,27 @@ import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router} from "@inertiajs/react";
+import SuccessModal from "@/Pages/SuccessModal";
+import ErrorModal from "@/Pages/ErrorModal";
+import { useEffect, useState } from "react";
 export default function Newindex({auth,subjects,queryparams = null,departments,success,error}){
+
+            // for the modal of success and error
+  const [successMessage, setSuccessMessage] = useState(success || null);
+  const [errorMessage, setErrorMessage] = useState(error || null);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+  //
   queryparams = queryparams || {}
    const searchfeildchanged = (name,value) =>{
     if(value){
@@ -48,17 +68,20 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
   >
       <Head title="Subjects" />
       <div className="py-12">
-      {success && (
-            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
-              {success}
-            </div>
-          )}
+      {successMessage && (
+          <SuccessModal
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
 
-          {error && (
-            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
-              {error}
-            </div>
-          )}
+        {errorMessage && (
+          <ErrorModal
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
+
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div className="container mb-4">
