@@ -41,6 +41,17 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+
+    //'providers' => [
+
+//        Maatwebsite\Excel\ExcelServiceProvider::class,
+  //  ],
+
+    //'aliases' => [
+
+      //  'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+    //],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -117,6 +128,8 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
+
+
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),

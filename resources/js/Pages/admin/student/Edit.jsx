@@ -149,7 +149,7 @@ export default function Create({ auth,departments,student}) {
               </div>
 
 
-               <div class="row form-row">
+               <div className="row form-row">
                 <div className="form-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>

@@ -109,7 +109,6 @@ class TeacherSubjectController extends Controller
     public function store(Request $request)
     {
 
-
         $request->validate([
 
             'teacher_id' => 'required|string',
@@ -212,12 +211,19 @@ class TeacherSubjectController extends Controller
     {
 
 
-       DB::table('teacher_subjects')
+      $record = DB::table('teacher_subjects')
                  ->where('teacher_id',$attributes['teacher_id'])
                  ->where('department_id',$attributes['department_id'])
                  ->where('semester',$attributes['semester'])
                  ->where('subject_id',$attributes['subject_id'])
-                 ->update($attributes);
+                 ->fist();
+
+            $record->update([
+                'teacher_id' => $attributes['teacher_id'],
+                'department_id' => $attributes['department_id'],
+                'semesster' => $attributes['semester'],
+                'subject_id' => $attributes['subject_id'],
+            ]);
 
 
              return to_route("assginsubject.index")->with("success","Assgined Subject has been updated  successfully!");

@@ -4,11 +4,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, router,usePage } from "@inertiajs/react";
-import SuccessModal from "@/Pages/SuccessModal";
-import ErrorModal from "@/Pages/ErrorModal";
-import { useEffect, useState } from "react";
 
-export default function Index({ auth,success,error,students,queryparams = null }) {
+import SelectInput from "@/Components/SelectInput";
+
+
+export default function Index({ auth,success,error,students,departments,queryparams = null }) {
 
           // for the modal of success and error
   const [successMessage, setSuccessMessage] = useState(success || null);
@@ -49,6 +49,17 @@ export default function Index({ auth,success,error,students,queryparams = null }
 
     }
 
+    const searchDepartmentfeildchanged = (name,value)  =>{
+
+      if(value){
+       queryparams[name] = value;
+
+      } else{
+        delete queryparams[name]
+      }
+
+      router.get(route('student.index'),queryparams);
+    }
 
   const deleteStudent = (student) =>{
 
@@ -86,10 +97,10 @@ export default function Index({ auth,success,error,students,queryparams = null }
           />
         )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="container mb-4">
+          <div className="container mb-4">
           <div className='row'>
-           <div class="col-md-12">
-            <div class="row">
+           <div className="col-md-12">
+            <div className="row">
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">Kankor ID</h6>
@@ -121,18 +132,26 @@ export default function Index({ auth,success,error,students,queryparams = null }
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">Department</h6>
-                  <TextInput
+                <SelectInput
                    className="form-control"
                    placeholder="Search..."
-                   defaultValue={queryparams.department}
-                   onBlur={e => searchfeildchanged('department',e.target.value)}
-                   onKeyPress={e => onKeyPress('department',e)}
-                 />
+                  defaultValue={queryparams.department}
+                   onChange={(e) => searchDepartmentfeildchanged('department',e.target.value)}
+                 >
+                    <option>Select</option>
+                     {departments.map((department) => (
+
+                       <option value={department.name} key={department.id}>{department.name}</option>
+
+                     ))
+                    }
+
+                 </SelectInput>
 
               </div>
             </div>
 
-            <div class="col-md-2 ">
+            <div className="col-md-2 ">
             <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">semester</h6>
                   <TextInput
@@ -171,6 +190,27 @@ export default function Index({ auth,success,error,students,queryparams = null }
             </div>
             </div>
             </div>
+            </div>
+            <div className="row mb-2 ms-4">
+              <div className="col-md-3">
+                <span className="text-gray-400">Make Attendence for first semesters</span>
+               <SelectInput
+                   className="form-control"
+                   placeholder="Search..."
+                   defaultValue={queryparams.department}
+                   onChange={(e) => searchDepartmentfeildchanged('department',e.target.value)}
+                 >
+                    <option>Select Department</option>
+                     {departments.map((department) => (
+
+                       <option value={department.name} key={department.id}>{department.name}</option>
+
+                     ))
+                    }
+
+                 </SelectInput>
+
+              </div>
             </div>
             <div className='overflow-auto'>
                 <table className='w-full text-md text-left rtl:text-right
@@ -228,19 +268,8 @@ export default function Index({ auth,success,error,students,queryparams = null }
                       ))}
                     </tbody>
                 </table>
-                {/* {students.current_semester === 1 ? (<div className="text-end">
-                             <Link href="" className="btn btn-primary m-3">
-                                 Export to Excel
-                            </Link>
-                           </div>
-                           ):(
-                                null
-                          )
-                              }
-                */}
+
                 <Pagination links={students.meta.links}></Pagination>
-
-
            </div>
           </div>
           </div>

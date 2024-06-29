@@ -105,10 +105,10 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
         )}
 
         <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="container">
+        <div className="container">
           <div className='row'>
-           <div class="col-md-12">
-            <div class="row">
+           <div className="col-md-12">
+            <div className="row">
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">subject</h6>
@@ -189,7 +189,7 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
             </div>
 
 
-            <div class="mt-3 me-4">
+            <div className="mt-3 me-4">
                <Link
                  className="btn btn-outline-secondary py-1 px-3 rounded shadow transition-all hover:bg-gray-600"
                  href={route("assginsubject.index")}

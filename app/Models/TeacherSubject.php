@@ -30,7 +30,7 @@ class TeacherSubject extends Model
     return 'teacher_id,faculty_id,department_id,semester,subject_id';
    }
 
- 
+
 
 
      // Mutator to serialize the subject field before saving to the database
@@ -64,4 +64,7 @@ class TeacherSubject extends Model
 
         return $this->belongsTo(Subject::class);
      }
+
+
+     
 }
