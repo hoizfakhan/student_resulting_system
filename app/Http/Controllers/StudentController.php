@@ -89,7 +89,6 @@ class StudentController extends Controller
 
        try{
 
-
        $image = $data['image'] ?? null;
 
         if($image){
