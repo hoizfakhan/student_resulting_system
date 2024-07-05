@@ -5,6 +5,9 @@ import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, router,usePage } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
+import { useEffect, useState } from "react";
+import SuccessModal from "@/Pages/SuccessModal";
+import ErrorModal from "@/Pages/ErrorModal";
 
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";

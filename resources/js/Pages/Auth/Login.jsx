@@ -31,7 +31,7 @@ export default function Login({ status, canResetPassword, error }) {
             <div className="flex flex-col items-center min-h-[80vh] justify-start bg-gradient-to-b from-blue-500 via-blue-400 to-indigo-600 pt-12">
                 <div className="w-full sm:max-w-md p-4 bg-white shadow-lg rounded-lg mt-8"> {/* Adjusted margin */}
                     <div className="mb-4 text-center"> {/* Adjusted margin */}
-                        <img src="/images/ApplicationLogo.jpg" alt="Logo" className="w-20 h-20 mx-auto mb-2 rounded-full shadow-md" />
+                        <img src="/images/ApplicationLogo.png" alt="Logo" className="w-20 h-20 mx-auto mb-2 rounded-full shadow-md" />
                         <h2 className="text-xl font-bold text-gray-800">Kabul Polytechnic University</h2>
                         <p className="mt-1 text-sm text-gray-600">Student Resulting System</p>
                     </div>
