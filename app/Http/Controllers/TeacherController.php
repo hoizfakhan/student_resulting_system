@@ -35,8 +35,6 @@ class TeacherController extends Controller
 
             $query->where("teachers.name","like","%".request("name")."%");
         }
-
-
         if(request('faculty')){
             $facultyname = $request->input('faculty');
             $facultyid  = Faculty::where('faculty_name',$facultyname)->first()->id;
@@ -44,12 +42,9 @@ class TeacherController extends Controller
                             $query->whereHas('faculty',function($query) use ($facultyid){
                              $query->where('id',$facultyid);
                             });
-
            });
 
         }
-
-
         if(request('department')){
             $departmentname = $request->input('department');
             $departmentid  = Department::where('name',$departmentname)->first()->id;
@@ -59,11 +54,6 @@ class TeacherController extends Controller
            });
 
         }
-
-
-
-
-
        $teachers =  $query->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("SuperAdmin/teacher/Index",[
@@ -76,8 +66,6 @@ class TeacherController extends Controller
             'error' => session("error"),
 
          ]);
-
-
     }
 
     /**
@@ -204,10 +192,12 @@ class TeacherController extends Controller
                $teachersubjects = $teacher->subjects()->get();
 
         $usertype=Auth()->user()->usertype;
-        return Inertia("teacher/TeacherSubject",[
+        return Inertia("teacher/subject/TeacherSubject",[
           'teachersubjects' => SubjectResource::collection($teachersubjects),
           'usertype' => $usertype,
         ]);
     }
+
+    
 
 }

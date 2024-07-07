@@ -47,4 +47,15 @@ class Student extends Model
     }
 
 
+    public function attendence()
+    {
+        return $this->hasMany(Attendence::class);
+    }
+
+    public  function subjects(){
+
+        return $this->belongsToMany(Subject::class,Student_Subject::class);
+
+    }
+
 }

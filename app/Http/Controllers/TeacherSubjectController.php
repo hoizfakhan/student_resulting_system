@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTeacherRequest;
-use App\Models\TeacherSubject;
-use App\Http\Requests\StoreTeacherSubjectRequest;
-use App\Http\Requests\UpdateTeacherSubjectRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\SubjectResource;
 use App\Http\Resources\TeacherResource;
@@ -13,9 +10,9 @@ use App\Http\Resources\TeacherSubjectResource;
 use App\Models\Department;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\TeacherSubject;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -32,7 +29,7 @@ class TeacherSubjectController extends Controller
 
        $teachers = $user->faculty->teachers()->get();
 
-        $query =  TeacherSubject::where('faculty_id',$facultyid);
+        $query = TeacherSubject ::where('faculty_id',$facultyid);
 
          if(request("subject")){
             $subjectname = $request->input('subject');
@@ -118,8 +115,6 @@ class TeacherSubjectController extends Controller
             'subject_id.*' => 'integer',
             'status' => 'required|string',
         ]);
-
-
 
         try{
 

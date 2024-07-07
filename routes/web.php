@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FacultyController;
@@ -68,8 +69,11 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('teacher',TeacherController::class);
-    Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
 
+    Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
+    Route::resource("attendence",AttendenceController::class);
+    Route::post('attendence/{subjectid}/{semester}', [AttendenceController::class,"store"])->name("attendence.store1");
+    Route::get("/attendence/{department_id}/{semester}/{subjectid}",[AttendenceController::class,"create"])->name("attendence.create");
     // all teacher routes
 
 });

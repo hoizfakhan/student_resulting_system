@@ -241,10 +241,10 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
                                 semester: teacherSubject.semester,
                                 subject_id: teacherSubject.subject_id
                             })}
-                           
+
                              className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                            >
-                          Edit
+                           Edit
                           </Link>
 
                          <DangerButton

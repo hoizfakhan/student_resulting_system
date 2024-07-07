@@ -216,7 +216,6 @@ export default function Create({auth,Departments,teacherusers}){
                               </button>
                            </div>
                         </form>
-
       </div>
      </div>
      </div>
