@@ -334,7 +334,9 @@ export default function Index({ auth,success,error,students,departments,querypar
                     </tbody>
                 </table>
 
-                <Pagination links={students.meta.links}></Pagination>
+                {students.data.length > 8 && (
+                <Pagination links={students.meta.links} />
+              )}
            </div>
           </div>
           </div>
