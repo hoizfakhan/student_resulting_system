@@ -48,6 +48,11 @@ class Subject extends Model
       return $this->hasMany(Attendence::class);
     }
 
+    public function semesters(){
+
+        return $this->belongsToMany(Semester::class,Semester_Subject::class);
+    }
+
 
 
 }

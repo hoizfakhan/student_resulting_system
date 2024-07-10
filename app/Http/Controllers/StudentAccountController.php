@@ -77,12 +77,11 @@ class StudentAccountController extends Controller
         try{
 
         $data = $request->validated();
+
         $data['password'] = bcrypt($data['password']);
         $data['usertype'] = User::STUDENT;
         $data['email_verified_at'] = time();
-        $user = $request->user();
-        $userfacultyid =  $user->faculty_id;
-        $data['faculty_id'] = $userfacultyid;
+      
 
        User::create($data);
       return to_route("studentaccount.index")->with('success','Student account created successfully!');
@@ -122,7 +121,7 @@ class StudentAccountController extends Controller
      */
     public function update(UpdateStudentAccountRequest $request, User $studentaccount)
     {
-          
+
         $data = $request->validated();
         $password = $data['password'] ?? null;
 

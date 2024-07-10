@@ -62,8 +62,8 @@ Route::middleware(['auth'])->group(function(){
 
 
 Route::middleware(['auth'])->group(function(){
-
-// all student routes
+    Route::get("myprofile",[StudentController::class,"MyProfile"])->name("myprofile");
+   // all student routes
 
  });
 
@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource("attendence",AttendenceController::class);
     Route::post('attendence/{subjectid}/{semester}', [AttendenceController::class,"store"])->name("attendence.store1");
     Route::get("/attendence/{department_id}/{semester}/{subjectid}",[AttendenceController::class,"create"])->name("attendence.create");
+
     // all teacher routes
 
 });

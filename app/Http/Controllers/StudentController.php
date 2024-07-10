@@ -7,13 +7,14 @@ use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Department;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class StudentController extends Controller
 {
@@ -26,7 +27,8 @@ class StudentController extends Controller
         $user =  $request->user();
         $query =  $user->faculty->students();
         $departments = $user->faculty->departments()->get();
-
+        $sortField = request("sort_field","created_at");
+        $sortDirection = request("sort_direction","desc");
 
         if(request('kankor_id')){
            $query->where("students.kankor_id",request("kankor_id"));
@@ -51,7 +53,7 @@ class StudentController extends Controller
           }
 
 
-        $students = $query->paginate(10);
+        $students = $query->orderBy($sortField,$sortDirection)->paginate(10);
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Index",[
             'usertype' => $usertype,
@@ -74,8 +76,11 @@ class StudentController extends Controller
         $user =  $request->user();
         $departments =  $user->faculty->departments()->get();
         $usertype=Auth()->user()->usertype;
+        $studentusers = User::where("usertype",0)->get();
+
         return Inertia("admin/student/Create",[
             'usertype' => $usertype,
+            'studentusers'=> $studentusers->toArray(),
             'departments' => $departments->toArray(),
         ]);
     }
@@ -135,11 +140,12 @@ class StudentController extends Controller
     {
         $user =  $request->user();
         $departments =  $user->faculty->departments()->get();
-
+        $studentusers = User::where("usertype",0)->get();
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/Edit",[
             'student' => new StudentResource($student),
             'departments' => $departments->toArray(),
+            'studentusers'=> $studentusers->toArray(),
             'usertype' => $usertype,
         ]);
 
@@ -153,6 +159,7 @@ class StudentController extends Controller
 
 
          $data = $request->validated();
+
          $image = $data['image'] ?? null;
 
          try{
@@ -197,5 +204,21 @@ class StudentController extends Controller
                               ->with('error','An error occured while deleteting this student!');
              }
     }
+
+
+    //student side
+
+    public function MyProfile(Request $request){
+
+        $user =  $request->user();
+        $student = $user->student;
+
+        $usertype=Auth()->user()->usertype;
+        return Inertia("student/Information",[
+         'student' => $student,
+         'usertype' => $usertype,
+
+        ]);
+    }
 }
-;
+

@@ -254,38 +254,24 @@ export default function Authenticated({ user, header, children }) {
                         >
                           <i className='bi bi-speedometer2'></i>
                           <NavLink href={route('dashboard')} active={route('').current('dashboard')} className='fs-6 text-white   ms-3 d-none d-sm-inline'>
-                            MyResults
+                            Dashboard
                           </NavLink>
                         </a>
                       </li>
 
-                      <li className="nav-item  my-1 py-2 py-sm-0">
-                        <a href="#submenu" className="nav-link text-white text-center text-sm-start" data-bs-toggle="collapse" aria-current="page"
-                        >
-                          <i className='bi bi-grid'></i>
-                          <NavLink href={route('dashboard')} active={route('').current('dashboard')} className=' fs-6 text-white   ms-3 d-none d-sm-inline'>
-                            MySubjects
-                          </NavLink>
-                          <i className='bi bi-arrow-down-short ms-0 ms-sm-0'></i>
+                      <li className="nav-item text-white my-1 py-2 py-sm-0">
+                          <a className="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
+                          >
+                            <span className='ms-2 d-none d-sm-inline'>
+                              <FontAwesomeIcon icon={faGraduationCap} />
+                              <NavLink href={route('myprofile')} active={route('').current('myprofile')} className='fs-6 text-white ms-2 d-none d-sm-inline'>
+                                My Info
+                              </NavLink>
+                            </span>
+                          </a>
+                        </li>
 
-                        </a>
-                        <ul
-                          className="nav collapse ms-2 flex-column"
-                          id='submenu'
-                          data-bs-parent="#parentM"
-                        >
-                          <li className="nav-item">
-                            <a className="nav-link text-white " href="#" aria-current="page">
-                              <span className='d-none d-sm-inline'>Teachers</span></a>
 
-                          </li>
-                          <li className="nav-item ">
-                            <a className="nav-link text-white" href="#"><span className='d-none d-sm-inline'>Item 2</span></a>
-                          </li>
-
-                        </ul>
-
-                      </li>
 
 
                       <li className="nav-item  my-1 py-2 py-sm-0">

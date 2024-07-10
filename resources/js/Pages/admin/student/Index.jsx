@@ -8,10 +8,7 @@ import SelectInput from "@/Components/SelectInput";
 import { useEffect, useState } from "react";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
-
-import SuccessModal from "@/Pages/SuccessModal";
-import ErrorModal from "@/Pages/ErrorModal";
-import { useEffect,useState } from "react";
+import {ChevronUpIcon,ChevronDownIcon} from '@heroicons/react/16/solid'
 
 export default function Index({ auth,success,error,students,departments,queryparams = null }) {
 
@@ -64,6 +61,24 @@ export default function Index({ auth,success,error,students,departments,querypar
       }
 
       router.get(route('student.index'),queryparams);
+    }
+
+    const sortChanged = (name) => {
+
+     if(name === queryparams.sort_field){
+        if(queryparams.sort_direction === "asc"){
+          queryparams.sort_direction = "desc";
+        } else{
+          queryparams.sort_direction = "asc";
+        }
+
+     } else{
+      queryparams.sort_field = name;
+      queryparams.sort_direction = "asc";
+     }
+
+      router.get(route("student.index"),queryparams);
+
     }
 
   const deleteStudent = (student) =>{
@@ -223,13 +238,57 @@ export default function Index({ auth,success,error,students,departments,querypar
                    <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400
                         border-b-2 border-gray-500'>
                       <tr className='text-nowrap bg-gray-500 text-white align-middle'>
-                       <th className='px-3 py-2 '>ID</th>
-                        <th className='px-3 py-2 '>Name</th>
+
+                        <th onClick={(e) => sortChanged('name')}>
+                           <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
+                             Name
+                             <div>
+                              <ChevronUpIcon className={
+                                "w-4 "+
+                                 (queryparams.sort_field === "name" &&
+                                  queryparams.sort_direction === "asc"
+                                  ? "text-white" : ""
+                                 )
+
+                                }
+
+                              />
+                              <ChevronDownIcon className={
+                                   "w-4 -mt-2 "+
+                                   (queryparams.sort_field === "name" &&
+                                    queryparams.sort_direction === "desc"
+                                    ? "text-white" : ""
+                                   )
+
+                              }
+
+
+
+
+                              />
+                             </div>
+
+                           </div>
+
+                        </th>
                         <th className='px-3 py-2'>Father Name</th>
                         <th className='px-3 py-2'>Department</th>
                         <th className='px-3 py-2'>Current Semester</th>
                         <th className='px-3 py-2'>Phone Number</th>
                         <th className='px-3 py-2'>Kankor ID</th>
+                        <th  onClick={(e) => sortChanged('kankor_marks')}>
+
+                          <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
+                             Kankor Marks
+                             <div>
+                              <ChevronUpIcon className="w-4"/>
+                              <ChevronDownIcon className="w-4 -mt-2"/>
+                             </div>
+
+                           </div>
+
+
+                        </th>
                         <th className='px-3 py-2'>Action</th>
                       </tr>
                    </thead>
@@ -237,13 +296,14 @@ export default function Index({ auth,success,error,students,departments,querypar
                       {students.data.map((student) => (
 
                           <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={student.id}>
-                           <td className='px-3 py-2'>{student.id}</td>
+
                            <td className='px-3 py-2'>{student.name}</td>
                            <td className='px-3 py-2 text-center'>{student.father_name}</td>
                            <td className='px-3 py-2 text-center'>{student.department.name}</td>
                            <td className='px-3 py-2 text-center'>{student.current_semester}</td>
                            <td className='px-3 py-2'>{student.phone_number}</td>
                            <td className='px-3 py-2 text-center'>{student.kankor_id}</td>
+                           <td className='px-3 py-2 text-center'>{student.kankor_marks}</td>
                            <td className='px-3 py-2 text-nowrap'>
 
                            <Link

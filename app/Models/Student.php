@@ -30,6 +30,7 @@ class Student extends Model
       'kankor_marks',
       'admission_date',
       'department_id',
+      'user_id',
       'current_semester',
       'identity_cart_number',
       'number_maktob_sent_exam_commettee',
@@ -40,6 +41,7 @@ class Student extends Model
 
 
     ];
+
 
     public function department(){
 
@@ -57,5 +59,16 @@ class Student extends Model
         return $this->belongsToMany(Subject::class,Student_Subject::class);
 
     }
+
+    public function user(){
+
+        return $this->belongsTo(User::class);
+    }
+
+    public function semesters(){
+
+        return $this->belongsToMany(Semester::class,Student_Semester::class);
+    }
+
 
 }
