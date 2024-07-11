@@ -564,7 +564,11 @@ export default function Authenticated({ user, header, children }) {
                             active={route("").current("studentaccount.index")}
                             className="fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline"
                           >
-                            <span className="me-2">*</span>
+                            <FontAwesomeIcon
+                              icon={faBriefcase}
+                              className="text-white inline-block mr-1"
+                            />
+                            
                             Teacher List
                           </NavLink>
                         </li>
