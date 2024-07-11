@@ -2,6 +2,8 @@
 
 return [
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -42,15 +44,15 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
 
 
-    //'providers' => [
+//     'providers' => [
 
 //        Maatwebsite\Excel\ExcelServiceProvider::class,
-  //  ],
+//    ],
 
-    //'aliases' => [
+//     'aliases' => [
 
-      //  'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-    //],
+//        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+//     ],
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +66,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -116,6 +120,9 @@ return [
         ),
     ],
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
@@ -128,9 +135,6 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
-
-
-
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),

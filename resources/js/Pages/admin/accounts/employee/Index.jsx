@@ -92,35 +92,7 @@ export default function ({ auth,users, success, error }) {
                     <th className="px-3 py-2">Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {users.data.map((user) => (
-                    <tr
-                      className="bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200"
-                      key={user.id}
-                    >
-                      <td className="px-3 py-2">{user.name}</td>
-                      <td className="px-3 py-2">{user.email}</td>
-                      <td className="px-3 py-2">{user.status}</td>
-                      <td className="px-3 py-2 text-nowrap">
-                        <Link
-                          href={route("user.edit", user.id)}
-                          className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
-                        >
-                          Edit
-                        </Link>
-
-                        <DangerButton
-                          onClick={(e) => deleteUser(user)}
-                          className="mx-3"
-                        >
-                          Delete
-                        </DangerButton>
-
-                       
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+             
               </table>
               {/* <Pagination links={users.meta.links}></Pagination> */}
             </div>

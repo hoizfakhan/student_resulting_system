@@ -313,22 +313,43 @@ export default function Authenticated({ user, header, children }) {
                         </li>
                       </>
                     )}
-                  </ul>
-                ) : usertype == 0 ? (
-                  <ul
-                    className="nav nav-pills flex-column  mt-2 mt-sm-0"
-                    id="parentM"
-                  >
-                    <li className="nav-item text-white my-1 py-2 py-sm-0">
-                      <a
-                        className="nav-link text-white text-center text-sm-start"
-                        aria-current="page"
-                      >
-                        <i className="bi bi-speedometer2"></i>
-                        <NavLink
-                          href={route("dashboard")}
-                          active={route("").current("dashboard")}
-                          className="fs-6 text-white   ms-3 d-none d-sm-inline"
+
+
+
+                  </ul>) : usertype == 0 ? (
+                    <ul
+                      className="nav nav-pills flex-column  mt-2 mt-sm-0"
+                      id='parentM'
+                    >
+
+                      <li className="nav-item text-white my-1 py-2 py-sm-0">
+                        <a className="nav-link text-white text-center text-sm-start" aria-current="page"
+                        >
+                          <i className='bi bi-speedometer2'></i>
+                          <NavLink href={route('dashboard')} active={route('').current('dashboard')} className='fs-6 text-white   ms-3 d-none d-sm-inline'>
+                            Dashboard
+                          </NavLink>
+                        </a>
+                      </li>
+
+                      <li className="nav-item text-white my-1 py-2 py-sm-0">
+                          <a className="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
+                          >
+                            <span className='ms-2 d-none d-sm-inline'>
+                              <FontAwesomeIcon icon={faGraduationCap} />
+                              <NavLink href={route('myprofile')} active={route('').current('myprofile')} className='fs-6 text-white ms-2 d-none d-sm-inline'>
+                                My Info
+                              </NavLink>
+                            </span>
+                          </a>
+                        </li>
+
+
+
+
+                      <li className="nav-item  my-1 py-2 py-sm-0">
+                        <a className="nav-link text-white text-center text-sm-start" aria-current="page"
+
                         >
                           MyResults
                         </NavLink>

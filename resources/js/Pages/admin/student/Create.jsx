@@ -7,7 +7,7 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({ auth,departments}) {
+export default function Create({ auth,departments,studentusers}) {
 
    const {data,setData,post,errors,reset} =  useForm({
 
@@ -37,12 +37,8 @@ export default function Create({ auth,departments}) {
     identity_cart_number:"",
     image:"",
     department_id:"",
-
-
+    user_id:"",
      });
-
-
-
 
   const onSubmit = (e) => {
 
@@ -597,6 +593,26 @@ export default function Create({ auth,departments}) {
                   </div>
                 </div>
               </div>
+                <div className='mt-3'>
+                          <InputLabel htmlFor="faculty">Student Account: <span className='text-red-300 text-lg'>*</span></InputLabel>
+                           <SelectInput
+                             id="user_id"
+                             name="user_id"
+                             className="form-control"
+                             onChange={(e) => setData("user_id", e.target.value)}
+
+                             >
+                             <option value="">Select User</option>
+                             {studentusers.map((studentuser) =>(
+                               <option value={studentuser.id} key={studentuser.id}>{studentuser.email}</option>
+
+                             ))}
+
+                           </SelectInput>
+                           <InputError message={errors.user_id} className='mt-2'/>
+                           <InputError/>
+                          </div>
+
               <div className="text-end mt-4">
                 <Link
                   href={route("student.index")}

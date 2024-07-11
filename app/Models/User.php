@@ -48,6 +48,11 @@ class User extends Authenticatable implements MustVerifyEmail
       return $this->hasOne(Teacher::class);
    }
 
+   public function student(){
+
+     return $this->hasOne(Student::class);
+   }
+
    static public function getTotalUser($user_type){
 
          return self::select('users.id')
