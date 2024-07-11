@@ -8,7 +8,7 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({ auth,departments,student}) {
+export default function Create({ auth,departments,student,studentusers}) {
 
    const {data,setData,post,errors,reset} =  useForm({
 
@@ -37,6 +37,7 @@ export default function Create({ auth,departments,student}) {
     number_maktob_lailia:student.data.number_maktob_lailia || "",
     identity_cart_number:student.data.identity_cart_number || " ",
     department_id:student.data.department_id || "",
+    user_id:student.data.user_id || "",
     image:'',
     _method:'PUT',
 
@@ -400,7 +401,7 @@ export default function Create({ auth,departments,student}) {
                       Kankor ID:<span className="text-red-300 text-lg">*</span>
                     </InputLabel>
                     <input
-                      type="number"
+                      type="text"
                       name="kankor_id"
                       value={data && data.kankor_id}
                       className="form-control mt-1"
@@ -586,6 +587,27 @@ export default function Create({ auth,departments,student}) {
 
                   </div>
                 </div>
+
+                <div className='mt-3'>
+                          <InputLabel htmlFor="faculty">Student Account: <span className='text-red-300 text-lg'>*</span></InputLabel>
+                           <SelectInput
+                             id="user_id"
+                             name="user_id"
+                             className="form-control"
+                             value={data.user_id}
+                             onChange={(e) => setData("user_id", e.target.value)}
+
+                             >
+                             <option value="">Select User</option>
+                            {studentusers.map((studentuser) =>(
+                               <option value={studentuser.id} key={studentuser.id}>{studentuser.email}</option>
+
+                             ))}
+
+                           </SelectInput>
+                           <InputError message={errors.user_id} className='mt-2'/>
+                           <InputError/>
+                          </div>
               </div>
               <div className="text-end mt-4">
                 <Link

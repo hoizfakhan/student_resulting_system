@@ -42,6 +42,7 @@ class StoreStudentRequest extends FormRequest
             'kankor_marks' => ['required','integer'],
             'admission_date' => ['required','date'],
             'department_id' => ['required','integer'],
+            'user_id' => ['nullable','integer'],
             'current_semester' => ['required','integer','between:1,10'],
             'identity_cart_number' => ['nullable','string','max:255'],
             'number_maktob_sent_exam_commettee' => ['nullable','integer'],

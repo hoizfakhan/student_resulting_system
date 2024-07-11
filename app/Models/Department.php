@@ -37,4 +37,9 @@ class Department extends Model
         return $this->hasMany(Teacher::class);
     }
 
+    public function semesters(){
+
+        return $this->belongsToMany(Semester::class,Department_Semester::class);
+    }
+
 }

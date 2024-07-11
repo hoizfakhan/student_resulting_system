@@ -7,17 +7,13 @@ import { Head, Link, router, usePage } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
-import { useEffect, useState } from "react";
 
-export default function Index({
-  auth,
-  success,
-  error,
-  students,
-  departments,
-  queryparams = null,
-}) {
-  // Handling success and error messages
+import {ChevronUpIcon,ChevronDownIcon} from '@heroicons/react/16/solid'
+
+export default function Index({ auth,success,error,students,departments,queryparams = null }) {
+
+          // for the modal of success and error
+
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
 
@@ -55,14 +51,47 @@ export default function Index({
     } else {
       delete queryparams[name];
     }
-    router.get(route("student.index"), queryparams);
-  };
 
-  const deleteStudent = (student) => {
-    if (
-      !window.confirm("Are you sure to delete this student from the system?")
-    ) {
-      return;
+
+    const searchDepartmentfeildchanged = (name,value)  =>{
+
+      if(value){
+       queryparams[name] = value;
+
+      } else{
+        delete queryparams[name]
+      }
+
+      router.get(route('student.index'),queryparams);
+    }
+
+    const sortChanged = (name) => {
+
+     if(name === queryparams.sort_field){
+        if(queryparams.sort_direction === "asc"){
+          queryparams.sort_direction = "desc";
+        } else{
+          queryparams.sort_direction = "asc";
+        }
+
+     } else{
+      queryparams.sort_field = name;
+      queryparams.sort_direction = "asc";
+     }
+
+      router.get(route("student.index"),queryparams);
+
+    }
+
+  const deleteStudent = (student) =>{
+
+    if(!window.confirm("Are you sure to delete this student from system?")){
+     return;
+     }
+
+    router.delete(route("student.destroy",student.id));
+
+
     }
     router.delete(route("student.destroy", student.id));
   };
@@ -219,6 +248,81 @@ export default function Index({
                 </SelectInput>
               </div>
             </div>
+
+            <div className='overflow-auto'>
+                <table className='w-full text-md text-left rtl:text-right
+                     dark:bg-gray-700 dark:text-gray-300 '>
+                   <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400
+                        border-b-2 border-gray-500'>
+                      <tr className='text-nowrap bg-gray-500 text-white align-middle'>
+
+                        <th onClick={(e) => sortChanged('name')}>
+                           <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
+                             Name
+                             <div>
+                              <ChevronUpIcon className={
+                                "w-4 "+
+                                 (queryparams.sort_field === "name" &&
+                                  queryparams.sort_direction === "asc"
+                                  ? "text-white" : ""
+                                 )
+
+                                }
+
+                              />
+                              <ChevronDownIcon className={
+                                   "w-4 -mt-2 "+
+                                   (queryparams.sort_field === "name" &&
+                                    queryparams.sort_direction === "desc"
+                                    ? "text-white" : ""
+                                   )
+
+                              }
+
+
+
+
+                              />
+                             </div>
+
+                           </div>
+
+                        </th>
+                        <th className='px-3 py-2'>Father Name</th>
+                        <th className='px-3 py-2'>Department</th>
+                        <th className='px-3 py-2'>Current Semester</th>
+                        <th className='px-3 py-2'>Phone Number</th>
+                        <th className='px-3 py-2'>Kankor ID</th>
+                        <th  onClick={(e) => sortChanged('kankor_marks')}>
+
+                          <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
+                             Kankor Marks
+                             <div>
+                              <ChevronUpIcon className="w-4"/>
+                              <ChevronDownIcon className="w-4 -mt-2"/>
+                             </div>
+
+                           </div>
+
+
+                        </th>
+                        <th className='px-3 py-2'>Action</th>
+                      </tr>
+                   </thead>
+                    <tbody>
+                      {students.data.map((student) => (
+
+                          <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={student.id}>
+
+                           <td className='px-3 py-2'>{student.name}</td>
+                           <td className='px-3 py-2 text-center'>{student.father_name}</td>
+                           <td className='px-3 py-2 text-center'>{student.department.name}</td>
+                           <td className='px-3 py-2 text-center'>{student.current_semester}</td>
+                           <td className='px-3 py-2'>{student.phone_number}</td>
+                           <td className='px-3 py-2 text-center'>{student.kankor_id}</td>
+                           <td className='px-3 py-2 text-center'>{student.kankor_marks}</td>
+                           <td className='px-3 py-2 text-nowrap'>
+
 
             {/* Student List Table */}
             <div className="overflow-auto shadow-lg rounded-lg">
