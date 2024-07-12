@@ -7,12 +7,19 @@ import { Head, Link, router, usePage } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import {ChevronUpIcon,ChevronDownIcon} from '@heroicons/react/16/solid'
-
-export default function Index({ auth,success,error,students,departments,queryparams = null }) {
-
-          // for the modal of success and error
+export default function Index({
+  auth,
+  success,
+  error,
+  students,
+  departments,
+  queryparams = null,
+}) {
+  // for the modal of success and error
 
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
@@ -45,56 +52,47 @@ export default function Index({ auth,success,error,students,departments,querypar
     searchFieldChanged(name, e.target.value);
   };
 
-  const searchDepartmentFieldChanged = (name, value) => {
-    if (value) {
-      queryparams[name] = value;
-    } else {
-      delete queryparams[name];
-    }
+  // const searchDepartmentFieldChanged = (name, value) => {
+  //   if (value) {
+  //     queryparams[name] = value;
+  //   } else {
+  //     delete queryparams[name];
+  //   }
 
-
-    const searchDepartmentfeildchanged = (name,value)  =>{
-
-      if(value){
-       queryparams[name] = value;
-
-      } else{
-        delete queryparams[name]
+    const searchDepartmentfeildchanged = (name, value) => {
+      if (value) {
+        queryparams[name] = value;
+      } else {
+        delete queryparams[name];
       }
 
-      router.get(route('student.index'),queryparams);
-    }
+      router.get(route("student.index"), queryparams);
+    };
 
     const sortChanged = (name) => {
-
-     if(name === queryparams.sort_field){
-        if(queryparams.sort_direction === "asc"){
+      if (name === queryparams.sort_field) {
+        if (queryparams.sort_direction === "asc") {
           queryparams.sort_direction = "desc";
-        } else{
+        } else {
           queryparams.sort_direction = "asc";
         }
+      } else {
+        queryparams.sort_field = name;
+        queryparams.sort_direction = "asc";
+      }
 
-     } else{
-      queryparams.sort_field = name;
-      queryparams.sort_direction = "asc";
-     }
+      router.get(route("student.index"), queryparams);
+    };
 
-      router.get(route("student.index"),queryparams);
+    const deleteStudent = (student) => {
+      if (!window.confirm("Are you sure to delete this student from system?")) {
+        return;
+      }
 
-    }
-
-  const deleteStudent = (student) =>{
-
-    if(!window.confirm("Are you sure to delete this student from system?")){
-     return;
-     }
-
-    router.delete(route("student.destroy",student.id));
-
-
-    }
-    router.delete(route("student.destroy", student.id));
-  };
+      router.delete(route("student.destroy", student.id));
+    };
+    
+  
 
   return (
     <AuthenticatedLayout
@@ -220,181 +218,145 @@ export default function Index({ auth,success,error,students,departments,querypar
                 </Link>
               </div>
             </div>
+          </div>
 
-            {/* Additional Filter */}
-            <div className="flex mb-4">
-              <div className="w-full md:w-1/3">
-                <label className="text-gray-500 dark:text-gray-400 mb-2">
-                  Make Attendance for First Semesters
-                </label>
-                <SelectInput
-                  className="form-control w-full p-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
-                  placeholder="Search..."
-                  defaultValue={queryparams.department}
-                  onChange={(e) =>
-                    searchDepartmentFieldChanged("department", e.target.value)
-                  }
-                >
-                  <option>Select Department</option>
-                  {departments.map((department) => (
-                    <option
-                      value={department.name}
-                      key={department.id}
-                      className="dark:bg-gray-700"
-                    >
-                      {department.name}
-                    </option>
-                  ))}
-                </SelectInput>
-              </div>
+          {/* Additional Filter */}
+          <div className="flex mb-4">
+            <div className="w-full md:w-1/3">
+              <label className="text-gray-500 dark:text-gray-400 mb-2">
+                Make Attendance for First Semesters
+              </label>
+              <SelectInput
+                className="form-control w-full p-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
+                placeholder="Search..."
+                defaultValue={queryparams.department}
+                onChange={(e) =>
+                  searchDepartmentFieldChanged("department", e.target.value)
+                }
+              >
+                <option>Select Department</option>
+                {departments.map((department) => (
+                  <option
+                    value={department.name}
+                    key={department.id}
+                    className="dark:bg-gray-700"
+                  >
+                    {department.name}
+                  </option>
+                ))}
+              </SelectInput>
             </div>
+          </div>
 
-            <div className='overflow-auto'>
-                <table className='w-full text-md text-left rtl:text-right
-                     dark:bg-gray-700 dark:text-gray-300 '>
-                   <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400
-                        border-b-2 border-gray-500'>
-                      <tr className='text-nowrap bg-gray-500 text-white align-middle'>
+          {/* Student List Table */}
+          <div className="overflow-auto shadow-lg rounded-lg">
+            <table className="w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300 ">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500">
+                <tr className="bg-gray-500 text-white">
+                  <th className="px-3 py-2">ID</th>
+                  <th className="px-3 py-2">
+                    <th onClick={(e) => sortChanged("name")}>
+                      <div className="px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer">
+                        Name
+                        <div>
+                          <FontAwesomeIcon icon={faChevronUp}
+                            className={
+                              "w-4  " +
+                              (queryparams.sort_field === "name" &&
+                              queryparams.sort_direction === "asc"
+                                ? "text-white text-white inline-block"
+                                : "")
+                            }
+                          />
+                          <FontAwesomeIcon icon={faChevronDown}
+                            className={
+                              "w-4 -mt-2 text-white inline-block" +
+                              (queryparams.sort_field === "name" &&
+                              queryparams.sort_direction === "desc"
+                                ? "text-white"
+                                : "")
+                            }
+                          />
+                        </div>
+                      </div>
+                    </th>
+                  </th>
+                  <th className="px-3 py-2">Father Name</th>
+                  <th className="px-3 py-2">Department</th>
+                  <th className="px-3 py-2">Current Semester</th>
+                  <th className="px-3 py-2">Phone Number</th>
+                  <th className="px-3 py-2">Kankor ID</th>
+                  <th onClick={(e) => sortChanged("kankor_marks")}>
+                    <div className="px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer">
+                      Kankor Marks
+                      <div>
+                        <FontAwesomeIcon icon={faChevronUp}  className="w-4 text-white inline-block" />
+                        <FontAwesomeIcon icon={faChevronDown} className="w-4 -mt-2 text-white inline-block" />
+                      </div>
+                    </div>
+                  </th>
+                  <th className="px-3 py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.data.map((student) => (
+                  <tr
+                    className="bg-gray-100 dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    key={student.id}
+                  >
+                    <td className="px-3 py-2">{student.id}</td>
+                    <td className="px-3 py-2">{student.name}</td>
+                    <td className="px-3 py-2 text-center">
+                      {student.father_name}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      {student.department_name}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      {student.current_semester}
+                    </td>
+                    <td className="px-3 py-2">{student.phone_number}</td>
+                    <td className="px-3 py-2 text-center">
+                      {student.kankor_id}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      {student.kankor_marks}
+                    </td>
+                    <td className="px-3 py-2 text-nowrap flex space-x-2">
+                      <Link
+                        href={route("student.show", student.id)}
+                        className="font-meduim text-gray-600 dark:text-blue-500 hover:bg-gray-300 mx-2 btn btn-secondary"
+                      >
+                        Complete Info
+                      </Link>
 
-                        <th onClick={(e) => sortChanged('name')}>
-                           <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
-                             Name
-                             <div>
-                              <ChevronUpIcon className={
-                                "w-4 "+
-                                 (queryparams.sort_field === "name" &&
-                                  queryparams.sort_direction === "asc"
-                                  ? "text-white" : ""
-                                 )
+                      <Link
+                        href={route("student.edit", student.id)}
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
+                      >
+                        Edit
+                      </Link>
 
-                                }
-
-                              />
-                              <ChevronDownIcon className={
-                                   "w-4 -mt-2 "+
-                                   (queryparams.sort_field === "name" &&
-                                    queryparams.sort_direction === "desc"
-                                    ? "text-white" : ""
-                                   )
-
-                              }
-
-
-
-
-                              />
-                             </div>
-
-                           </div>
-
-                        </th>
-                        <th className='px-3 py-2'>Father Name</th>
-                        <th className='px-3 py-2'>Department</th>
-                        <th className='px-3 py-2'>Current Semester</th>
-                        <th className='px-3 py-2'>Phone Number</th>
-                        <th className='px-3 py-2'>Kankor ID</th>
-                        <th  onClick={(e) => sortChanged('kankor_marks')}>
-
-                          <div  className='px-3 py-2 flex items-center justify-contant gap-1 cursor-pointer' >
-                             Kankor Marks
-                             <div>
-                              <ChevronUpIcon className="w-4"/>
-                              <ChevronDownIcon className="w-4 -mt-2"/>
-                             </div>
-
-                           </div>
-
-
-                        </th>
-                        <th className='px-3 py-2'>Action</th>
-                      </tr>
-                   </thead>
-                    <tbody>
-                      {students.data.map((student) => (
-
-                          <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={student.id}>
-
-                           <td className='px-3 py-2'>{student.name}</td>
-                           <td className='px-3 py-2 text-center'>{student.father_name}</td>
-                           <td className='px-3 py-2 text-center'>{student.department.name}</td>
-                           <td className='px-3 py-2 text-center'>{student.current_semester}</td>
-                           <td className='px-3 py-2'>{student.phone_number}</td>
-                           <td className='px-3 py-2 text-center'>{student.kankor_id}</td>
-                           <td className='px-3 py-2 text-center'>{student.kankor_marks}</td>
-                           <td className='px-3 py-2 text-nowrap'>
-
-
-            {/* Student List Table */}
-            <div className="overflow-auto shadow-lg rounded-lg">
-              <table className="w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300 ">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500">
-                  <tr className="bg-gray-500 text-white">
-                    <th className="px-3 py-2">ID</th>
-                    <th className="px-3 py-2">Name</th>
-                    <th className="px-3 py-2">Father Name</th>
-                    <th className="px-3 py-2">Department</th>
-                    <th className="px-3 py-2">Current Semester</th>
-                    <th className="px-3 py-2">Phone Number</th>
-                    <th className="px-3 py-2">Kankor ID</th>
-                    <th className="px-3 py-2">Action</th>
+                      <DangerButton
+                        onClick={() => deleteStudent(student)}
+                        className="mx-3"
+                      >
+                        Delete
+                      </DangerButton>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {students.data.map((student) => (
-                    <tr
-                      className="bg-gray-100 dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
-                      key={student.id}
-                    >
-                      <td className="px-3 py-2">{student.id}</td>
-                      <td className="px-3 py-2">{student.name}</td>
-                      <td className="px-3 py-2 text-center">
-                        {student.father_name}
-                      </td>
-                      <td className="px-3 py-2 text-center">
-                        {student.department_name}
-                      </td>
-                      <td className="px-3 py-2 text-center">
-                        {student.current_semester}
-                      </td>
-                      <td className="px-3 py-2">{student.phone_number}</td>
-                      <td className="px-3 py-2 text-center">
-                        {student.kankor_id}
-                      </td>
-                      <td className="px-3 py-2 text-nowrap flex space-x-2">
-                        <Link
-                          href={route("student.show", student.id)}
-                          className="font-meduim text-gray-600 dark:text-blue-500 hover:bg-gray-300 mx-2 btn btn-secondary"
-                        >
-                          Complete Info
-                        </Link>
+                ))}
+              </tbody>
+            </table>
 
-                        <Link
-                          href={route("student.edit", student.id)}
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
-                        >
-                          Edit
-                        </Link>
-
-                        <DangerButton
-                          onClick={() => deleteStudent(student)}
-                          className="mx-3"
-                        >
-                          Delete
-                        </DangerButton>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Pagination */}
-              <div className="mt-4">
-                <Pagination links={students.meta.links} />
-              </div>
+            {/* Pagination */}
+            <div className="mt-4">
+              <Pagination links={students.meta.links} />
             </div>
           </div>
         </div>
       </div>
     </AuthenticatedLayout>
   );
+
 }
