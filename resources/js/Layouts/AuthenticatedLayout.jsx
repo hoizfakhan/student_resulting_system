@@ -481,8 +481,6 @@ export default function Authenticated({ user, header, children }) {
                 }
 
               </div>
-
-
             </div>
           </div>
         </aside>
