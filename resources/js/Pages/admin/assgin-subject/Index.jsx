@@ -232,6 +232,7 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
                            <td className="px-3 py-2">{teacherSubject.semester}</td>
                            <td className="px-3 py-2">{teacherSubject.teacher.name}</td>
                            <td className="px-3 py-2">{teacherSubject.status}</td>
+                           
                            <td className="px-3 py-2">
                            <Link
                                href={route("assignsubject.edit", {

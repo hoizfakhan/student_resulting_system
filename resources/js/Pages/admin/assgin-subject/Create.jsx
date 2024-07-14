@@ -17,9 +17,11 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
     const selectedId = parseInt(event.target.value);
     if (selectedSubjects.includes(selectedId)) {
       setSelectedSubjects(selectedSubjects.filter(id => id !== selectedId))
-    } else {
+    }
+    else {
       setSelectedSubjects([...selectedSubjects, selectedId]);
     }
+
   };
 
 
@@ -108,11 +110,7 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                     {teachers.data.map((teacher) => (
 
                       <option value={teacher.id} key={teacher.id}>{teacher.name}</option>
-
-
                    ))}
-
-
 
                     </SelectInput>
                     <InputError message={errors.teacher_id} className='mt-2'/>
@@ -134,8 +132,6 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                      {departments.data.map((department) => (
 
                       <option value={department.id} key={department.id}>{department.name}</option>
-
-
                      ))}
 
                     </SelectInput>

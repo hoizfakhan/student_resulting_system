@@ -20,6 +20,7 @@ export default function Authenticated({ user, header, children }) {
   const [showSubNav, setShowSubNav] = useState(false);
   const [showSubjectSubNav, setShowSubjectSubNav] = useState(false);
   const [showTeacherSubNav, setShowTeacherSubNav] = useState(false);
+  const [showSemesterSubNav, setShowSemesterSubNav] = useState(false);
 
   const { usertype } = usePage().props;
   const { departments } = usePage().props;
@@ -403,6 +404,39 @@ export default function Authenticated({ user, header, children }) {
 
                             </a>
                           </li>
+
+                    <li className="nav-item  my-1 mb-0 py-2  py-sm-0">
+                      <a className="nav-link nav-link-hover text-white text-center text-sm-start" aria-current="page"
+                        onClick={() => setShowSemesterSubNav(!showSemesterSubNav)}
+                      >
+                        <FontAwesomeIcon icon={faBook} className='ms-2' />
+                        <span className='fs-6 text-white ms-3 d-none d-sm-inline nab-link'>
+                          Semester
+                        </span>
+                        <i className='bi bi-arrow-down-short ms-sm-0'></i>
+                      </a>
+                    </li>
+                    {showSemesterSubNav && (
+                      <>
+
+                        <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+                          <NavLink href={route('semester.index')} active={route('').current('semester.index')} className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
+                            <span className='me-2'>*</span>
+                            Semester
+                          </NavLink>
+
+                        </li>
+
+                        <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3">
+                          <NavLink href={route('assignsemester.index')} active={route('').current('assignsemester.index')} className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
+                            <span className='me-2'>*</span>
+                            Assign Semesters
+                          </NavLink>
+
+                        </li>
+                      </>
+
+                    )}
 
 
                           <li className="nav-item  my-1 py-2 py-sm-0">
