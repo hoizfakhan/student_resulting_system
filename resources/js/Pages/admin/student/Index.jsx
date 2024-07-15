@@ -52,14 +52,9 @@ export default function Index({
     searchFieldChanged(name, e.target.value);
   };
 
-  // const searchDepartmentFieldChanged = (name, value) => {
-  //   if (value) {
-  //     queryparams[name] = value;
-  //   } else {
-  //     delete queryparams[name];
-  //   }
 
-    const searchDepartmentfeildchanged = (name, value) => {
+
+    const searchDepartmentFieldChanged = (name, value) => {
       if (value) {
         queryparams[name] = value;
       } else {
@@ -91,8 +86,8 @@ export default function Index({
 
       router.delete(route("student.destroy", student.id));
     };
-    
-  
+
+
 
   return (
     <AuthenticatedLayout
@@ -212,7 +207,7 @@ export default function Index({
               <div>
                 <Link
                   href={route("student.index")}
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
+                  className="bg-gray-300 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
                 >
                   Reset Page
                 </Link>

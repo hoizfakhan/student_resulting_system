@@ -5,7 +5,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
 import { Head,Link,useForm } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-export default function Edit({ auth,teachers,departments,subjects,teacherSubject,error }) {
+export default function Edit({auth,teachers,departments,subjects,teacherSubject,error }) {
 
   //const [selectedSubjects, setSelectedSubjects] = useState([]);
 

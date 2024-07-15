@@ -142,7 +142,7 @@ class TeacherController extends Controller
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
 
-
+       
        $data =  $request->validated();
        $name =  $teacher->name;
 
@@ -198,6 +198,6 @@ class TeacherController extends Controller
         ]);
     }
 
-    
+
 
 }

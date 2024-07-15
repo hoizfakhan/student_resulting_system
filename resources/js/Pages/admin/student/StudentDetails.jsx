@@ -2,7 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react"; // Import Link from Inertia.js
 
 export default function StudentDetails({ auth, student }) {
-  console.log(student.name);
+  
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -26,7 +26,7 @@ export default function StudentDetails({ auth, student }) {
                       <ul className="mt-2">
                         <li><strong>Kankor ID:</strong> {student.data.kankor_id}</li>
                         <li><strong>Name:</strong> {student.data.name} {student.data.last_name}</li>
-                        <li><strong>Department:</strong> {student.data.department_name}</li>
+                        <li><strong>Department:</strong> {student.data.department.name}</li>
                       </ul>
                     </div>
                   </div>

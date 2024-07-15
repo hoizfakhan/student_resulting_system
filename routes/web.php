@@ -6,10 +6,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DepartmentSemesterController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherAccountController;
 use App\Http\Controllers\TeacherSubjectController;
@@ -51,6 +53,7 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 });
 
 Route::middleware(['auth'])->group(function(){
+    
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
     Route::resource('department',DepartmentController::class);
@@ -58,6 +61,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/department-selector/{facultyid}',[DepartmentController::class,'getDepartments'])->name('department-selector');
     Route::resource("teacheraccount",TeacherAccountController::class);
     Route::get("blockteacheraccount/{teacheraccountid}",[TeacherAccountController::class,"BlockTeacherAccount"])->name("blockteacheraccount");
+    Route::resource("semester",SemesterController::class);
+    Route::resource("assignsemester",DepartmentSemesterController::class);
    // Super Admin routes
 });
 

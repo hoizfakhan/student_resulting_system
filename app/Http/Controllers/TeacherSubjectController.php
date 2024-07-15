@@ -87,7 +87,7 @@ class TeacherSubjectController extends Controller
         $user =  $request->user();
         $teachers =  $user->faculty->teachers()->get();
         $departments =  $user->faculty->departments()->get();
-        $subjects   =   $user->faculty->subjects()->get();
+        $subjects = $user->faculty->subjects()->get();
 
 
         $usertype=Auth()->user()->usertype;
@@ -108,7 +108,7 @@ class TeacherSubjectController extends Controller
 
         $request->validate([
 
-            'teacher_id' => 'required|string',
+            'teacher_id' => 'required|integer',
             'department_id' => 'required|integer',
             'semester' => 'required|integer',
             'subject_id' => 'array',
@@ -119,6 +119,7 @@ class TeacherSubjectController extends Controller
         try{
 
         $subject_id = $request->subject_id;
+
         if(count($subject_id)>0){
            for($i=0; $i<count($subject_id); $i++){
 
