@@ -10,7 +10,14 @@ import {
   faGraduationCap,
   faBriefcase,
   faUserGraduate,
-  faChalkboardTeacher,faUser,faUserCircle,fas,faHome
+  faChalkboardTeacher,
+  faUser,
+  faUserCircle,
+  fas,
+  faHome,
+  faFileAlt,
+  faBuilding,
+  faUniversity,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/js/dist/dropdown";
 
@@ -23,6 +30,7 @@ export default function Authenticated({ user, header, children }) {
   const [showSubNav, setShowSubNav] = useState(false);
   const [showSubjectSubNav, setShowSubjectSubNav] = useState(false);
   const [showTeacherSubNav, setShowTeacherSubNav] = useState(false);
+  const [showResultSubNav, setShowResultSubNav] = useState(false);
 
   const { usertype } = usePage().props;
   const { departments } = usePage().props;
@@ -35,7 +43,7 @@ export default function Authenticated({ user, header, children }) {
             <div className="flex justify-between h-20">
               <div className="flex">
                 <div className="shrink-0 flex items-center">
-                  <Link href="/">
+                  <Link href="">
                     <ApplicationLogo className="block h-9 w-auto fill-current text-red-600 dark:text-gray-200 bg-gray-200 " />
                   </Link>
                 </div>
@@ -48,7 +56,7 @@ export default function Authenticated({ user, header, children }) {
                 )}
               </div>
 
-              <div className="hidden sm:flex sm:items-center sm:ms-6">
+              <div className="hidden  sm:flex sm:items-center sm:ms-6">
                 <div className="ms-3 relative">
                   <Dropdown>
                     <Dropdown.Trigger>
@@ -317,6 +325,26 @@ export default function Authenticated({ user, header, children }) {
                           </li>
                         </>
                       )}
+                      <li className="nav-item my-1 mb-0 py-2 py-sm-0">
+                        <div
+                          className="nav-link nav-link-hover text-white text-center text-sm-start"
+                          aria-current="page"
+                        >
+                          <FontAwesomeIcon
+                            icon={faFileAlt}
+                            className="text-white inline-block ms-2"
+                          />
+                          <span className="ms-2 d-none d-sm-inline">
+                            <NavLink
+                              href={route("showresult.index")}
+                              active={route("").current("showresult.index")}
+                              className="fs-6 text-white ms-2 d-none d-sm-inline"
+                            >
+                              Result
+                            </NavLink>
+                          </span>
+                        </div>
+                      </li>
                     </ul>
                   ) : usertype == 0 ? (
                     <ul
@@ -361,7 +389,7 @@ export default function Authenticated({ user, header, children }) {
                           aria-current="page"
                         >
                           <NavLink
-                            href={route("myresult")}
+                            href={route("dashboard")}
                             active={route("").current("myresult")}
                             className="fs-6 text-white ms-2 d-none d-sm-inline"
                           >

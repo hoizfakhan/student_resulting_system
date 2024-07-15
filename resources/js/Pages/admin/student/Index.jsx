@@ -310,7 +310,7 @@ export default function Index({
                       {student.father_name}
                     </td>
                     <td className="px-3 py-2 text-center">
-                      {student.department_name}
+                      {student.department.name}
                     </td>
                     <td className="px-3 py-2 text-center">
                       {student.current_semester}

@@ -188,7 +188,7 @@ export default function StudentDetails({ auth, student }) {
                           Department
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.data.department_name}
+                          {student.data.department.name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white">
