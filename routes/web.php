@@ -39,20 +39,22 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::resource('studentaccount', StudentAccountController::class);
     Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
-    Route::resource('subject',SubjectController::class);
+   // Route::resource('subject',SubjectController::class);
     Route::resource('assginsubject',TeacherSubjectController::class);
     Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
     Route::get('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/edit', [TeacherSubjectController::class, 'edit'])
     ->name('assignsubject.edit');
-
+   // Route::get('showresult',MarksController::class);
     Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
      ->name('assignsubject.update');
+
+
     // all admin routes
 
 });
 
 Route::middleware(['auth'])->group(function(){
-    
+
     Route::resource('faculty',FacultyController::class);
     Route::resource('manager',ManagerController::class);
     Route::resource('department',DepartmentController::class);
@@ -62,6 +64,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get("blockteacheraccount/{teacheraccountid}",[TeacherAccountController::class,"BlockTeacherAccount"])->name("blockteacheraccount");
     Route::resource("semester",SemesterController::class);
     Route::resource("assignsemester",DepartmentSemesterController::class);
+    Route::resource('subject',SubjectController::class);
+
    // Super Admin routes
 });
 

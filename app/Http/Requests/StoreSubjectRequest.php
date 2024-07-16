@@ -24,14 +24,19 @@ class StoreSubjectRequest extends FormRequest
     {
         return [
 
-            'name' => ['required','string','max:255'],
-            'faculty_id' => ['nullable','integer'],
-            'department_id' => ['nullable','integer'],
-            'semester' => ['nullable','integer'],
+
+
+
+             'name' => ['required','string','max:255'],
+            // 'faculty_id' => ['nullable','integer'],
+            //'department_id' => ['nullable','integer'],
+            //'semester' => ['nullable','integer'],
             'subject_type' => ['required','string',Rule::in(['core','project','basic','general'])],
             'credit' => ['required','integer'],
             'practical_credit' => ['nullable','integer'],
             'therical_credit' => ['nullable','integer'],
+
+
 
         ];
     }

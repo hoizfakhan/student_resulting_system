@@ -42,6 +42,7 @@ class AttendenceController extends Controller
                           ->orderBy('id')
                           ->get();
 
+        
        $usertype=Auth()->user()->usertype;
        return Inertia("teacher/attendence/Create",[
 

@@ -39,7 +39,7 @@ class StudentResource extends JsonResource
         'department' => new DepartmentResource($this->department),
         'user_id' => $this->user_id,
         'user' => new UserResource($this->user),
-       // 'attendence' => AttendenceResource::collection($this->whenLoaded('attendence')),
+        'attendence' => AttendenceResource::collection($this->whenLoaded('attendence')),
         'current_semester' => $this->current_semester,
         'identity_cart_number' => $this->identity_cart_number,
         'number_maktob_sent_exam_commettee'=>$this->number_maktob_sent_exam_commettee,

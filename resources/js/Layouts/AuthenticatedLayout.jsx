@@ -476,6 +476,19 @@ export default function Authenticated({ user, header, children }) {
 
                           )}
 
+                         <li className="nav-item  my-1 py-2 py-sm-0">
+                            <a className="nav-link text-white text-center text-sm-start" aria-current="page"
+                            >
+                               <FontAwesomeIcon icon={faBook} className='ms-2' />
+                              <span className='ms-2 d-none d-sm-inline'>
+                                <NavLink href={route('subject.index')} active={route('').current('faculty.index')} className='fs-6 text-white   ms-2 d-none d-sm-inline'>
+                                  Subject
+                                </NavLink>
+
+                              </span>
+                            </a>
+                          </li>
+
 
                         </ul>) : null
                 }

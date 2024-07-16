@@ -7,6 +7,7 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 
 export default function Create({ auth, students, subject, subjectid, semester, department, success, error }) {
+  console.log(students);
   const calculateCompletionStatus = (absentHours, totalHours) => {
     console.log(absentHours);
     const attendancePercentage = ((absentHours / totalHours) * 100);
@@ -14,7 +15,7 @@ export default function Create({ auth, students, subject, subjectid, semester, d
   };
 
   const initialAttendances = students.data.map(student => {
-    const attendance = student.attendence.length > 0 ? student.attendence[0] : { total_hours: '', absent_hours: '' };
+    const attendance = student.attendence && student.attendence.length > 0 ? student.attendence[0] : { total_hours: '', absent_hours: '' };
     return {
       student_id: student.id,
       total_hours: attendance.total_hours || '',
@@ -106,76 +107,81 @@ export default function Create({ auth, students, subject, subjectid, semester, d
               </div>
             </div>
             <div className='overflow-auto'>
-              <form onSubmit={onSubmit}>
-                <table className='w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300'>
-                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500'>
-                    <tr className='text-nowrap bg-gray-500 text-white align-middle'>
-                      <th className='px-3 py-2'>Name</th>
-                      <th className='px-3 py-2'>Father Name</th>
-                      <th className='px-3 py-2'>Total Hours</th>
-                      <th className='px-3 py-2'>Absent Hours</th>
-                      <th className='px-3 py-2'>Present Hours</th>
-                      <th className='px-3 py-2'>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.data.map((student) => (
-                      <tr key={student.id}>
-                        <td className='px-3 py-2'>{student.name}</td>
-                        <td className='px-3 py-2'>{student.father_name}</td>
-                        <td className='px-3 py-2'>
-                          <TextInput
-                            className="form-control"
-                            type="text"
-                            name={`total_hours_${student.id}`}
-                            value={data.attendances.find(a => a.student_id === student.id)?.total_hours || ''}
-                            placeholder="Total hours"
-                            onChange={(e) => handleArrayChange(e, student.id, 'total_hours')}
-                          />
-                        </td>
-                        <InputError message={errors[`attendances.${student.id}.total_hours`]} className='mt-2'/>
-                        <td className='px-3 py-2'>
-                          <TextInput
-                            className="form-control"
-                            type="text"
-                            name={`absent_hours_${student.id}`}
-                            value={data.attendances.find(a => a.student_id === student.id)?.absent_hours || ''}
-                            placeholder="Absent hours"
-                            onChange={(e) => handleArrayChange(e, student.id, 'absent_hours')}
-                          />
-                        </td>
-                        <InputError message={errors[`attendances.${student.id}.absent_hours`]} className='mt-2'/>
-                        <td className='px-3 py-2'>
-                          <TextInput
-                            className="form-control"
-                            type="number"
-                            placeholder="present hours"
-                            name={`present_hours_${student.id}`}
-                            value={data.attendances.find(a => a.student_id === student.id)?.present_hours || ''}
-                            readOnly
-                          />
-                        </td>
-                        <td className='px-3 py-2'>
-                          {student.attendence.map(attendance => (
-                            <span key={attendance.id} className="text-lead">
-                              {calculateCompletionStatus(attendance.absent_hours, attendance.total_hours)}
-                            </span>
-                          ))}
-                        </td>
+              {students.data && students.data.length > 0 ? (
+                <form onSubmit={onSubmit}>
+                  <table className='w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300'>
+                    <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500'>
+                      <tr className='text-nowrap bg-gray-500 text-white align-middle'>
+                        <th className='px-3 py-2'>Name</th>
+                        <th className='px-3 py-2'>Father Name</th>
+                        <th className='px-3 py-2'>Total Hours</th>
+                        <th className='px-3 py-2'>Absent Hours</th>
+                        <th className='px-3 py-2'>Present Hours</th>
+                        <th className='px-3 py-2'>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="text-end me-2">
-                  <button className='bg-blue-500 py-1 px-3 mt-2 mb-2 text-gray-200 rounded-sm bg-gray-500 transition-all hover:bg-gray-600 mr-2'>
-                    Save
-                  </button>
-                </div>
-              </form>
+                    </thead>
+                    <tbody>
+                      {students.data.map((student) => (
+                        <tr key={student.id}>
+                          <td className='px-3 py-2'>{student.name}</td>
+                          <td className='px-3 py-2'>{student.father_name}</td>
+                          <td className='px-3 py-2'>
+                            <TextInput
+                              className="form-control"
+                              type="text"
+                              name={`total_hours_${student.id}`}
+                              value={data.attendances.find(a => a.student_id === student.id)?.total_hours || ''}
+                              placeholder="Total hours"
+                              onChange={(e) => handleArrayChange(e, student.id, 'total_hours')}
+                            />
+                          </td>
+                          <InputError message={errors[`attendances.${student.id}.total_hours`]} className='mt-2'/>
+                          <td className='px-3 py-2'>
+                            <TextInput
+                              className="form-control"
+                              type="text"
+                              name={`absent_hours_${student.id}`}
+                              value={data.attendances.find(a => a.student_id === student.id)?.absent_hours || ''}
+                              placeholder="Absent hours"
+                              onChange={(e) => handleArrayChange(e, student.id, 'absent_hours')}
+                            />
+                          </td>
+                          <InputError message={errors[`attendances.${student.id}.absent_hours`]} className='mt-2'/>
+                          <td className='px-3 py-2'>
+                            <TextInput
+                              className="form-control"
+                              type="number"
+                              placeholder="present hours"
+                              name={`present_hours_${student.id}`}
+                              value={data.attendances.find(a => a.student_id === student.id)?.present_hours || ''}
+                              readOnly
+                            />
+                          </td>
+                          <td className='px-3 py-2'>
+                            {student.attendence.map(attendance => (
+                              <span key={attendance.id} className="text-lead">
+                                {calculateCompletionStatus(attendance.absent_hours, attendance.total_hours)}
+                              </span>
+                            ))}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="text-end me-2">
+                    <button className='bg-blue-500 py-1 px-3 mt-2 mb-2 text-gray-200 rounded-sm bg-gray-500 transition-all hover:bg-gray-600 mr-2'>
+                      Save
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
           </div>
         </div>
       </div>
     </AuthenticatedLayout>
   );
+
 }

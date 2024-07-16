@@ -9,12 +9,14 @@ class Subject extends Model
 {
     use HasFactory;
 
+    protected $table="subjects";
+
     protected $fillable = [
 
         'name',
-        'faculty_id',
-        'department_id',
-        'semester',
+        // 'faculty_id',
+        //'department_id',
+        //'semester',
         'credit',
         'practical_credit',
         'therical_credit',
@@ -22,7 +24,9 @@ class Subject extends Model
 
     ];
 
-    public function faculty(){
+
+
+   public function faculty(){
 
         return $this->belongsTo(Faculty::class,'faculty_id');
     }
@@ -52,7 +56,6 @@ class Subject extends Model
 
         return $this->belongsToMany(Semester::class,Semester_Subject::class);
     }
-
 
 
 }

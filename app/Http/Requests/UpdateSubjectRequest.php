@@ -25,8 +25,8 @@ class UpdateSubjectRequest extends FormRequest
         return [
 
             'name' => ['required','string','max:255'],
-            'department_id' => ['nullable','integer'],
-            'semester' => ['nullable','integer'],
+          //'department_id' => ['nullable','integer'],
+            //'semester' => ['nullable','integer'],
             'subject_type' => ['required','string',Rule::in(['core','project','basic','general'])],
             'credit' => ['required','integer'],
             'practical_credit' => ['nullable','integer'],
