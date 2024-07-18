@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Semester;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeacherSubjectResource extends JsonResource
+class AssignSubjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,17 +18,15 @@ class TeacherSubjectResource extends JsonResource
         return [
             
          'id' => $this->id,
-         'teacher_id' => $this->teacher_id,
-         'teacher' =>  $this->teacher ? new TeacherResource($this->teacher) : null,
+         'subject_id' => $this->subject_id,
+         'subject' => $this->subject ? new SubjectResource($this->subject) : null,
          'faculty_id' => $this->faculty_id,
          'faculty' =>  $this->faculty ? new FacultyResource($this->faculty) : null,
          'department_id' => $this->department_id,
          'department' =>  $this->department ? new DepartmentResource($this->department) : null,
          'semester_id' => $this->semester_id,
          'semester' =>  $this->semester ? new SemesterReource($this->semester) : null,
-         'subject_id' => $this->subject_id,
-         'subject' => $this->subject ? new SubjectResource($this->subject) : null,
-         'status' => $this->status,
+
 
         ];
     }

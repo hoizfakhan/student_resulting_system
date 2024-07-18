@@ -70,7 +70,6 @@ class DepartmentSemesterController extends Controller
 
         $semester_id = $request->semester_id;
 
-
         if(count($semester_id) > 0){
            for($i=0; $i<count($semester_id); $i++){
 

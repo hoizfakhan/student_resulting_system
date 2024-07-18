@@ -31,25 +31,19 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
 
    const searchfeildchanged = (name,value) => {
 
-  if(value){
+   if(value){
 
      queryparams[name] = value;
 
-   }else{
+    }else{
     delete queryparams[subject];
-   }
+    }
 
-  router.get(route("assginsubject.index",queryparams));
+    router.get(route("assginsubject.index",queryparams));
 
-   }
-
-  const onKeyPress = (name,e) => {
-  if(e.key !== 'Enter') return
-
-  searchfeildchanged(name,e.target.value);
+     }
 
 
-   }
 
 
    const deleteSubject = (teacherSubject) => {
@@ -57,18 +51,7 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
     if (!window.confirm("Are you sure to delete this assigned subject?")) {
         return;
     }
-
-    const { teacher_id, faculty_id, department_id,semester, subject_id } = teacherSubject;
-
-    const url = `/assignsubject/${teacher_id}/${faculty_id}/${department_id}/${semester}/${subject_id}`;
-
-
-    Inertia.delete(url).then(() => {
-      console.log('Subject deleted successfully');
-      // You may want to redirect or perform any other action after successful deletion
-    }).catch(error => {
-      console.error('Error deleting subject:', error.response.data);
-   });
+    router.delete(route("assginsubject.destroy",teacherSubject.id));
 
    }
 
@@ -111,45 +94,22 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
             <div className='col-md-2'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
                 <h6 className="text-gray-500 mb-1">subject</h6>
-                  <TextInput
+                <SelectInput
                    className="form-control"
-                   placeholder="Search..."
                    defaultValue={queryparams.subject}
-                   onBlur={e => searchfeildchanged('subject',e.target.value)}
-                   onKeyPress={e => onKeyPress('subject',e)}
+                   onChange={(e) => searchfeildchanged("subject",e.target.value)}
+                 >
+                <option value="" >Select</option>
+                {teacherSubjects.data.map((teacherSubject) => (
+                  <option value={teacherSubject.subject.name} key={teacherSubject.id}>{teacherSubject.subject.name}</option>
 
-                 />
 
-              </div>
-            </div>
-            <div className='col-md-2'>
-              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
-                <h6 className="text-gray-500 mb-1">department</h6>
-                  <TextInput
-                   className="form-control"
-                   placeholder="Search..."
-                   defaultValue={queryparams.department}
-                   onBlur={e => searchfeildchanged('department',e.target.value)}
-                   onKeyPress={e => onKeyPress('department',e)}
+                ))
 
-                 />
+                }
+              </SelectInput>
 
               </div>
-            </div>
-            <div className='col-md-2'>
-              <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
-                <h6 className="text-gray-500 mb-1">semester</h6>
-                  <TextInput
-                   className="form-control"
-                   placeholder="Search..."
-                   defaultValue={queryparams.semester}
-                   onBlur={e => searchfeildchanged('semester',e.target.value)}
-                   onKeyPress={e => onKeyPress('semester',e)}
-
-                 />
-
-              </div>
-
             </div>
 
             <div className='col-md-2'>
@@ -157,27 +117,30 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
                 <h6 className="text-gray-500 mb-1">teacher</h6>
                   <SelectInput
                    className="form-control"
-
                    defaultValue={queryparams.teacher}
                    onChange={(e) => searchfeildchanged("teacher",e.target.value)}
                  >
                 <option value="" >Select</option>
                 {teachers.map((teacher) => (
-                  <option value={teacher.name} key={teacher.id}>{teacher.name}</option>
-
-
+                  <option value={teacher.name} key={teacher.id}>{teacher.name} {teacher.last_name}</option>
                 ))
-
                 }
 
                  </SelectInput>
 
               </div>
-
             </div>
+            <div className="col-md-2 mt-5">
+                      <Link
+                        className="btn btn-outline-primary"
+                        href={route("assginsubject.index")}
+                      >
+                        Reset
+                      </Link>
+                    </div>
 
 
-             <div className='col-md-4 text-end'>
+             <div className='col-md-6 text-end'>
               <div className='me-3 mt-4'>
               <Link
                  href={route('assginsubject.create')}
@@ -187,15 +150,6 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
             </Link>
             </div>
 
-
-            <div className="mt-3 me-4">
-               <Link
-                 className="btn btn-outline-secondary py-1 px-3 rounded shadow transition-all hover:bg-gray-600"
-                 href={route("assginsubject.index")}
-               >
-                Reset Page
-               </Link>
-            </div>
 
             </div>
             </div>
@@ -225,25 +179,22 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
                 {teacherSubjects !== undefined && teacherSubjects !== null ? (
                       teacherSubjects.data.map((teacherSubject) => (
                       <tr className="bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200"
-                       key={`${teacherSubject.teacher_id}-${teacherSubject.faculty_id}-${teacherSubject.department_id}-${teacherSubject.semester}-${teacherSubject.subject_id}`}
+                       key={teacherSubject.id}
                       >
                            <td className="px-3 py-2">{teacherSubject.subject.name}</td>
                            <td className="px-3 py-2">{teacherSubject.department.name}</td>
-                           <td className="px-3 py-2">{teacherSubject.semester}</td>
+                           <td className="px-3 py-2">{teacherSubject.semester.name}</td>
                            <td className="px-3 py-2">{teacherSubject.teacher.name}</td>
                            <td className="px-3 py-2">{teacherSubject.status}</td>
-                           
+
                            <td className="px-3 py-2">
                            <Link
-                               href={route("assignsubject.edit", {
-                                teacher_id: teacherSubject.teacher_id,
-                                faculty_id: teacherSubject.faculty_id,
-                                department_id: teacherSubject.department_id,
-                                semester: teacherSubject.semester,
-                                subject_id: teacherSubject.subject_id
-                            })}
-
-                             className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
+                                href={route("assginsubject.edit", {
+                                  id: teacherSubject.id,
+                                  department_id: teacherSubject.department.id,
+                                  semester_id: teacherSubject.semester.id
+                               })}
+                              className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                            >
                            Edit
                           </Link>
@@ -271,6 +222,7 @@ export default function Index({auth,teacherSubjects,teachers,queryparams = null,
               </table>
                <Pagination links={teacherSubjects.meta.links}></Pagination>
             </div>
+
 
 
 

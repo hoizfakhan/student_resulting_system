@@ -3,66 +3,74 @@ import InputLabel from "@/Components/InputLabel";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
+import teacher from "@/Pages/teacher/teacher";
 import { Head,Link,useForm } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-export default function Create({ auth,teachers,departments,subjects,error }) {
+export default function Edit({auth,teachers,departments,subjects,semesters,teacherSubject,error }) {
 
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [Subjects,setSubjects] = useState([]);
-
-  const [selectedDepartmentid,setselectedDepartmentid] = useState('');
-  const [selectedSemester,setSelectedSemester] = useState('');
-
-  const handleCheckboxChange = (event) => {
-    const selectedId = parseInt(event.target.value);
-    if (selectedSubjects.includes(selectedId)) {
-      setSelectedSubjects(selectedSubjects.filter(id => id !== selectedId))
-    }
-    else {
-      setSelectedSubjects([...selectedSubjects, selectedId]);
-    }
-
-  };
-
-
+   const [selectedDepartmentid,setSelectedDepartmentid] = useState('');
+   const [selectedSemesterid,setSelectedSemesterid] = useState('');
+   const [Semesters,setSemesters] = useState([]);
+   const [Subjects,setSubjects] = useState([]);
 
   const {data,setData,post,errors,reset}  =   useForm({
 
-          teacher_id:"",
-          department_id:"",
-          semester:"",
-          subject_id:"",
-          status:"",
+          teacher_id:teacherSubject.data.teacher_id || "",
+          department_id:teacherSubject.data.department_id || "",
+          semester_id:teacherSubject.data.semester_id || "",
+          status:teacherSubject.data.status || "",
+          subject_id:teacherSubject.data.subject_id || "",
+          _method:'PUT',
 
       });
 
+
+{/*
       useEffect(() => {
-        setData({ ...data, subject_id: selectedSubjects });
-      }, [selectedSubjects]);
 
-
-      useEffect(() => {
-        if(selectedDepartmentid && selectedSemester){
-
-          let filteredSub = subjects.data.filter(sub => {
-            return sub.department_id == selectedDepartmentid && sub.semester == selectedSemester
+        if(selectedDepartmentid){
+         let filteredSem = semesters.data.filter(sem => {
+            return sem.department_id == selectedDepartmentid
           })
-          setSubjects(filteredSub);
-          setData({...data,department_id:selectedDepartmentid,semester:selectedSemester});
-        }
-      }, [selectedDepartmentid,selectedSemester]);
 
+          setSemesters(filteredSem);
+
+        }
+
+      },[selectedDepartmentid]);
+
+      useEffect(() => {
+
+        if(selectedDepartmentid,selectedSemesterid){
+
+         let filteredsub= subjects.data.filter(sub => {
+         return sub.department_id == selectedDepartmentid && sub.semester_id == selectedSemesterid;
+
+        })
+
+        setSubjects(filteredsub);
+        setData({...data,department_id:selectedDepartmentid,semester_id:selectedSemesterid});
+
+       }
+
+     },[selectedDepartmentid,selectedSemesterid])
+
+*/}
+
+    //  useEffect(() => {
+      //  setData({ ...data, subject_id: selectedSubjects });
+     // }, [selectedSubjects]);
 
 
       const onSubmit = (e) =>{
 
-        e.preventDefault();
+       e.preventDefault();
 
-        post(route("assginsubject.store"),{
-          ...data,
-          subject_id:selectedSubjects,
-        });
+        post(route('assginsubject.update',teacherSubject.data.id));
+
+
        }
+
 
 
   return (
@@ -70,7 +78,7 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-         Assgin New Subject
+       Edit Assgined Subject
         </h2>
       }
     >
@@ -85,7 +93,7 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="mt-4 ms-5">
-              <p className="lead text-gray-600 ">Assgin Subject Form</p>
+              <p className="lead text-gray-600">Edit Assgined Subject Form</p>
             </div>
 
             <form
@@ -103,20 +111,25 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                       id="teacher_id"
                       type="text"
                       name="teacher_id"
+                      value={data && data.teacher_id}
                       isFocused={true}
                       onChange={(e) => setData("teacher_id",e.target.value)}
                     >
+
                     <option value="">Select Teacher</option>
-                    {teachers.data.map((teacher) => (
+                    {teachers.map((teacher) => (
 
                       <option value={teacher.id} key={teacher.id}>{teacher.name}</option>
+
+
                    ))}
+
 
                     </SelectInput>
                     <InputError message={errors.teacher_id} className='mt-2'/>
                   </div>
                 </div>
-                <div className="form-group col-md-6">
+             {/*   <div className="form-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>
                      Department:<span className="text-red-300 text-lg">*</span>
@@ -126,13 +139,13 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                       id="department_id"
                       name="department_id"
                       value={selectedDepartmentid}
-                      onChange={(e) => setselectedDepartmentid(e.target.value)}
+                      onChange={(e) => setSelectedDepartmentid(e.target.value)}
                     >
                     <option>Select department</option>
-                     {departments.data.map((department) => (
-
+                     {departments.map((department) => (
                       <option value={department.id} key={department.id}>{department.name}</option>
                      ))}
+
 
                     </SelectInput>
                       <InputError message={errors.department_id} className='mt-2'/>
@@ -146,49 +159,58 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                       Semester{" "}
                       <span className="text-red-300 text-lg">*</span>
                     </InputLabel>
-                    <TextInput
+                    <SelectInput
                       className="form-control mt-1"
-                      id="semester"
-                      name="semester"
-                      type="number"
-                      valu={selectedSemester}
-                      onChange={(e) => setSelectedSemester(e.target.value)}
-                    />
-                   <InputError message={errors.semester} className='mt-2'/>
+                      id="semester_id"
+                      name="semester_id"
+                      value={selectedSemesterid}
+                      onChange={(e) => setSelectedSemesterid(e.target.value)}
+                    >
+                   <option>Select Semester</option>
+
+                   {Semesters.length > 0 ? (
+
+                   Semesters.map((semester) => (
+                   <option value={semester.semester.id} key={semester.id}>{semester.semester.name}</option>
+
+                  ))
+
+                   ) : (
+
+                  <option value="">Select a department fisrt</option>
+                  )}
+
+                    </SelectInput>
+                   <InputError message={errors.semester_id} className='mt-2'/>
                   </div>
                 </div>
-                <div className="form-group col-md-6 d-flex flex-wrap">
+*/}
+
+                <div className="form-group col-md-6">
                   <div className="mt-3">
                     <InputLabel>
-                      Subject{" "}
-                      <span className="text-red-300 text-lg">*</span>
+                     Subject:<span className="text-red-300 text-lg">*</span>
                     </InputLabel>
-                     <ul>
-                  {Subjects.length > 0 ? (
+                    <SelectInput
+                      className="form-control mt-1"
+                      id="subject_id"
+                      name="subject_id"
+                      value={data.subject_id}
+                      onChange={(e) => setData("subject_id",e.target.value)}
+                    >
+                   <option>Select Subject</option>
+                     {subjects.data.map((subject) => (
 
-                      Subjects.map((subject) => (
-                        <li key={subject.id} className="mr-2">
-                          <input
-                            type="checkbox"
-                            value={subject.id}
-                            onChange={handleCheckboxChange}
+                      <option value={subject.subject.id} key={subject.id}>{subject.subject.name}</option>
 
-                          />
-                          <span className="ms-2">{subject.name}</span>
+                     ))}
 
-                        </li>
-
-                      ))
-                  ) : (
-                    <span className="text-gray-300 text-sm">No Subjects</span>
-                  )
-
-                      }
-
-                     </ul>
+                    </SelectInput>
+                      <InputError message={errors.subject_id} className='mt-2'/>
                   </div>
                 </div>
               </div>
+
 
               <div className="row form-row">
                 <div className="form-group col-md-6">
@@ -201,9 +223,9 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                       className="form-control mt-1"
                       id="status"
                       name="status"
+                      value={data.status}
                       onChange={(e) => setData("status",e.target.value)}
                      >
-                     <option value="">Select Status</option>
                      <option value="active">Active</option>
                      <option value="inactive">Inactive</option>
 
@@ -224,7 +246,7 @@ export default function Create({ auth,teachers,departments,subjects,error }) {
                 Cancel
               </Link>
               <button className="btn btn-success mb-1 mt-1 mt-1" type="submit">
-                Submit
+                Update
               </button>
 
               </div>

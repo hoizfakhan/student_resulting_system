@@ -30,8 +30,10 @@ class Faculty extends Model
 
     public function subjects(){
 
-      return $this->hasMany(Subject::class);
+      return $this->belongsToMany(Subject::class,Assign_Subject::class);
     }
+
+
 
 
     public function teachers(){

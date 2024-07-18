@@ -15,6 +15,7 @@ class DepartmentSemesterResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            
             'id' => $this->id,
             'department_id' => $this->department_id,
             'department' =>  $this->department ? new DepartmentResource($this->department) : null,

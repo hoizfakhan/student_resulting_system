@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTeacherRequest;
+use App\Http\Requests\UpdateAssignSubjectRequest;
+use App\Http\Resources\AssignSubjectResource;
 use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\DepartmentSemesterResource;
 use App\Http\Resources\SubjectResource;
 use App\Http\Resources\TeacherResource;
 use App\Http\Resources\TeacherSubjectResource;
+use App\Models\Assign_Subject;
 use App\Models\Department;
+use App\Models\Department_Semester;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherSubject;
@@ -29,7 +34,9 @@ class TeacherSubjectController extends Controller
 
        $teachers = $user->faculty->teachers()->get();
 
-        $query = TeacherSubject ::where('faculty_id',$facultyid);
+        $query = TeacherSubject::where('faculty_id',$facultyid);
+
+
 
          if(request("subject")){
             $subjectname = $request->input('subject');
@@ -66,7 +73,7 @@ class TeacherSubjectController extends Controller
         $teacherSubjects  =   $query->paginate(10);
 
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/assgin-subject/Index",[
+        return Inertia("admin/assign-subject-teacher/Index",[
             'teacherSubjects' => TeacherSubjectResource::collection($teacherSubjects),
             'teachers' => $teachers->toArray(),
             'queryparams' => request()->query() ?: null,
@@ -88,13 +95,16 @@ class TeacherSubjectController extends Controller
         $teachers =  $user->faculty->teachers()->get();
         $departments =  $user->faculty->departments()->get();
         $subjects = $user->faculty->subjects()->get();
-
+        $semesters = Department_Semester::all();
+        $subjects = Assign_Subject::all();
 
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/assgin-subject/Create",[
+        return Inertia("admin/assign-subject-teacher/Create",[
             'teachers' => TeacherResource::collection($teachers),
             'departments' => DepartmentResource::collection($departments),
             'subjects' => SubjectResource::collection($subjects),
+            'semesters' => DepartmentSemesterResource::collection($semesters),
+            'subjects' => AssignSubjectResource::collection($subjects),
             'error' =>session('error'),
             'usertype' => $usertype,
         ]);
@@ -110,11 +120,12 @@ class TeacherSubjectController extends Controller
 
             'teacher_id' => 'required|integer',
             'department_id' => 'required|integer',
-            'semester' => 'required|integer',
+            'semester_id' => 'required|integer',
             'subject_id' => 'array',
             'subject_id.*' => 'integer',
             'status' => 'required|string',
         ]);
+
 
         try{
 
@@ -130,7 +141,7 @@ class TeacherSubjectController extends Controller
               $data->teacher_id = $request->teacher_id;
               $data->faculty_id = $userfacultyid;
               $data->department_id = $request->department_id;
-              $data->semester = $request->semester;
+              $data->semester_id = $request->semester_id;
               $data->subject_id = $subject_id[$i];
               $data->status = $request->status;
 
@@ -174,28 +185,24 @@ class TeacherSubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request,$teacher_id,$faculty_id,$department_id,$semester,$subject_id)
+    public function edit(Request $request,$id, $department_id, $semester_id)
     {
+
         $user =  $request->user();
         $departments = $user->faculty->departments()->get();
         $teachers =  $user->faculty->teachers()->get();
-        $subjects = $user->faculty->subjects()->get();
-
-        $teacherSubject = TeacherSubject::where('teacher_id', $teacher_id)
-        ->where('faculty_id', $faculty_id)
-        ->where('department_id', $department_id)
-        ->where('semester', $semester)
-        ->where('subject_id', $subject_id)
-        ->first();
+        $subjects = Assign_Subject::where('department_id',$department_id)->where('semester_id',$semester_id)->get();
+        $semesters = Department_Semester::all();
+        $teacherSubject = TeacherSubject::find($id);
 
 
-        //dd($teacher_id,$faculty_id,$department_id,$semester,$subject_id);
         $usertype=Auth()->user()->usertype;
-        return Inertia("admin/assgin-subject/Edit",[
+        return Inertia("admin/assign-subject-teacher/Edit",[
            'teacherSubject' => new TeacherSubjectResource($teacherSubject),
            'teachers' => $teachers->toArray(),
            'departments' => $departments->toArray(),
-           'subjects' => $subjects->toArray(),
+           'semesters' => DepartmentSemesterResource::collection($semesters),
+           'subjects' => AssignSubjectResource::collection($subjects),
            'usertype' => $usertype,
         ]);
     }
@@ -203,119 +210,56 @@ class TeacherSubjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(array $attributes)
+    public function update(UpdateAssignSubjectRequest $request,string $id)
     {
-
-
-      $record = DB::table('teacher_subjects')
-                 ->where('teacher_id',$attributes['teacher_id'])
-                 ->where('department_id',$attributes['department_id'])
-                 ->where('semester',$attributes['semester'])
-                 ->where('subject_id',$attributes['subject_id'])
-                 ->fist();
-
-            $record->update([
-                'teacher_id' => $attributes['teacher_id'],
-                'department_id' => $attributes['department_id'],
-                'semesster' => $attributes['semester'],
-                'subject_id' => $attributes['subject_id'],
-            ]);
-
-
-             return to_route("assginsubject.index")->with("success","Assgined Subject has been updated  successfully!");
-    {/*
-      $data =  $request->validated();
-      $user = $request->user();
-      $userfacultyid =  $user->faculty_id;
-      $data['faculty_id'] = $userfacultyid;
-
-      try{
-       $teacherSubject->update($data);
-       return to_route("assginsubject.index")->with("success","Assgined Subject has been updated  successfully!");
-      }   catch(QueryException $e){
-
-        Log::error($e->getMessage());
-        return redirect()->route('assginsubject.index')
-                                 ->with('error','An error occured while updating Assigned subject!');
-      }
-    */}
-
-
-     {/* $request->validate([
-
-            'teacher_id' => 'required|integer',
-            'department_id' => 'required|integer',
-            'semester' => 'required|integer',
-            'subject_id' => 'integer',
-            'status' => 'required|string',
-        ]);
-
-
         try{
+         $data =  $request->validated();
+         $subject =  TeacherSubject::find($id);
 
+         $subject->update($data);
 
-                $data = TeacherSubject::where([
-                  'teacher_id' => $request->teacher_id,
-                  'faculty_id' => $userfacultyid,
-                  'department_id' => $request->department_id,
-                  'semester' => $request->semester,
-                  'subject_id' => $request->subject_id,
-              ])->first();
+          return to_route('assginsubject.index')->with('success','Assgined Subject has been updated successfully!');
 
-              if (!$data) {
-                  $data = new TeacherSubject();
-
-                  $data->teacher_id = $request->teacher_id;
-                  $data->faculty_id = $userfacultyid;
-                  $data->department_id = $request->department_id;
-                  $data->semester = $request->semester;
-                  $data->subject_id = $request->subject_id;
-              }
-                  $data->status = $request->status;
-                  $data->save();
-
-                  return to_route("assginsubject.index")->with("success","Assgined Subject has been updated  successfully!");
-
-            }
-            catch(QueryException $e){
+        }catch(QueryException $e){
 
             Log::error($e->getMessage());
-            return redirect()->route('assginsubject.index')
-                                     ->with('error','An error occured while updating Assigned subject!');
+            return to_route('assignsubject.index')
+                      ->with('error','An error occured while Updating this assigend subject!');
+
+       }
 
 
-          }
+        }
 
-        */}
 
-    }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($teacher_id, $faculty_id, $department_id, $semester ,$subject_id)
+    public function destroy(string $id)
     {
-     // dd($teacher_id,$faculty_id,$department_id,$semester,$subject_id);
-       try{
-        $deleted = DB::table('teacher_subjects')
-              ->where('teacher_id',$teacher_id)
-              ->where('faculty_id',$faculty_id)
-              ->where('department_id',$department_id)
-              ->where('semester',$semester)
-              ->where('subject_id',$subject_id)
-              ->delete();
 
-            return to_route("assginsubject.index")->with("success","Assgind Subject has been deleted successfully!");
+        try{
+            $subject = TeacherSubject::find($id);
 
-    } catch(QueryException $e){
+            $subject->delete();
+            return to_route('assginsubject.index')->with('success',"Subject has been deleted successfully!");
+         }  catch(QueryException $e){
 
-        $errorMessage = $e->getMessage();
-        Log::error($errorMessage);
+             $errorCode = $e->errorInfo[1];
+             if($errorCode == 1451){ // this code is used when a column has child rows
 
-        return to_route("assginsubject.index")
-                        ->with("error","An error acoored while deleting this assgindedsubject!");
+                 return to_route("assginsubject.index")
+                              ->with('error','Cannot delete this subject, it has associated records!');
+             }
 
-    }
+             else{
+                return to_route("assginsubject.index")->with('error','An error occured while deleteting subject');
+             }
+
+         }
 
     }
 

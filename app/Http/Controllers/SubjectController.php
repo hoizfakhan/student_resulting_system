@@ -177,7 +177,7 @@ class SubjectController extends Controller
 
 
          $data = $request->validated();
-          $name = $subject->name;
+         $name = $subject->name;
 
          try{
 

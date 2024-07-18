@@ -226,9 +226,9 @@ export default function Authenticated({ user, header, children }) {
                       <>
 
                         <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3">
-                          <NavLink href={route('subject.index')} active={route('').current('studentaccount.index')} className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
+                          <NavLink href={route('semestersubject.index')} active={route('').current('semestersubject.index')} className='fs-6 text-white nav-link nav-link-hover-sub   ms-3 d-none d-sm-inline'>
                             <span className='me-2'>*</span>
-                            Subjects
+                            Assign  Subjects
                           </NavLink>
 
                         </li>
@@ -236,7 +236,7 @@ export default function Authenticated({ user, header, children }) {
                         <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3">
                           <NavLink href={route('assginsubject.index')} active={route('').current('employeeaccount.index')} className='fs-6 text-white nav-link nav-link-hover-sub  ms-3 d-none d-sm-inline'>
                             <span className='me-2'>*</span>
-                            Assign Subjects
+                             Teacher Subject
                           </NavLink>
 
                         </li>

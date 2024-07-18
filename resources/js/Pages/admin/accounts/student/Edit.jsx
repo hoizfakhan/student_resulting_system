@@ -33,7 +33,6 @@ export default function Edit({ auth,studentaccount }) {
       const onSubmit = (e) =>{
 
          e.preventDefault();
-          console.log("**",status);
         post(route("studentaccount.update",studentaccount.data.id));
 
        }

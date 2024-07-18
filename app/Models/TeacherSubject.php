@@ -9,41 +9,28 @@ use App\Traits\CompositeKeyTrait;
 class TeacherSubject extends Model
 {
 
-
     use HasFactory;
+
+    protected $table = "teacher_subjects";
 
     protected $fillable=[
 
         'teacher_id',
         'faculty_id',
         'department_id',
-        'semester',
+        'semester_id',
         'subject_id',
         'status',
 
     ];
 
-   protected $primarykey = ['teacher_id','faculty_id','department_id','semester','subject_id'];
+  // protected $primarykey = ['teacher_id','faculty_id','department_id','semester','subject_id'];
 
-   public function getKeyName()
-   {
-    return 'teacher_id,faculty_id,department_id,semester,subject_id';
-   }
+   //public function getKeyName()
+   //{
 
-
-
-
-     // Mutator to serialize the subject field before saving to the database
-    // public function setSubjectAttribute($value)
-     //{
-       //  $this->attributes['subject'] = serialize($value);
-     //}
-
-     // Accessor to unserialize the subject field when retrieving from the database
-     //public function getSubjectAttribute($value)
-     //{
-       //  return unserialize($value);
-     //}
+    //return 'teacher_id,faculty_id,department_id,semester,subject_id';
+   //}
 
      public function teacher(){
 
@@ -60,11 +47,14 @@ class TeacherSubject extends Model
         return $this->belongsTo(Department::class);
      }
 
+     public function semester(){
+
+        return $this->belongsTo(Semester::class);
+     }
+
      public  function subject(){
 
         return $this->belongsTo(Subject::class);
      }
 
-
-     
 }

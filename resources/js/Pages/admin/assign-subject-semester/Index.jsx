@@ -6,15 +6,16 @@ import SuccessModal from "@/Pages/SuccessModal";
 import DangerButton from "@/Components/DangerButton";
 import SelectInput from "@/Components/SelectInput";
 
- export default function Index({auth,facultys,Departments,semesters,error,success}){
+ export default function Index({auth,subjects,departments,semesters,error,success}){
 
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
 
-  const [selectedDepartmentid,setselectedDepartmentid] = useState('');
   const [Semesters,setSemesters] = useState([]);
-  const [selectedFacultyid,setSelectedFacultyid] = useState('');
-  const [departments,setDepartments] = useState([]);
+  const [selectedDepartmentid,setSelectedDepartmentid] = useState('');
+  const [selectedSemesterid,setSelectedSemesterid] = useState('');
+
+  const [Subjects,setSubjects] = useState([]);
 
 
   useEffect(() => {
@@ -30,54 +31,52 @@ import SelectInput from "@/Components/SelectInput";
   }, [error]);
 
 
-  useEffect(() => {
+   useEffect(() => {
 
-    if(selectedFacultyid){
-     let filteredDept = Departments.filter(dept => {
-        return dept.faculty_id == selectedFacultyid
+
+    if(selectedDepartmentid){
+     let filteredSem = semesters.data.filter(sem => {
+        return sem.department_id == selectedDepartmentid
       })
-      setDepartments(filteredDept);
+      setSemesters(filteredSem);
 
     }
 
-  },[selectedFacultyid]);
+  },[selectedDepartmentid]);
 
 
 
-   useEffect(() => {
+ useEffect(() => {
 
-    console.log(selectedDepartmentid,"hi");
-     if(selectedDepartmentid){
+     if(selectedDepartmentid,selectedSemesterid){
 
-      let filteredsemesters = semesters.data.filter(sem => {
-      return sem.department_id == selectedDepartmentid;
+      let filteredsub= subjects.data.filter(sub => {
+      return sub.department_id == selectedDepartmentid && sub.semester_id == selectedSemesterid;
 
      })
 
-     setSemesters(filteredsemesters);
+     setSubjects(filteredsub);
 
     }
 
-  },[selectedDepartmentid])
+  },[selectedDepartmentid,selectedSemesterid])
 
 
-  const deletesemester = (Semester) => {
-    console.log(Semester);
-    if (!window.confirm("Are you sure to delete this semester?")) {
+  const deletesubject = (subject) => {
+    console.log(subject);
+    if (!window.confirm("Are you sure to delete this subject?")) {
       return;
     }
 
-    router.delete(route("assignsemester.destroy",Semester.id));
-
+    router.delete(route("semestersubject.destroy",subject.id));
   };
-
 
 
 return(
 
   <AuthenticatedLayout
     user={auth.user}
-    header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Assgined Semesters</h2>}
+    header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Assgined Subjects</h2>}
 
   >
   <Head title="Semesters List" />
@@ -103,50 +102,48 @@ return(
             <div className="row">
             <div className='col-md-4'>
               <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
-                <h6 className="text-gray-500 mb-1">Faculty</h6>
+                <h6 className="text-gray-500 mb-1">Department</h6>
                   <SelectInput
                    className="form-control"
-                   value={selectedFacultyid}
+                   value={selectedDepartmentid}
                    isFocused={true}
-                   onChange={(e) => setSelectedFacultyid(e.target.value)}
+                   onChange={(e) => setSelectedDepartmentid(e.target.value)}
                  >
-                 <option>Select Faculty</option>
-                  {facultys.map((faculty) => (
+                 <option>Select Department</option>
+                 {departments.map((department) => (
 
-                    <option value={faculty.id} key={faculty.id}>{faculty.faculty_name}</option>
+                    <option value={department.id} key={department.id}>{department.name}</option>
 
-                  ))
-
-                  }
+                 ))
+                 }
                  </SelectInput>
-
               </div>
             </div>
+
             <div className='col-md-4'>
             <div className="p-6 text-gray-900 dark:text-gray-100 flex text-xl d-flex flex-column">
-                <h6 className="text-gray-500 mb-1">Department</h6>
+                <h6 className="text-gray-500 mb-1">Semester</h6>
                        <SelectInput
                               id="department"
                               className="form-control mt-1"
-                              name="department_id"
-                              value={selectedDepartmentid}
-                              onChange={(e) => setselectedDepartmentid(e.target.value)}
+                              name="semester_id"
+                              value={selectedSemesterid}
+                              onChange={(e) => setSelectedSemesterid(e.target.value)}
                            >
-                            <option vlaue="">Select department</option>
+                            <option vlaue="">Select Semester</option>
 
-                             {departments.length > 0 ? (
+                             {Semesters.length > 0 ? (
 
-                                  departments.map((department) => (
-                                  <option value={department.id} key={department.id}>{department.name}</option>
+                                  Semesters.map((semester) => (
+                                  <option value={semester.semester.id} key={semester.id}>{semester.semester.name}</option>
 
                                 ))
 
                               ) : (
 
-                                <option value="">Select a faculty fisrt</option>
+                                <option value="">Select a Department fisrt</option>
                                )}
-
-                           </SelectInput>
+                   </SelectInput>
               </div>
             </div>
 
@@ -154,10 +151,10 @@ return(
              <div className='col-md-4 text-end'>
               <div className='me-3 mt-4'>
               <Link
-                 href={route('assignsemester.create')}
+                 href={route('semestersubject.create')}
                  className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-              Assign Semester
+              Assign Subject
             </Link>
             </div>
             </div>
@@ -166,28 +163,48 @@ return(
             </div>
             </div>
 
-           {Semesters.length > 0 ? (
+           {Subjects.length > 0 ? (
             <div className='overflow-auto'>
                 <table className='w-full text-md text-left rtl:text-right
                      dark:bg-gray-700 dark:text-gray-300 '>
                    <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400
                         border-b-2 border-gray-500'>
                       <tr className='text-nowrap bg-gray-500 text-white align-middle'>
-                        <th className='px-3 py-2'>ID</th>
                         <th className='px-3 py-2'>Name</th>
+                        <th className='px-3 py-2'>Credit</th>
+                        <th className='px-3 py-2'>Practical Credit</th>
+                        <th className='px-3 py-2'>Therical Credit</th>
+                        <th className='px-3 py-2'>Subject Type</th>
                         <th className='px-3 py-2'>Action</th>
 
                       </tr>
                    </thead>
                     <tbody>
-                      {Semesters.map((Semester) => (
+                      {Subjects.map((subject) => (
 
-                          <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={Semester.id}>
-                           <td className='px-3 py-2'>{Semester.semester.id}</td>
-                           <td className='px-3 py-2'>{Semester.semester.name}</td>
+                          <tr className='bg-gray border-b dark:bg-gray-800  dark:border-gray-700 hover:bg-gray-200 align-middle' key={subject.id}>
+                           <td className='px-3 py-2'>{subject.subject.name}</td>
+                           <td className='px-3 py-2'>{subject.subject.credit}</td>
+                           <td className='px-3 py-2'>
+
+                            {subject.subject.practical_credit ? (
+                            <span>{subject.subject.practical_credit}</span>
+                            ):(<span>No Credit</span>)
+
+                            }
+
+                           </td>
+                           <td className='px-3 py-2'>
+                            {subject.subject.therical_credit ? (
+                             <span>{subject.subject.therical_credit}</span>
+                            ):(<span>No Credit</span>)
+                          }
+
+                            </td>
+                           <td className='px-3 py-2'>{subject.subject.subject_type}</td>
                            <td className='px-3 py-2 text-nowrap'>
                             <DangerButton
-                             onClick={(e) => deletesemester(Semester)}
+                             onClick={(e) => deletesubject(subject)}
                              className='mx-3'
                              >
                               Delete
@@ -202,8 +219,10 @@ return(
            </div>
 
                 ):(
-                    <h6 className="text-gray-300 text-center">No semesters yet</h6>
+                    <h6 className="text-gray-300 text-center">No subjects yet</h6>
                 )}
+
+
 
        </div>
        </div>

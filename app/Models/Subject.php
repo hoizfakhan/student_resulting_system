@@ -14,9 +14,6 @@ class Subject extends Model
     protected $fillable = [
 
         'name',
-        // 'faculty_id',
-        //'department_id',
-        //'semester',
         'credit',
         'practical_credit',
         'therical_credit',
@@ -25,16 +22,22 @@ class Subject extends Model
     ];
 
 
+   public function facultys(){
 
-   public function faculty(){
+      return $this->belongsToMany(Faculty::class,Assign_Subject::class);
+   }
 
-        return $this->belongsTo(Faculty::class,'faculty_id');
-    }
+   public function departments(){
 
-    public function department(){
+     return $this->belongsToMany(Department::class,Assign_Subject::class);
+   }
 
-        return $this->belongsTo(Department::class,'department_id');
-    }
+   public function semesters(){
+
+    return $this->belongsToMany(Semester::class,Assign_Subject::class);
+  }
+
+
 
     public function teachers(){
 
@@ -50,11 +53,6 @@ class Subject extends Model
     public function attendences(){
 
       return $this->hasMany(Attendence::class);
-    }
-
-    public function semesters(){
-
-        return $this->belongsToMany(Semester::class,Semester_Subject::class);
     }
 
 
