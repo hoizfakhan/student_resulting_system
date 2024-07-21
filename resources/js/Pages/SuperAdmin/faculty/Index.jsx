@@ -9,6 +9,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import ErrorModal from "@/Pages/ErrorModal";
 import SuccessModal from "@/Pages/SuccessModal";
 import { useEffect, useState } from "react";
+import { faEdit, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Index({ auth, success, facultys, error }) {
   const [successMessage, setSuccessMessage] = useState(success || null);
@@ -74,7 +76,7 @@ export default function Index({ auth, success, facultys, error }) {
                     href={route("faculty.create")}
                     className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                   >
-                    Add New Faculty
+                    <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
                   </Link>
                 </div>
               </div>
@@ -112,14 +114,14 @@ export default function Index({ auth, success, facultys, error }) {
                           href={route("faculty.edit", faculty.id)}
                           className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                         >
-                          Edit
+                         <FontAwesomeIcon icon={faEdit} className="ms-2" />
                         </Link>
 
                         <DangerButton
                           onClick={(e) => deletefaculty(faculty)}
                           className="mx-3"
                         >
-                          Delete
+                         <FontAwesomeIcon icon={faTrash} className="ms-2" />
                         </DangerButton>
 
                         <Link

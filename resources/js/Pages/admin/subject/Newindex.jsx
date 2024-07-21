@@ -7,6 +7,8 @@ import { Head, Link, router} from "@inertiajs/react";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
+import { faEdit, faPlusCircle, faRedo, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Newindex({auth,subjects,queryparams = null,departments,success,error}){
 
             // for the modal of success and error
@@ -145,7 +147,7 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
                  className="btn btn-outline-secondary"
                  href={route("subject.index")}
                >
-                Reset
+                <FontAwesomeIcon icon={faRedo} className="ms-2" />
                </Link>
             </div>
 
@@ -155,7 +157,7 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
                  href={route('subject.create')}
                  className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-               Add New Subject
+               <FontAwesomeIcon icon={faPlusCircle} className="ms-2" />
             </Link>
             </div>
             </div>
@@ -205,14 +207,14 @@ export default function Newindex({auth,subjects,queryparams = null,departments,s
                           href={route("subject.edit", subject.id)}
                           className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                         >
-                          Edit
+                          <FontAwesomeIcon icon={faEdit} className="ms-2" />
                         </Link>
 
                         <DangerButton
                           onClick={(e) => deleteSubject(subject)}
                           className="mx-3"
                         >
-                          Delete
+                          <FontAwesomeIcon icon={faTrash} className="ms-2" />
                         </DangerButton>
                       </td>
                     </tr>

@@ -9,6 +9,8 @@ import Pagination from "@/Components/Pagination";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
+import { faEdit, faRedo, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Index({
   auth,
@@ -157,7 +159,7 @@ export default function Index({
                  className="btn btn-outline-secondary"
                  href={route("teacher.index")}
                >
-                Reset
+                <FontAwesomeIcon icon={faRedo} className="ms-2" />
                </Link>
             </div>
 
@@ -167,7 +169,7 @@ export default function Index({
                  href={route('teacher.create')}
                  className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-               Add New Teacher
+               <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
             </Link>
             </div>
             </div>
@@ -205,13 +207,13 @@ export default function Index({
                               href={route("teacher.edit",teacher.id)}
                               className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary'
                             >
-                             Edit
+                             <FontAwesomeIcon icon={faEdit} className="ms-2" />
                             </Link>
                             <DangerButton
                              onClick={(e) => deleteTeacher(teacher)}
                              className='mx-3'
                              >
-                              Delete
+                              <FontAwesomeIcon icon={faTrash} className="ms-2" />
                             </DangerButton>
                            </td>
                          </tr>

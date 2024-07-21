@@ -9,7 +9,7 @@ import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faChevronDown,faBook, faEdit, faTrash, faUserPlus, faRedo } from '@fortawesome/free-solid-svg-icons';
 
 export default function Index({
   auth,
@@ -115,7 +115,7 @@ export default function Index({
             />
           )}
 
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <div className="overflow-auto shadow-lg rounded-lg p-6 ">
             {/* Search Filters */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
               <div className="flex flex-col">
@@ -158,7 +158,7 @@ export default function Index({
                     searchDepartmentFieldChanged("department", e.target.value)
                   }
                 >
-                  <option className="dark:bg-gray-700">Select</option>
+                  <option className="dark:bg-gray-700" value="">Select</option>
                   {departments.map((department) => (
                     <option
                       value={department.name}
@@ -201,19 +201,19 @@ export default function Index({
                   href={route("student.create")}
                   className="bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
                 >
-                  Add New Student
+                  <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
                 </Link>
               </div>
               <div>
                 <Link
                   href={route("student.index")}
-                  className="bg-gray-300 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
+                  className="bg-gray-400 hover:bg-gray-600 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
                 >
-                  Reset Page
+                  <FontAwesomeIcon icon={faRedo} className="ms-2" />
                 </Link>
               </div>
             </div>
-          </div>
+          {/* </div> */}
 
           {/* Additional Filter */}
           <div className="flex mb-4">
@@ -244,7 +244,7 @@ export default function Index({
           </div>
 
           {/* Student List Table */}
-          <div className="overflow-auto shadow-lg rounded-lg">
+          {/* <div className="overflow-auto shadow-lg rounded-lg"> */}
             <table className="w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500">
                 <tr className="bg-gray-500 text-white">
@@ -322,21 +322,21 @@ export default function Index({
                         href={route("student.show", student.id)}
                         className="font-meduim text-gray-600 dark:text-blue-500 hover:bg-gray-300 mx-2 btn btn-secondary"
                       >
-                        Complete Info
+                        <FontAwesomeIcon icon={faBook} className="ms-2" />
                       </Link>
 
                       <Link
                         href={route("student.edit", student.id)}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                       >
-                        Edit
+                        <FontAwesomeIcon icon={faEdit} className="ms-2" />
                       </Link>
 
                       <DangerButton
                         onClick={() => deleteStudent(student)}
                         className="mx-3"
                       >
-                        Delete
+                        <FontAwesomeIcon icon={faTrash} className="ms-2" />
                       </DangerButton>
                     </td>
                   </tr>

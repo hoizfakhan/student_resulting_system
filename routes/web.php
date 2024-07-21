@@ -45,7 +45,6 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
     Route::get('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/edit', [TeacherSubjectController::class, 'edit'])
     ->name('assignsubject.edit');
-    Route::resource( 'showresult', MarksController::class);
     Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
      ->name('assignsubject.update');
     // all admin routes
