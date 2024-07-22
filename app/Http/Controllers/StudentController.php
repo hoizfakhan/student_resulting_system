@@ -6,6 +6,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Department;
+use App\Models\Semester;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -14,7 +15,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Concerns\ToArray;
+
 
 class StudentController extends Controller
 {
@@ -25,7 +26,10 @@ class StudentController extends Controller
     {
 
         $user =  $request->user();
-        $query =  $user->faculty->students();
+        $query = $user->faculty->students()->with(['semesters' => function ($query){
+             $query->wherePivot('status',1);
+        }]);
+
         $departments = $user->faculty->departments()->get();
         $sortField = request("sort_field","created_at");
         $sortDirection = request("sort_direction","desc");
@@ -64,8 +68,6 @@ class StudentController extends Controller
             'queryparams' => request()->query() ?: null,
 
         ]);
-
-
     }
 
     /**
@@ -101,7 +103,24 @@ class StudentController extends Controller
 
         }
 
-         Student::create($data);
+       $student =  Student::create($data);
+       $firstSemester = Semester::first();
+
+       try{
+
+
+        if($firstSemester){
+
+           Log::info('Attaching semester ID: ' .$firstSemester->id.'to student ID' .$student->id);
+           $student->semesters()->attach($firstSemester->id, ['status' => 1]);
+        }
+
+      } catch(QueryException $e){
+
+         Log::error('Error attaching semester:'.$e->getMessage());
+         return to_route('student.index')->with('error','failed to assign semester to student!');
+      }
+
          return to_route('student.index')->with('success','New Student registered successfully!');
 
 
@@ -123,6 +142,9 @@ class StudentController extends Controller
     public function show(Student $student)
     {
 
+      $student->load(['semesters' => function ($query){
+          $query->wherePivot('status',1);
+      }]);
 
         $usertype=Auth()->user()->usertype;
         return Inertia("admin/student/StudentDetails",props: [

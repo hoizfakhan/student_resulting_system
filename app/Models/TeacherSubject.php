@@ -24,14 +24,6 @@ class TeacherSubject extends Model
 
     ];
 
-  // protected $primarykey = ['teacher_id','faculty_id','department_id','semester','subject_id'];
-
-   //public function getKeyName()
-   //{
-
-    //return 'teacher_id,faculty_id,department_id,semester,subject_id';
-   //}
-
      public function teacher(){
 
         return $this->belongsTo(Teacher::class);

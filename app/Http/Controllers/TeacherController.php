@@ -142,7 +142,7 @@ class TeacherController extends Controller
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
 
-       
+
        $data =  $request->validated();
        $name =  $teacher->name;
 
@@ -184,20 +184,26 @@ class TeacherController extends Controller
 
     // teacher part
 
-    public function TeacherSubjects(Request $request){
+    public function TeacherSubjects(Request $request)
+{
+    $user = $request->user();
+    $teacher = $user->teacher;
 
-               $user =  $request->user();
-               $teacher = $user->teacher;
-
-               $teachersubjects = $teacher->subjects()->get();
-
-        $usertype=Auth()->user()->usertype;
-        return Inertia("teacher/subject/TeacherSubject",[
-          'teachersubjects' => SubjectResource::collection($teachersubjects),
-          'usertype' => $usertype,
-        ]);
-    }
+    $teachersubjects = $teacher->subjects()
+     ->with(['assignSubjects.faculty', 'assignSubjects.department', 'assignSubjects.semester'])
+       ->get();
 
 
+    $usertype = Auth()->user()->usertype;
 
+    // Transform the collection of subjects using SubjectResource
+    $transformedSubjects = SubjectResource::collection($teachersubjects);
+
+
+
+    return Inertia::render("teacher/subject/TeacherSubject", [
+        'teachersubjects' => $transformedSubjects,
+        'usertype' => $usertype,
+    ]);
+}
 }

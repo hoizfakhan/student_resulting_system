@@ -22,20 +22,36 @@ class Subject extends Model
     ];
 
 
-   public function facultys(){
+   // Subject.php
 
-      return $this->belongsToMany(Faculty::class,Assign_Subject::class);
-   }
+public function assignSubjects()
+{
+    return $this->hasMany(Assign_Subject::class);
+}
 
-   public function departments(){
+public function facultys()
+{
+    return $this->belongsToMany(Faculty::class, 'assign-_subjects')
+                ->withPivot('semester_id', 'department_id');
+}
 
-     return $this->belongsToMany(Department::class,Assign_Subject::class);
-   }
+public function departments()
+{
+    return $this->belongsToMany(Department::class, 'assign-_subjects')
+                ->withPivot('semester_id', 'faculty_id');
+}
 
-   public function semesters(){
+public function semesters()
+{
+    return $this->belongsToMany(Semester::class, 'assign-_subjects')
+                ->withPivot('department_id', 'faculty_id');
+}
 
-    return $this->belongsToMany(Semester::class,Assign_Subject::class);
-  }
+public function teacherSubjects()
+{
+    return $this->belongsToMany(Teacher::class, 'teacher_subjects')
+                ->withPivot('semester_id', 'department_id', 'faculty_id');
+}
 
 
 

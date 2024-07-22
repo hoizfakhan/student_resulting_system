@@ -16,7 +16,7 @@ class AssignSubjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            
+
          'id' => $this->id,
          'subject_id' => $this->subject_id,
          'subject' => $this->subject ? new SubjectResource($this->subject) : null,
@@ -25,7 +25,7 @@ class AssignSubjectResource extends JsonResource
          'department_id' => $this->department_id,
          'department' =>  $this->department ? new DepartmentResource($this->department) : null,
          'semester_id' => $this->semester_id,
-         'semester' =>  $this->semester ? new SemesterReource($this->semester) : null,
+         'semester' =>  $this->semester ? new SemesterResource($this->semester) : null,
 
 
         ];

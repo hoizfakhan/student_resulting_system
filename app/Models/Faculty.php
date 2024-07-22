@@ -30,7 +30,8 @@ class Faculty extends Model
 
     public function subjects(){
 
-      return $this->belongsToMany(Subject::class,Assign_Subject::class);
+      return $this->belongsToMany(Subject::class,Assign_Subject::class)
+                         ->withPivot('semester_id','department_id');
     }
 
 

@@ -14,6 +14,7 @@ class StudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        //student resource
         return [
 
         'id' => $this->id,
@@ -40,13 +41,15 @@ class StudentResource extends JsonResource
         'user_id' => $this->user_id,
         'user' => new UserResource($this->user),
         'attendence' => AttendenceResource::collection($this->whenLoaded('attendence')),
-        'current_semester' => $this->current_semester,
         'identity_cart_number' => $this->identity_cart_number,
         'number_maktob_sent_exam_commettee'=>$this->number_maktob_sent_exam_commettee,
         'number_maktob_tajeel'=>$this->number_maktob_tajeel,
         'number_maktob_monfak'=>$this->number_maktob_monfak,
         'number_maktob_lailia'=>$this->number_maktob_lailia,
         'image_path'=>$this->image_path ? Storage::url($this->image_path) : '',
+        'current_semester' => $this->semesters()->first(),
+        'semesters' => SemesterResource::collection($this->whenLoaded('semesters')),
+
 
 
 

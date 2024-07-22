@@ -85,9 +85,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
     Route::resource("attendence",AttendenceController::class);
-    Route::post('attendence/{subjectid}/{semester}', [AttendenceController::class,"store"])->name("attendence.store1");
-    Route::get("/attendence/{department_id}/{semester}/{subjectid}",[AttendenceController::class,"create"])->name("attendence.create");
-
+    Route::post('attendence/{subject_id}/{semester_id}', [AttendenceController::class,"store"])->name("attendence.store1");
+    Route::get("/attendence/{department_id}/{semester_id}/{subject_id}",[AttendenceController::class,"create"])->name("attendence.create");
+  // Route::get('assign/attendance{department_id}/{semester_id}', [AttendenceController::class, 'create'])->name('assign.attendance');
     // all teacher routes
 
 });

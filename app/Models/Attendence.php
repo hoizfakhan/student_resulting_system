@@ -9,7 +9,9 @@ class Attendence extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $table = "attendences";
+
+    protected $fillable= ['student_id','subject_id','semester_id','attendence_year','total_hours','absent_hours'];
 
     public function student()
     {

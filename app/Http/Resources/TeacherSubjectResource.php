@@ -15,7 +15,7 @@ class TeacherSubjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            
+
          'id' => $this->id,
          'teacher_id' => $this->teacher_id,
          'teacher' =>  $this->teacher ? new TeacherResource($this->teacher) : null,
@@ -24,7 +24,7 @@ class TeacherSubjectResource extends JsonResource
          'department_id' => $this->department_id,
          'department' =>  $this->department ? new DepartmentResource($this->department) : null,
          'semester_id' => $this->semester_id,
-         'semester' =>  $this->semester ? new SemesterReource($this->semester) : null,
+         'semester' =>  $this->semester ? new SemesterResource($this->semester) : null,
          'subject_id' => $this->subject_id,
          'subject' => $this->subject ? new SubjectResource($this->subject) : null,
          'status' => $this->status,

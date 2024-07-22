@@ -29,7 +29,6 @@ export default function Create({ auth,departments,studentusers}) {
     kankor_id:"",
     kankor_marks:"",
     admission_date:"",
-    current_semester:"",
     number_maktob_sent_exam_commettee:"",
     number_maktob_tajeel:"",
     number_maktob_monfak:"",
@@ -142,49 +141,6 @@ export default function Create({ auth,departments,studentusers}) {
                   </div>
                 </div>
               </div>
-
-  {/*         <div className="row form-row">
-                <div className="form-group col-md-6">
-                  <div className="mt-3">
-                    <InputLabel htmlFor="gender">Gender:</InputLabel>
-                    <div className="d-flex">
-                      <div className="form-check col-md-3">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="gender"
-                          id="genderMale"
-                          value="male"
-                          {...register("gender")}
-                          defaultChecked
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="genderMale"
-                        >
-                          Male
-                        </label>
-                      </div>
-                      <div className="form-check col-md-3">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="gender"
-                          id="genderFemale"
-                          value="female"
-                          {...register("gender")}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="genderFemale"
-                        >
-                          Female
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-               */}
                <div className="row form-row">
                 <div className="form-group col-md-6">
                   <div className="mt-3">
@@ -471,28 +427,7 @@ export default function Create({ auth,departments,studentusers}) {
                 </div>
 
 
-                <div className="from-group col-md-6">
-                  <div className="mt-3">
-                    <InputLabel>
-                      Semester:<span className="text-red-300 text-lg">*</span>
-                    </InputLabel>
-                    <select
-                      id="semester"
-                      name="current_semester"
-                      className="form-control mt-1"
-                      onChange={(e) => setData("current_semester",e.target.value)}
-                    >
-                      <option value="">Select a semester</option>
-                      {[...Array(10)].map((_, index) => (
-                        <option key={index + 1} value={index + 1}>
-                          {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                    <InputError message={errors.current_semester} className='mt-2'/>
-
-                  </div>
-                </div>
+               
               </div>
 
               <div className="row form-row">

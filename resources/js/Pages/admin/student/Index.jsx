@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
+
 export default function Index({
   auth,
   success,
@@ -19,7 +20,8 @@ export default function Index({
   departments,
   queryparams = null,
 }) {
-  // for the modal of success and error
+
+  console.log(students);
 
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
@@ -308,7 +310,11 @@ export default function Index({
                       {student.department.name}
                     </td>
                     <td className="px-3 py-2 text-center">
-                      {student.current_semester}
+                      {
+
+                      student.current_semester ?  student.current_semester.name : "no current semester"
+
+                      }
                     </td>
                     <td className="px-3 py-2">{student.phone_number}</td>
                     <td className="px-3 py-2 text-center">

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attendences', function (Blueprint $table) {
             $table->id();
-
+            
             $table->unsignedBigInteger("student_id")->nullable(false);
             $table->foreign("student_id")->references("id")->on("students")
                   ->noActionOnDelete()
@@ -23,13 +23,17 @@ return new class extends Migration
             $table->foreign("subject_id")->references("id")->on("subjects")
                         ->noActionOnDelete()
                         ->cascadeOnUpdate();
-             $table->integer('semester');
+
+            $table->unsignedBigInteger('semester_id')->nullable();
+            $table->foreign('semester_id')->references('id')->on('semesters')
+                         ->noActionOnDelete()
+                         ->cascadeOnUpdate();
+
              $table->integer('attendence_year');
              $table->tinyInteger('total_hours')->nullable(false);
              $table->tinyInteger('absent_hours')->nullable(false)->default(0);
 
-             $table->unique(['student_id','subject_id','semester','attendence_year'],'unique_attendence');
-
+             $table->unique(['student_id','subject_id','semester_id','attendence_year'],'unique_attendence');
             $table->timestamps();
         });
     }

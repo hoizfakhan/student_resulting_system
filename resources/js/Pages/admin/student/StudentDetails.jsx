@@ -2,7 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react"; // Import Link from Inertia.js
 
 export default function StudentDetails({ auth, student }) {
-  
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -196,7 +196,18 @@ export default function StudentDetails({ auth, student }) {
                           Current Semester
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.data.current_semester}
+                          {student.data.current_semester ? (
+                           <span>
+                            {student.data.current_semester.name}
+                            (Status:
+                             {student.data.current_semester.pivot.status}
+                            )
+                           </span>
+
+                          ):(
+                          <span>no current semester</span>
+                          )
+                        }
                         </td>
                       </tr>
                     </tbody>

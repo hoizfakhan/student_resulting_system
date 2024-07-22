@@ -31,7 +31,6 @@ class Student extends Model
       'admission_date',
       'department_id',
       'user_id',
-      'current_semester',
       'identity_cart_number',
       'number_maktob_sent_exam_commettee',
       'number_maktob_tajeel',
@@ -65,10 +64,14 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function semesters(){
 
-        return $this->belongsToMany(Semester::class,Student_Semester::class);
-    }
+    //student model
+    public function semesters()
+        {
+            return $this->belongsToMany(Semester::class, Student_Semester::class)
+                        ->withPivot('status') // include the pivot table column 'status'
+                        ->withTimestamps(); // enable timestamps on pivot table
+        }
 
 
 }

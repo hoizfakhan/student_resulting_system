@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateAssignSubjectRequest;
 use App\Http\Resources\AssignSubjectResource;
 use App\Http\Resources\DepartmentResource;
@@ -18,7 +17,6 @@ use App\Models\Teacher;
 use App\Models\TeacherSubject;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -231,13 +229,6 @@ class TeacherSubjectController extends Controller
 
         }
 
-
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
 

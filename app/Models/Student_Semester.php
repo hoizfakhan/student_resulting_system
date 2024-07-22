@@ -9,8 +9,11 @@ class Student_Semester extends Model
 {
     use HasFactory;
 
+    protected $table = "student__semesters";
+
     protected $fillable = ['student_id','semester_id','status'];
 
+    //student_semester model
     public function student(){
 
         return $this->belongsTo(Student::class);

@@ -6,8 +6,26 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 
-export default function Create({ auth, students, subject, subjectid, semester, department, success, error }) {
-  console.log(students);
+export default function Create({ auth, students, subject, subjectid, semester,semester_id,department, success, error }) {
+
+  function getIraninYear(){
+
+     const gregorrainYear = new Date().getFullYear();
+     let iranainyear = gregorrainYear - 621;
+
+     const currentDate = new Date();
+     const startOFIranianYear = new Date(gregorrainYear,2,21);
+
+     if(currentDate < startOFIranianYear) {
+
+       iranainyear--;
+     }
+
+     return iranainyear;
+
+  }
+  console.log(getIraninYear());
+  
   const calculateCompletionStatus = (absentHours, totalHours) => {
     console.log(absentHours);
     const attendancePercentage = ((absentHours / totalHours) * 100);
@@ -27,8 +45,8 @@ export default function Create({ auth, students, subject, subjectid, semester, d
   const { data, setData, post, errors, reset } = useForm({
     student_id: "",
     subject_id: subjectid || "",
-    semester: semester || "",
-    attendence_year: new Date().getFullYear(),
+    semester_id: semester_id || "",
+    attendence_year: getIraninYear(),
     attendances: initialAttendances,
   });
 
@@ -67,7 +85,7 @@ export default function Create({ auth, students, subject, subjectid, semester, d
 
   const onSubmit = (e) => {
     e.preventDefault();
-    post(route('attendence.store1', [data.subject_id, data.semester]));
+    post(route('attendence.store1', [data.subject_id, data.semester_id]));
   };
 
   return (
