@@ -4,6 +4,8 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
 import Pagination from "@/Components/Pagination";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ({ auth,users, success, error }) {
 
@@ -70,7 +72,7 @@ export default function ({ auth,users, success, error }) {
               href={route("employeeaccount.create")}
               className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
             >
-              Create new Account
+              <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
             </Link>
             </div>
             </div>

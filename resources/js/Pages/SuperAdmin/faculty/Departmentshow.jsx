@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DangerButton from '@/Components/DangerButton';
 import Pagination from '@/Components/Pagination';
 import { Head, Link, router } from '@inertiajs/react';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Departmentshow({auth,success,departments,fname}){
 
@@ -76,13 +77,13 @@ export default function Departmentshow({auth,success,departments,fname}){
                               href={route("department.edit",department.id)}
                               className='font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-2   btn btn-outline-primary'
                             >
-                             Edit
+                             <FontAwesomeIcon icon={faEdit} className="ms-2" />
                             </Link>
 
                             <DangerButton
                               onClick={(e) => deletedepartment(department)}
                              >
-                              Delete
+                              <FontAwesomeIcon icon={faTrash} className="ms-2" />
                             </DangerButton>
 
 

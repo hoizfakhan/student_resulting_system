@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import ErrorModal from "@/Pages/ErrorModal";
 import SuccessModal from "@/Pages/SuccessModal";
 import DangerButton from "@/Components/DangerButton";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function Index({auth,semesters,error,success}){
@@ -103,14 +105,14 @@ return(
                           href={route("semester.edit", semester.id)}
                           className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                         >
-                          Edit
+                          <FontAwesomeIcon icon={faEdit} className="ms-2" />
                         </Link>
 
                         <DangerButton
                         onClick={(e) => deletesemester(semester)}
                           className="mx-3"
                         >
-                          Delete
+                          <FontAwesomeIcon icon={faTrash} className="ms-2" />
                         </DangerButton>
 
                       </td>

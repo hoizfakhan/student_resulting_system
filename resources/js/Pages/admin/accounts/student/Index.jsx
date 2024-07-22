@@ -6,6 +6,8 @@ import DangerButton from "@/Components/DangerButton";
 import TextInput from "@/Components/TextInput";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faRedo, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function Index({ auth,users,success,error,studentaccounts,queryparams = null }) {
 
@@ -130,7 +132,7 @@ export default function Index({ auth,users,success,error,studentaccounts,querypa
                         className="btn btn-outline-primary"
                         href={route("studentaccount.index")}
                       >
-                        Reset
+                        <FontAwesomeIcon icon={faRedo} className="ms-2"/>
                       </Link>
                     </div>
 
@@ -140,7 +142,7 @@ export default function Index({ auth,users,success,error,studentaccounts,querypa
                           href={route('studentaccount.create')}
                           className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                         >
-                          Create New Account
+                         <FontAwesomeIcon icon={faUserPlus} className="ms-2"/>
                         </Link>
                       </div>
                     </div>
@@ -186,14 +188,14 @@ export default function Index({ auth,users,success,error,studentaccounts,querypa
                           href={route("studentaccount.edit", studentaccount.id)}
                           className="font-medium text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                         >
-                          Edit
+                          <FontAwesomeIcon icon={faEdit} className="ms-2" />
                         </Link>
 
                         <DangerButton
                           onClick={() => deleteStudent(studentaccount)}
                           className="mx-3"
                         >
-                          Delete
+                           <FontAwesomeIcon icon={faTrash} className="ms-2" />
                         </DangerButton>
 
                         <Link

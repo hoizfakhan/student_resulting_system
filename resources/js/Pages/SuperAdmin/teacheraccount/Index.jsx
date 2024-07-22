@@ -7,6 +7,8 @@ import { Head, Link, router } from "@inertiajs/react";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
+import { faEdit, faRedo, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function Index({auth,teacheraccounts,queryparams = null,success,error}){
@@ -140,7 +142,7 @@ export default function Index({auth,teacheraccounts,queryparams = null,success,e
                  className="btn btn-outline-primary"
                  href={route("teacheraccount.index")}
                >
-                Reset
+                <FontAwesomeIcon icon={faRedo} className="ms-2" />
                </Link>
             </div>
 
@@ -150,7 +152,7 @@ export default function Index({auth,teacheraccounts,queryparams = null,success,e
                  href={route('teacheraccount.create')}
                  className="bg-emerald-500 py-1  px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-               Create New Account
+              <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
             </Link>
             </div>
             </div>
@@ -200,14 +202,14 @@ export default function Index({auth,teacheraccounts,queryparams = null,success,e
                           href={route("teacheraccount.edit",teacheraccount.id)}
                           className="font-meduim text-blue-600 dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-primary"
                         >
-                          Edit
+                         <FontAwesomeIcon icon={faEdit} className="ms-2" />
                         </Link>
 
                         <DangerButton
                          onClick={ (e) => deleteTeacher(teacheraccount)}
                           className="mx-3"
                         >
-                          Delete
+                          <FontAwesomeIcon icon={faTrash} className="ms-2" />
                         </DangerButton>
 
                           <Link

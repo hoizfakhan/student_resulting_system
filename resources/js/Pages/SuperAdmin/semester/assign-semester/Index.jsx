@@ -5,6 +5,8 @@ import ErrorModal from "@/Pages/ErrorModal";
 import SuccessModal from "@/Pages/SuccessModal";
 import DangerButton from "@/Components/DangerButton";
 import SelectInput from "@/Components/SelectInput";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
  export default function Index({auth,facultys,Departments,semesters,error,success}){
 
@@ -190,7 +192,7 @@ return(
                              onClick={(e) => deletesemester(Semester)}
                              className='mx-3'
                              >
-                              Delete
+                              <FontAwesomeIcon icon={faTrash} className="ms-2" />
                             </DangerButton>
                            </td>
                          </tr>

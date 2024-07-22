@@ -19,6 +19,7 @@ use App\Http\Controllers\TeacherSubjectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\MarksController;
 
 //Route::middleware(['auth','verified'])->group(function(){
   //  Route::get('/dashboard',fn() => Inertia::render('Dashboard'))->name('dashboard');
@@ -42,10 +43,9 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
     Route::resource('assginsubject',TeacherSubjectController::class);
-    //Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
-    Route::get('/assginsubject/{id}/edit/{department_id}/{semester_id}', [TeacherSubjectController::class,'edit'])
-      ->name('assginsubject.edit');
-
+    Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
+    Route::get('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/edit', [TeacherSubjectController::class, 'edit'])
+    ->name('assignsubject.edit');
 
     Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
      ->name('assignsubject.update');
