@@ -72,4 +72,8 @@ public function teacherSubjects()
     }
 
 
+    public function marks(){
+
+        return $this->hasMany(Marks::class);
+     }
 }

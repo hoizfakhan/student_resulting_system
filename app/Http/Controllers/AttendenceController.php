@@ -14,7 +14,6 @@ use App\Models\Subject;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AttendenceController extends Controller
@@ -40,7 +39,11 @@ class AttendenceController extends Controller
         $students = Student::where('department_id', $department_id)
         ->whereHas('semesters', function ($query) use ($semester_id) {
             $query->where('semester_id', $semester_id);
-        })->with('attendence')
+        })
+        ->with(['attendence' => function ($query) use ($subject_id) {
+            $query->where('subject_id', $subject_id);
+
+        }])
           ->get();
 
 
@@ -89,7 +92,7 @@ class AttendenceController extends Controller
             $iranianYear--;
         }
        Attendence::create([
-        
+
         'student_id' => $dt['student_id'],
         'subject_id' => $subject_id,
         'semester_id' => $semester_id,

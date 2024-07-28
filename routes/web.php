@@ -81,14 +81,25 @@ Route::middleware(['auth'])->group(function(){
  });
 
 Route::middleware(['auth'])->group(function(){
+    //teacher routes
     Route::resource('teacher',TeacherController::class);
 
     Route::get("mysubjects",[TeacherController::class,"TeacherSubjects"])->name("mysubjects");
     Route::resource("attendence",AttendenceController::class);
-    Route::post('attendence/{subject_id}/{semester_id}', [AttendenceController::class,"store"])->name("attendence.store1");
     Route::get("/attendence/{department_id}/{semester_id}/{subject_id}",[AttendenceController::class,"create"])->name("attendence.create");
-  // Route::get('assign/attendance{department_id}/{semester_id}', [AttendenceController::class, 'create'])->name('assign.attendance');
-    // all teacher routes
+    Route::post('attendence/{subject_id}/{semester_id}', [AttendenceController::class,"store"])->name("attendence.store1");
+    Route::resource("/marks",MarksController::class);
+    Route::get("/marks/{department_id}/{semester_id}/{subject_id}",[MarksController::class,"create"])->name("marks.create");
+
+    Route::post('marks/{subject_id}', [MarksController::class, 'store'])->name('marks.store1');
+    Route::post('marks/Chance1/{subject_id}/all', [MarksController::class, 'storechance1All'])->name('marks.storechance1All');
+    Route::post('marks/Chance2/{subject_id}/all', [MarksController::class, 'storechance2All'])->name('marks.storechance2All');
+    Route::post('marks/Chance3/{subject_id}/all', [MarksController::class, 'storechance3All'])->name('marks.storechance3All');
+    Route::post('marks/Chance4/{subject_id}/all', [MarksController::class, 'storechance4All'])->name('marks.storechance4All');
+    Route::get("/failedstudentschance2/{subjectid}/{department_id}/{semester_id}/{chance}",[MarksController::class,"FailedStudentsChance2"])->name("FailedStudentChance2.marks");
+    Route::get("/failedstudentschance3/{subjectid}/{department_id}/{semester_id}/{chance}",[MarksController::class,"FailedStudentsChance3"])->name("FailedStudentChance3.marks");
+    Route::get("/failedstudentschance4/{subjectid}/{department_id}/{semester_id}/{chance}",[MarksController::class,"FailedStudentsChance4"])->name("FailedStudentChance4.marks");
+
 
 });
 

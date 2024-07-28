@@ -65,13 +65,20 @@ class Student extends Model
     }
 
 
-    //student model
+
     public function semesters()
         {
             return $this->belongsToMany(Semester::class, Student_Semester::class)
                         ->withPivot('status') // include the pivot table column 'status'
                         ->withTimestamps(); // enable timestamps on pivot table
         }
+
+     public function marks(){
+
+        return $this->hasMany(Marks::class);
+     }
+
+    
 
 
 }

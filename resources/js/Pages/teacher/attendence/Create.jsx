@@ -8,6 +8,7 @@ import InputError from "@/Components/InputError";
 
 export default function Create({ auth, students, subject, subjectid, semester,semester_id,department, success, error }) {
 
+
   function getIraninYear(){
 
      const gregorrainYear = new Date().getFullYear();
@@ -25,9 +26,9 @@ export default function Create({ auth, students, subject, subjectid, semester,se
 
   }
   console.log(getIraninYear());
-  
+
   const calculateCompletionStatus = (absentHours, totalHours) => {
-    console.log(absentHours);
+
     const attendancePercentage = ((absentHours / totalHours) * 100);
     return attendancePercentage > 25 ? 'uncompleted' : 'completed';
   };

@@ -446,46 +446,15 @@ export default function Authenticated({ user, header, children }) {
                         </a>
                       </li>
 
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
-                        <a
-                          className="nav-link text-white text-center text-sm-start"
-                          aria-current="page"
-                        >
-                          <i className="bi bi-house"></i>
-                          <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              active={route("").current("dashboard")}
-                              className="fs-6 text-white   ms-2 d-none d-sm-inline"
-                            >
-                              NE Department
-                            </NavLink>
-                          </span>
-                        </a>
-                      </li>
 
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
-                        <a
-                          className="nav-link text-white text-center text-sm-start"
-                          aria-current="page"
-                        >
-                          <i className="bi bi-people"></i>
-                          <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              active={route("").current("dashboard")}
-                              className="fs-6 text-white   ms-2 d-none d-sm-inline"
-                            >
-                              CE Department
-                            </NavLink>
-                          </span>
-                        </a>
-                      </li>
+
                     </ul>
                   ) : usertype == 3 ? (
                     <ul
                       className="nav nav-pills flex-column  mt-2 mt-sm-0"
                       id="parentM"
                     >
-                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
+                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-900">
                         <a
                           className="nav-link text-white text-center text-sm-start"
                           aria-current="page"

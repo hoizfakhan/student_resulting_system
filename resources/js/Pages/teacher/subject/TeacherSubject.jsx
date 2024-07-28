@@ -52,7 +52,13 @@ export default function Teacher({ auth, teachersubjects }) {
 
                           Assign Attendance
                         </Link>
-                        <Link className='font-medium text-blue-600 rounded-sm dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-success'>
+                        <Link
+                          href={route('marks.create', {
+                            department_id: teachersubject.departments.length > 0 ? teachersubject.departments[0].id : null,
+                            semester_id: teachersubject.semesters.length > 0 ? teachersubject.semesters[0].id : null,
+                            subject_id:teachersubject.id,
+                          })}
+                         className='font-medium text-blue-600 rounded-sm dark:text-blue-500 hover:bg-gray-300 mx-1 btn btn-outline-success'>
                           Assign Score
                         </Link>
                       </td>
