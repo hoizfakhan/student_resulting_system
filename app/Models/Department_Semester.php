@@ -10,6 +10,7 @@ class Department_Semester extends Model
     use HasFactory;
 
     protected $table="department_semesters";
+    //Department_semester model
     protected $fillable = ['semester_id','department_id'];
 
 

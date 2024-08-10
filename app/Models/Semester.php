@@ -9,6 +9,7 @@ class Semester extends Model
 {
     use HasFactory;
 
+    //semester model
     protected $fillable = ['name'];
 
     public function departments(){
@@ -16,7 +17,7 @@ class Semester extends Model
         return $this->belongsToMany(Department::class,Department_Semester::class);
     }
 
-    //semester model
+
     public function students(){
 
         return $this->belongsToMany(Student::class,Student_Semester::class);
@@ -27,5 +28,10 @@ class Semester extends Model
 
         return $this->belongsToMany(Subject::class,Assign_Subject::class)
                         ->withPivot('department_id','faculty_id');
+    }
+    //semester
+    public function drop_students(){
+
+        return $this->hasMany(Drop_Student::class);
     }
 }

@@ -9,7 +9,7 @@ class Assign_Subject extends Model
 {
     use HasFactory;
     protected $table="assign-_subjects";
-
+  // assign_subject model
     protected $fillable = ['subject_id','faculty_id','department_id','semester_id'];
 
 

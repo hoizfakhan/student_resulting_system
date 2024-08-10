@@ -199,9 +199,7 @@ export default function StudentDetails({ auth, student }) {
                           {student.data.current_semester ? (
                            <span>
                             {student.data.current_semester.name}
-                            (Status:
-                             {student.data.current_semester.pivot.status}
-                            )
+                           
                            </span>
 
                           ):(

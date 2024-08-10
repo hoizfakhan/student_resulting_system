@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAttendenceRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\StudentResource;
 use App\Models\Department;
+use App\Models\Marks;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
@@ -72,60 +73,72 @@ class AttendenceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAttendenceRequest $request,$subject_id,$semester_id)
+    public function store(StoreAttendenceRequest $request, $subject_id, $semester_id)
     {
+        try {
+            $data = $request->validated()['attendances'];
 
+            foreach ($data as $dt) {
+                $gregorianYear = date('Y');
+                $iranianYear = $gregorianYear - 621;
 
+                $currentDate = Carbon::now();
+                $startOfIranianYear = Carbon::create($gregorianYear, 3, 21);
+                if ($currentDate < $startOfIranianYear) {
+                    $iranianYear--;
+                }
 
-       try{
+                // Store attendance data
+                Attendence::create([
+                    'student_id' => $dt['student_id'],
+                    'subject_id' => $subject_id,
+                    'semester_id' => $semester_id,
+                    'attendence_year' => $iranianYear,
+                    'total_hours' => $dt['total_hours'],
+                    'absent_hours' => $dt['absent_hours'],
+                ]);
 
-      $data = $request->validated()['attendances'];
+                // Calculate attendance compliance
+                $totalHours = $dt['total_hours'];
+                $absentHours = $dt['absent_hours'];
+                $attendancePercentage = ($totalHours - $absentHours) / $totalHours * 100;
 
-       foreach($data as $dt){
+                // Check if the absence exceeds 25%
+                if ($attendancePercentage < 75) {
+                    // Update or create marks entry with zero for the first chance
+                    $marksEntry = Marks::updateOrCreate(
+                        [
+                            'student_id' => $dt['student_id'],
+                            'subject_id' => $subject_id,
+                            'marks_year' => $iranianYear,
+                            'chance' => 1 // Assuming 1 is the first chance
+                        ],
+                        [
+                            'home_work_marks' => 0,
+                            'attendence_and_class_activity_marks' => 0,
+                            'midterm_marks' => 0,
+                            'final_marks' => 0,
+                        ]
+                    );
+                }
+            }
 
-        $gregorainYear = date('Y');
-        $iranianYear = $gregorainYear - 621;
+            return redirect()->back()->with("success", "Attendance has been assigned successfully!");
 
-        $currentDate = Carbon::now();
-        $startOfIranianYear = Carbon::create($gregorainYear,3,21);
-        if($currentDate < $startOfIranianYear){
-            $iranianYear--;
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == 1062) {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->with('error', 'Duplicate Entry, Attendance did not assign!');
+            } else {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->with('error', 'An error occurred while assigning attendance!');
+            }
         }
-       Attendence::create([
-
-        'student_id' => $dt['student_id'],
-        'subject_id' => $subject_id,
-        'semester_id' => $semester_id,
-        'attendence_year' =>$iranianYear,
-        'total_hours' => $dt['total_hours'],
-        'absent_hours' => $dt['absent_hours'],
-
-        ]);
-
-      }
-
-      return redirect()->back()->with("success","Attendence has been assigned successfully!");
-
-       } catch(QueryException $e){
-
-        $errorCode = $e->errorInfo[1];
-        if($errorCode == 1062){
-
-           return redirect()->back()
-                             ->withInput()
-                             ->with('error','Duplicate Entry, Attendence did not asssgined!');
-        }
-
-        else{
-
-           return redirect()->back()
-                            ->withInput()
-                            ->with('error','An error occured while assgining attendences!');
-        }
-
-
-       }
     }
+
 
     /**
      * Display the specified resource.

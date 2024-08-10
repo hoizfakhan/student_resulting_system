@@ -9,6 +9,7 @@ class Student extends Model
 {
     use HasFactory;
 
+     //student model
     protected $fillable = [
 
       'name',
@@ -36,6 +37,7 @@ class Student extends Model
       'number_maktob_tajeel',
       'number_maktob_monfak',
       'number_maktob_lailia',
+      'status',
       'image_path'
 
 
@@ -65,6 +67,7 @@ class Student extends Model
     }
 
 
+    //student
 
     public function semesters()
         {
@@ -78,7 +81,18 @@ class Student extends Model
         return $this->hasMany(Marks::class);
      }
 
-    
+
+
+     public function graduatedStudents()
+     {
+         return $this->hasOne(Graduated_Student::class);
+     }
+
+     //student
+     public function dropedStudents()
+     {
+         return $this->hasOne(Drop_Student::class);
+     }
 
 
 }

@@ -62,6 +62,7 @@ class FacultyController extends Controller
     {
        try {
        $request->validate([
+        
               'name' => 'required|unique:faculties,faculty_name',
               'boss' => 'required',
 

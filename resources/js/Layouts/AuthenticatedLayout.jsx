@@ -31,6 +31,7 @@ export default function Authenticated({ user, header, children }) {
   const [showSubjectSubNav, setShowSubjectSubNav] = useState(false);
   const [showTeacherSubNav, setShowTeacherSubNav] = useState(false);
   const [showSemesterSubNav, setShowSemesterSubNav] = useState(false);
+  const [showMarksSubNav, setShowMarksSubNav] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
 
   const { usertype } = usePage().props;
@@ -209,7 +210,7 @@ export default function Authenticated({ user, header, children }) {
                             <NavLink
                               href={route("dashboard")}
                               active={route("").current("dashboard")}
-                              className="fs-6 text-white ms-1  d-none d-sm-inline"
+                              className="fs-6 text-white ms-1 text-decoration-none  d-none d-sm-inline"
                             >
                               Dashboard
                             </NavLink>
@@ -227,7 +228,7 @@ export default function Authenticated({ user, header, children }) {
                             <NavLink
                               href={route("student.index")}
                               active={route("").current("student.index")}
-                              className="fs-6 text-white ms-2 d-none d-sm-inline"
+                              className="fs-6 text-white ms-2 text-decoration-none d-none d-sm-inline"
                             >
                               Student
                             </NavLink>
@@ -331,6 +332,55 @@ export default function Authenticated({ user, header, children }) {
                           </li>
                         </>
                       )}
+
+                 <li className="nav-item  my-1 mb-0 py-2  py-sm-0 hover:bg-blue-700">
+                        <a
+                          className="nav-link nav-link-hover text-white text-center text-sm-start"
+                          aria-current="page"
+                          onClick={() =>
+                            setShowMarksSubNav(!showMarksSubNav)
+                          }
+                        >
+                          <FontAwesomeIcon icon={faBook} className="ms-2" />
+                          <span className="fs-6 text-white ms-3 d-none d-sm-inline nab-link">
+                            Student Marks
+                          </span>
+                          <i className="bi bi-arrow-down-short ms-sm-0"></i>
+                        </a>
+                      </li>
+
+                      {showMarksSubNav && (
+                        <>
+                          <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3 hover:bg-blue-700">
+                            <NavLink
+                              href={route("showstudents")}
+                              active={route("").current("showstudents")}
+                              className="fs-6 text-white nav-link nav-link-hover-sub ms-3 d-none d-sm-inline flex items-center space-x-2"
+                            >
+                              <FontAwesomeIcon
+                                icon={faBook}
+                                className="text-white inline-block"
+                              />
+                              <span>Student Marks</span>
+                            </NavLink>
+                          </li>
+
+                          <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3 hover:bg-blue-700">
+                            <NavLink
+                              href={route("dropstudents.index")}
+                              active={route("").current("dropstudents.index")}
+                              className="fs-6 text-white nav-link nav-link-hover-sub ms-3 d-none d-sm-inline flex items-center space-x-2"
+                            >
+                              <FontAwesomeIcon
+                                icon={faChalkboardTeacher}
+                                className="text-white inline-block"
+                              />
+                              <span>Drop Student</span>
+                            </NavLink>
+                          </li>
+                        </>
+                      )}
+
                     </ul>
                   ) : usertype == 0 ? (
                     <ul
@@ -480,7 +530,7 @@ export default function Authenticated({ user, header, children }) {
                             <NavLink
                               href={route("faculty.index")}
                               active={route("").current("faculty.index")}
-                              className="fs-6 text-white   ms-2 d-none d-sm-inline"
+                              className="fs-6 text-white text-decoration-none  ms-2 d-none d-sm-inline"
                             >
                               Faculty
                             </NavLink>
@@ -498,7 +548,7 @@ export default function Authenticated({ user, header, children }) {
                             <NavLink
                               href={route("manager.index")}
                               active={route("").current("manager.index")}
-                              className="fs-6 text-white  ms-2 d-none d-sm-inline"
+                              className="fs-6 text-white  ms-2 text-decoration-none d-none d-sm-inline"
                             >
                               Faculty manager
                             </NavLink>
@@ -590,8 +640,30 @@ export default function Authenticated({ user, header, children }) {
                               Teacher Account
                             </NavLink>
                           </li>
+
+
                         </>
+
+
                       )}
+
+                  <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
+                        <a
+                          className="nav-link text-white  text-center text-sm-start"
+                          aria-current="page"
+                        >
+                          <FontAwesomeIcon icon={faBook} />
+                          <span className="ms-2 d-none d-sm-inline">
+                            <NavLink
+                              href={route("subject.index")}
+                              active={route("").current("subject.index")}
+                              className="fs-6 text-white text-decoration-none  ms-2 d-none d-sm-inline"
+                            >
+                              Subject
+                            </NavLink>
+                          </span>
+                        </a>
+                      </li>
                     </ul>
                   ) : null}
                 </div>

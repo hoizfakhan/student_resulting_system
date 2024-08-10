@@ -14,7 +14,7 @@ class StudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        //student resource
+        $currentSemester = $this->semesters->where('pivot.status', 1)->first();
         return [
 
         'id' => $this->id,
@@ -48,7 +48,7 @@ class StudentResource extends JsonResource
         'number_maktob_monfak'=>$this->number_maktob_monfak,
         'number_maktob_lailia'=>$this->number_maktob_lailia,
         'image_path'=>$this->image_path ? Storage::url($this->image_path) : '',
-        'current_semester' => $this->semesters()->first(),
+        'current_semester' => $currentSemester ? new SemesterResource($currentSemester) : null,
         'semesters' => SemesterResource::collection($this->whenLoaded('semesters')),
 
 

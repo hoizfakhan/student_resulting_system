@@ -67,17 +67,15 @@ class ManagerController extends Controller
            $data['password'] = bcrypt($data['password']);
            $data['usertype'] = User::ADMIN;
            $data['email_verified_at'] = time();
-
-          User::create($data);
+           User::create($data);
           return to_route("manager.index")->with('success','Faculty Manager successfully registered!');
          } catch(QueryException $e){
-
              $errorCode = $e->errorInfo[1];
              if($errorCode == 1062){
 
                 return redirect()->route('manager.create')
                                   ->withInput()
-                                  ->with('error','A Manager already exists for the selected facutly!');
+                               ->with('error','A Manager already exists for the selected facutly!');
              }
              else{
 
@@ -85,7 +83,6 @@ class ManagerController extends Controller
                                  ->withInput()
                                  ->with('error','An error occured while creating the manager!');
              }
-
          }
     }
 

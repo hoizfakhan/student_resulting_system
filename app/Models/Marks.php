@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Marks extends Model
 {
     use HasFactory;
-
+  //marks model
     protected $table = "marks";
     protected $fillable = ['student_id','subject_id','chance','marks_year','home_work_marks','attendence_and_class_activity_marks','midterm_marks','final_marks'];
 

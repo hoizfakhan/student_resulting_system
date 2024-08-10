@@ -2,13 +2,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 
-export default function CreateChance3({
+export default function CreateChance2({
   auth,
   students,
   subjectid,
@@ -24,13 +24,13 @@ export default function CreateChance3({
 
 }) {
 
-  const [saveEnabled, setSaveEnabled] = useState(false);
   const handleBackClick =() => {
 
     window.history.back();
   }
 
   const [chance, setChance] = useState();
+
   const calculateStatus = (home_work, class_activity,midterm,final) => {
 
     const total_marks = ((home_work+class_activity+midterm+final));
@@ -61,7 +61,7 @@ export default function CreateChance3({
    const fetchFailedStudents = () => {
     try {
 
-      Inertia.get(route('FailedStudentChance4.marks', { subjectid,semester_id,department_id, chance}));
+      Inertia.get(route('FailedStudentChance3.marks', { subjectid,semester_id,department_id, chance}));
 
 
     } catch (error) {
@@ -119,7 +119,6 @@ export default function CreateChance3({
     }
   }, [info]);
 
-
   // Handle change in marks for a specific field (homework, class_activity, midterm, final)
   const handleArrayChange = (e, studentId, field) => {
     const { value } = e.target;
@@ -134,7 +133,6 @@ export default function CreateChance3({
 
     // Calculate total_marks for the student whose field was updated
     calculateTotalMarks(studentId, updatedMarks);
-    checkAllMarksEntered(updatedMarks);
   };
 
   // Calculate total marks for a student and update state
@@ -156,17 +154,6 @@ export default function CreateChance3({
       ...prevStatus,
       [studentId]: studentStatus,
     }));
-  };
-
-   // Check if all marks are entered
-   const checkAllMarksEntered = (updatedMarks) => {
-    const allEntered = updatedMarks.every(mark =>
-      mark.homework !== '' &&
-      mark.class_activity !== '' &&
-      mark.midterm !== '' &&
-      mark.final !== ''
-    );
-    setSaveEnabled(allEntered);
   };
 
   const handleSaveMarks = (studentId) => {
@@ -197,7 +184,7 @@ export default function CreateChance3({
       midterm: parseInt(mark.midterm || 0),
       final: parseInt(mark.final || 0),
     }));
-    post(route("marks.storechance3All", [data.subject_id]), {
+    post(route("marks.storechance2All", [data.subject_id]), {
       marks: marksData,
     });
   };
@@ -234,12 +221,13 @@ export default function CreateChance3({
           />
         )}
 
-      {infoMessage && (
+    {infoMessage && (
           <ErrorModal
             message={infoMessage}
             onClose={() => setinfoMessage(null)}
           />
         )}
+
 
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -259,7 +247,7 @@ export default function CreateChance3({
                   <span className="mt-3 text-gray-500">{semester}</span>
                 </div>
                 <div className="col-md-3 ms-1">
-                Chance:Third
+                Chance:Second
 
                 </div>
                 <div className="col-md-3 ms-1">
@@ -270,11 +258,12 @@ export default function CreateChance3({
                 <div className="col-md-3 ms-1 mt-2">
                 <button
                   className="btn btn-sm btn-outline-primary"
-                  onClick={() => setChance(4)}
+                  onClick={() => setChance(3)}
                    >
-                 Chance 4
+                 Chance 3
                 </button>
                 </div>
+
 
               </div>
             </div>
@@ -397,11 +386,11 @@ export default function CreateChance3({
                   <button
                     className="btn btn-sm text-center m-3 btn-success"
                     onClick={handleSaveAllMarks}
-                    disabled={!saveEnabled}
                   >
                     Save Marks
                   </button>
                   </div>
+
                 </form>
               ) : (
                 <div className="text-center text-gray-500 font-lg">No students found.</div>

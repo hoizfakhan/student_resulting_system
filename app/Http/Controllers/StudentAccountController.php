@@ -81,7 +81,7 @@ class StudentAccountController extends Controller
         $data['password'] = bcrypt($data['password']);
         $data['usertype'] = User::STUDENT;
         $data['email_verified_at'] = time();
-      
+
 
        User::create($data);
       return to_route("studentaccount.index")->with('success','Student account created successfully!');
@@ -142,9 +142,7 @@ class StudentAccountController extends Controller
             Log::error($errorMessage);
         return to_route('studentaccount.index')
                         ->with('error','An error occured while updateing this account!');
-
       }
-
 }
 
     /**

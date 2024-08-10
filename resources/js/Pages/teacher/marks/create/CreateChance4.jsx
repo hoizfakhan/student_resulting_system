@@ -19,10 +19,12 @@ export default function CreateChance4({
   department,
   success,
   error,
+  info,
   teacher_name,
 
 }) {
 
+  const [saveEnabled, setSaveEnabled] = useState(false);
   const handleBackClick =() => {
 
     window.history.back();
@@ -70,7 +72,7 @@ export default function CreateChance4({
   // State to manage success and error messages
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
-
+  const [infoMessage, setinfoMessage] = useState(error || null);
   // State to manage total marks for each student
   const [totalMarks, setTotalMarks] = useState({});
   // State to manage status (passed or failed) for each student
@@ -110,6 +112,12 @@ export default function CreateChance4({
     }
   }, [error]);
 
+  useEffect(() => {
+    if (info) {
+      setinfoMessage(error);
+    }
+  }, [info]);
+
   // Handle change in marks for a specific field (homework, class_activity, midterm, final)
   const handleArrayChange = (e, studentId, field) => {
     const { value } = e.target;
@@ -124,6 +132,7 @@ export default function CreateChance4({
 
     // Calculate total_marks for the student whose field was updated
     calculateTotalMarks(studentId, updatedMarks);
+    checkAllMarksEntered(updatedMarks);
   };
 
   // Calculate total marks for a student and update state
@@ -138,6 +147,17 @@ export default function CreateChance4({
       ...prevTotalMarks,
       [studentId]: totalMarks,
     }));
+
+     // Check if all marks are entered
+   const checkAllMarksEntered = (updatedMarks) => {
+    const allEntered = updatedMarks.every(mark =>
+      mark.homework !== '' &&
+      mark.class_activity !== '' &&
+      mark.midterm !== '' &&
+      mark.final !== ''
+    );
+    setSaveEnabled(allEntered);
+  };
 
     // Determine status (passed or failed) based on totalMarks
     const studentStatus = totalMarks >= 55 ? "Passed" : "Failed";
@@ -209,6 +229,14 @@ export default function CreateChance4({
           <ErrorModal
             message={errorMessage}
             onClose={() => setErrorMessage(null)}
+          />
+        )}
+
+
+     {infoMessage && (
+          <ErrorModal
+            message={infoMessage}
+            onClose={() => setinfoMessage(null)}
           />
         )}
 
@@ -359,6 +387,7 @@ export default function CreateChance4({
                   <button
                     className="btn btn-sm text-center m-3 btn-success"
                     onClick={handleSaveAllMarks}
+                    disabled={!saveEnabled}
                   >
                     Save Marks
                   </button>

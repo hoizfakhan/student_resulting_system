@@ -19,9 +19,12 @@ export default function CreateChance2({
   department,
   success,
   error,
+  info,
   teacher_name,
 
 }) {
+
+  const [saveEnabled, setSaveEnabled] = useState(false);
 
   const handleBackClick =() => {
 
@@ -71,6 +74,7 @@ export default function CreateChance2({
   // State to manage success and error messages
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
+  const [infoMessage, setinfoMessage] = useState(error || null);
 
   // State to manage total marks for each student
   const [totalMarks, setTotalMarks] = useState({});
@@ -111,6 +115,12 @@ export default function CreateChance2({
     }
   }, [error]);
 
+  useEffect(() => {
+    if (info) {
+      setinfoMessage(error);
+    }
+  }, [info]);
+
   // Handle change in marks for a specific field (homework, class_activity, midterm, final)
   const handleArrayChange = (e, studentId, field) => {
     const { value } = e.target;
@@ -125,6 +135,7 @@ export default function CreateChance2({
 
     // Calculate total_marks for the student whose field was updated
     calculateTotalMarks(studentId, updatedMarks);
+    checkAllMarksEntered(updatedMarks);
   };
 
   // Calculate total marks for a student and update state
@@ -146,6 +157,16 @@ export default function CreateChance2({
       ...prevStatus,
       [studentId]: studentStatus,
     }));
+  };
+  // Check if all marks are entered
+  const checkAllMarksEntered = (updatedMarks) => {
+    const allEntered = updatedMarks.every(mark =>
+      mark.homework !== '' &&
+      mark.class_activity !== '' &&
+      mark.midterm !== '' &&
+      mark.final !== ''
+    );
+    setSaveEnabled(allEntered);
   };
 
   const handleSaveMarks = (studentId) => {
@@ -212,6 +233,14 @@ export default function CreateChance2({
             onClose={() => setErrorMessage(null)}
           />
         )}
+
+    {infoMessage && (
+          <ErrorModal
+            message={infoMessage}
+            onClose={() => setinfoMessage(null)}
+          />
+        )}
+
 
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -370,6 +399,7 @@ export default function CreateChance2({
                   <button
                     className="btn btn-sm text-center m-3 btn-success"
                     onClick={handleSaveAllMarks}
+                    disabled={!saveEnabled}
                   >
                     Save Marks
                   </button>

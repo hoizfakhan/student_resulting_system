@@ -11,6 +11,7 @@ import SuccessModal from "@/Pages/SuccessModal";
 import { useEffect, useState } from "react";
 import { faEdit, faPlusCircle, faRedo, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SelectInput from "@/Components/SelectInput";
 
 export default function Index({ auth,queryparams = null, subjects,success, error }) {
   const [successMessage, setSuccessMessage] = useState(success || null);

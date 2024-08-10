@@ -8,6 +8,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentSemesterController;
+use App\Http\Controllers\DropStudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\MarksController;
+use App\Models\Marks;
 
 //Route::middleware(['auth','verified'])->group(function(){
   //  Route::get('/dashboard',fn() => Inertia::render('Dashboard'))->name('dashboard');
@@ -46,11 +48,15 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::delete('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}', [TeacherSubjectController::class,'destroy']);
     Route::get('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/edit', [TeacherSubjectController::class, 'edit'])
     ->name('assignsubject.edit');
-
     Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
      ->name('assignsubject.update');
-
     Route::resource('semestersubject',AssignSubjectController::class);
+    Route::get('students',[MarksController::class,'ShowStudents'])->name('showstudents');
+    Route::get("studentmarks/{student_id}",[MarksController::class,'ShowMarks'])->name('ShowMarks');
+    Route::post('/promote-student', [MarksController::class, 'PromoteStudent'])->name("promote-student");
+    Route::resource("dropstudents",DropStudentController::class);
+    Route::get('/drop-form', [MarksController::class, 'promoteStudent'])->name('dropForm');
+    Route::post('/submit-drop', [MarksController::class, 'submitDropForm'])->name('dropStudent.submit');
 
 
     // all admin routes
@@ -69,6 +75,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource("semester",SemesterController::class);
     Route::resource("assignsemester",DepartmentSemesterController::class);
     Route::resource('subject',SubjectController::class);
+
 
    // Super Admin routes
 });
@@ -93,6 +100,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::post('marks/{subject_id}', [MarksController::class, 'store'])->name('marks.store1');
     Route::post('marks/Chance1/{subject_id}/all', [MarksController::class, 'storechance1All'])->name('marks.storechance1All');
+    Route::post('/marks/update/{subject_id}', [MarksController::class, 'storechance1All'])->name('marks.storechance1All');
+
     Route::post('marks/Chance2/{subject_id}/all', [MarksController::class, 'storechance2All'])->name('marks.storechance2All');
     Route::post('marks/Chance3/{subject_id}/all', [MarksController::class, 'storechance3All'])->name('marks.storechance3All');
     Route::post('marks/Chance4/{subject_id}/all', [MarksController::class, 'storechance4All'])->name('marks.storechance4All');

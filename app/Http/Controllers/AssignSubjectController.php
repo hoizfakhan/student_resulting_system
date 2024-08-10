@@ -35,9 +35,7 @@ class AssignSubjectController extends Controller
          ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+  
     public function create(Request $request)
     {
 
@@ -143,7 +141,7 @@ class AssignSubjectController extends Controller
     {
         try{
             $subject = Assign_Subject::find($id);
-            
+
             $subject->delete();
             return to_route('semestersubject.index')->with('success',"Subject has been deleted successfully!");
          }  catch(QueryException $e){

@@ -2,11 +2,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SuccessModal from "@/Pages/SuccessModal";
 import ErrorModal from "@/Pages/ErrorModal";
 import { useEffect, useState } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { Inertia } from "@inertiajs/inertia";
+import { Head, useForm } from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
-import SelectInput from "@/Components/SelectInput";
+import { Inertia } from '@inertiajs/inertia'; // Correct import
 
 export default function CreateChance1({
   auth,
@@ -19,97 +18,53 @@ export default function CreateChance1({
   department,
   success,
   error,
+  info,
   teacher_name,
-
 }) {
-
+   // State to manage success and error messages
+   const [successMessage, setSuccessMessage] = useState(success || null);
+   const [errorMessage, setErrorMessage] = useState(error || null);
+   const [infoMessage, setinfoMessage] = useState(error || null);
   const [chance, setChance] = useState();
-  const [locked, setLocked] = useState(false); // Added state for locking inputs
+  const [saveEnabled, setSaveEnabled] = useState(false); // State to track if Save button should be enabled
+  const [totalMarks, setTotalMarks] = useState({});
+  const [status, setStatus] = useState({});
 
-  const calculateStatus = (home_work, class_activity,midterm,final) => {
-
-    const total_marks = ((home_work+class_activity+midterm+final));
-    return total_marks >=55 ? 'Passed' : 'Failed';
-  };
   // Initialize initial marks for each student
-
   const initialMarks = students.data.map(student => {
-    const mark = student.marks && student.marks.length > 0 ? student.marks[0] : {home_work: '', class_activity: '',midterm:'',final:'' };
+    const mark = student.marks && student.marks.length > 0 ? student.marks[0] : { home_work: '', class_activity: '', midterm: '', final: '' };
     return {
       student_id: student.id,
-     // chance: mark.chance || '',
       homework: mark.home_work || '',
       class_activity: mark.class_activity || '',
       midterm: mark.midterm || '',
       final: mark.final || '',
-      total_marks: (mark.home_work || 0) + (mark.class_activity || 0)+(mark.midterm || 0)+(mark.final || 0)
+      total_marks: (mark.home_work || 0) + (mark.class_activity || 0) + (mark.midterm || 0) + (mark.final || 0)
     };
   });
 
-  // Initialize form state using Inertia useForm hook with initialMarks
   const { data, setData, post, errors } = useForm({
     subject_id: subjectid || "",
     marks: initialMarks, // Use initialMarks here
   });
 
-   // Function to fetch failed students for the first chance
-   const fetchFailedStudents = () => {
+  // Function to calculate status based on total marks
+  const calculateStatus = (home_work, class_activity, midterm, final) => {
+    const total_marks = ((home_work || 0) + (class_activity || 0) + (midterm || 0) + (final || 0));
+    return total_marks >= 55 ? 'Passed' : 'Failed';
+  };
+
+  // Function to fetch failed students for the current chance
+  const fetchFailedStudents = () => {
     try {
-
-      Inertia.get(route('FailedStudentChance2.marks', { subjectid,semester_id,department_id, chance}));
-
-
+      Inertia.get(route(`FailedStudentChance${chance}.marks`, { subjectid, semester_id, department_id, chance }));
     } catch (error) {
       console.error("Error fetching failed students:", error);
     }
   };
 
-  // State to manage success and error messages
-  const [successMessage, setSuccessMessage] = useState(success || null);
-  const [errorMessage, setErrorMessage] = useState(error || null);
-
-  // State to manage total marks for each student
-  const [totalMarks, setTotalMarks] = useState({});
-  // State to manage status (passed or failed) for each student
-  const [status, setStatus] = useState({});
-
-
-   // Effect to fetch failed students when component mounts
-   useEffect(() => {
-    if (chance === 2) {
-      fetchFailedStudents();
-
-    }
-
-    if (chance === 3) {
-      fetchFailedStudents();
-
-    }
-
-    if (chance === 4) {
-      fetchFailedStudents();
-
-    }
-  }, [chance]); // Trigger fetch when chance changes
-
-
-  // Effect to update success message
-  useEffect(() => {
-    if (success) {
-      setSuccessMessage(success);
-    }
-  }, [success]);
-
-  // Effect to update error message
-  useEffect(() => {
-    if (error) {
-      setErrorMessage(error);
-    }
-  }, [error]);
-
-  // Handle change in marks for a specific field (homework, class_activity, midterm, final)
+  // Handle change in marks for a specific field
   const handleArrayChange = (e, studentId, field) => {
-    if (locked) return; // Prevent changes if locked
     const { value } = e.target;
 
     // Update the respective field for the student
@@ -122,6 +77,9 @@ export default function CreateChance1({
 
     // Calculate total_marks for the student whose field was updated
     calculateTotalMarks(studentId, updatedMarks);
+
+    // Check if all marks are entered to update Save button state
+    checkAllMarksEntered(updatedMarks);
   };
 
   // Calculate total marks for a student and update state
@@ -145,23 +103,16 @@ export default function CreateChance1({
     }));
   };
 
-  const handleSaveMarks = (studentId) => {
-    const studentMarks = data.marks.find((mark) => mark.student_id === studentId);
-
-    // Prepare data for the specific student
-    const marksData = {
-      student_id: studentMarks.student_id,
-      subject_id: data.subject_id,
-      homework: parseInt(studentMarks.homework || 0),
-      class_activity: parseInt(studentMarks.class_activity || 0),
-      midterm: parseInt(studentMarks.midterm || 0),
-      final: parseInt(studentMarks.final || 0),
-    };
-
-    // Use Inertia's post method to save data
-    post(route("marks.store1", [data.subject_id]), marksData);
+  // Check if all marks are entered
+  const checkAllMarksEntered = (updatedMarks) => {
+    const allEntered = updatedMarks.every(mark =>
+      mark.homework !== '' &&
+      mark.class_activity !== '' &&
+      mark.midterm !== '' &&
+      mark.final !== ''
+    );
+    setSaveEnabled(allEntered);
   };
-
 
   // Handle saving marks for all students
   const handleSaveAllMarks = () => {
@@ -183,6 +134,34 @@ export default function CreateChance1({
     e.preventDefault();
     // Additional submission logic if needed
   };
+
+  // Effect to fetch failed students when component mounts or chance changes
+  useEffect(() => {
+    if (chance === 2 || chance === 3 || chance === 4) {
+      fetchFailedStudents();
+    }
+  }, [chance]); // Trigger fetch when chance changes
+
+  // Effect to update success message
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+    }
+  }, [success]);
+
+  // Effect to update error message
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+
+  // Effect to update info message
+  useEffect(() => {
+    if (info) {
+      setinfoMessage(info);
+    }
+  }, [info]);
 
   return (
     <AuthenticatedLayout
@@ -209,6 +188,12 @@ export default function CreateChance1({
             onClose={() => setErrorMessage(null)}
           />
         )}
+        {infoMessage && (
+          <ErrorModal
+            message={infoMessage}
+            onClose={() => setinfoMessage(null)}
+          />
+        )}
 
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -228,24 +213,21 @@ export default function CreateChance1({
                   <span className="mt-3 text-gray-500">{semester}</span>
                 </div>
                 <div className="col-md-3 ms-1">
-                Chance:<span className="mt-3 text-gray-500">First</span>
-
+                  Chance:<span className="mt-3 text-gray-500">First</span>
                 </div>
                 <div className="col-md-3 ms-1">
-                Year:{" "}
-                <span className="mt-3 text-gray-500"></span>
+                  Year:{" "}
+                  <span className="mt-3 text-gray-500"></span>
                 </div>
 
                 <div className="col-md-3 ms-1 mt-2">
-                   <button
-                   className="btn btn-sm btn-outline-primary ms-2"
-                   onClick={() => setChance(2)}
-                 >
-                   Chance 2
-                 </button>
+                  <button
+                    className="btn btn-sm btn-outline-primary ms-2"
+                    onClick={() => setChance(2)}
+                  >
+                    Chance 2
+                  </button>
                 </div>
-
-
               </div>
             </div>
             <div className="overflow-auto">
@@ -259,13 +241,12 @@ export default function CreateChance1({
                         <th className="px-3 py-2">Father Name</th>
                         <th className="px-3 py-2">Home Work (10%)</th>
                         <th className="px-3 py-2">
-                          Attendance && Class Activity (10%)
+                          Attendance & Class Activity (10%)
                         </th>
                         <th className="px-3 py-2">Midterm Marks (20%)</th>
                         <th className="px-3 py-2">Final Marks (60%)</th>
                         <th className="px-3 py-2">Total Marks (100%)</th>
                         <th className="px-3 py-2">Status</th>
-
                       </tr>
                     </thead>
                     <tbody>
@@ -286,12 +267,10 @@ export default function CreateChance1({
                               onChange={(e) =>
                                 handleArrayChange(e, student.id, "homework")
                               }
-                              disabled={locked} // Disable input if locked
                             />
                           </td>
                           <InputError message={errors[`marks.${student.id}.homework`]} className='mt-2'/>
                           <td className="px-3 py-2">
-
                             <TextInput
                               className="form-control"
                               type="number"
@@ -303,12 +282,10 @@ export default function CreateChance1({
                               onChange={(e) =>
                                 handleArrayChange(e, student.id, "class_activity")
                               }
-                              disabled={locked} // Disable input if locked
                             />
                           </td>
                           <InputError message={errors[`marks.${student.id}.class_activity`]} className='mt-2'/>
                           <td className="px-3 py-2">
-                            {/* Text input for midterm marks */}
                             <TextInput
                               className="form-control"
                               type="number"
@@ -320,12 +297,10 @@ export default function CreateChance1({
                               onChange={(e) =>
                                 handleArrayChange(e, student.id, "midterm")
                               }
-                              disabled={locked} // Disable input if locked
                             />
                           </td>
                           <InputError message={errors[`marks.${student.id}.midterm`]} className='mt-2'/>
                           <td className="px-3 py-2">
-
                             <TextInput
                               className="form-control"
                               type="number"
@@ -337,12 +312,11 @@ export default function CreateChance1({
                               onChange={(e) =>
                                 handleArrayChange(e, student.id, "final")
                               }
-                              disabled={locked} // Disable input if locked
                             />
                           </td>
                           <InputError message={errors[`marks.${student.id}.final`]} className='mt-2'/>
                           <td className="px-3 py-2">
-                          <TextInput
+                            <TextInput
                               className="form-control"
                               type="number"
                               placeholder="total marks"
@@ -352,26 +326,32 @@ export default function CreateChance1({
                             />
                           </td>
                           <td className="px-3 py-2">
-                          {student.marks.map(mark => (
-                              <span key={mark.id} className="text-lead">
-                                {calculateStatus(mark.home_work, mark.class_activity,mark.midterm,mark.final)}
+                            {data.marks.find(mark => mark.student_id === student.id)?.total_marks ? (
+                              <span className="text-lead">
+                                {calculateStatus(
+                                  data.marks.find(mark => mark.student_id === student.id).homework,
+                                  data.marks.find(mark => mark.student_id === student.id).class_activity,
+                                  data.marks.find(mark => mark.student_id === student.id).midterm,
+                                  data.marks.find(mark => mark.student_id === student.id).final
+                                )}
                               </span>
-                            ))}
+                            ) : (
+                              'Not Calculated'
+                            )}
                           </td>
-
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {/* Button to save marks for all students */}
                   <div className="text-end mt-3">
-                  <button
-                    className="btn btn-sm text-center m-3 btn-success"
-                    onClick={handleSaveAllMarks}
-                    disabled={locked} // Disable input if locked
-                  >
-                    Save Marks
-                  </button>
+                    <button
+                      className="btn btn-sm text-center m-3 btn-success"
+                      onClick={handleSaveAllMarks}
+                      disabled={!saveEnabled} // Disable the button if not all marks are entered
+                    >
+                      Save Marks
+                    </button>
                   </div>
                 </form>
               ) : (
