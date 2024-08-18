@@ -10,7 +10,7 @@ class Semester extends Model
     use HasFactory;
 
     //semester model
-    protected $fillable = ['name'];
+    protected $fillable = ['name','semester_order'];
 
     public function departments(){
 

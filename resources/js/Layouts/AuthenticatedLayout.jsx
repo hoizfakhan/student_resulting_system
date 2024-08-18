@@ -268,21 +268,7 @@ export default function Authenticated({ user, header, children }) {
                             </NavLink>
                           </li>
 
-                          <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3 hover:bg-blue-700">
-                            <NavLink
-                              href={route("employeeaccount.index")}
-                              active={route("").current(
-                                "employeeaccount.index"
-                              )}
-                              className="fs-6 text-white nav-link nav-link-hover-sub ms-3 d-none d-sm-inline flex items-center space-x-2"
-                            >
-                              <FontAwesomeIcon
-                                icon={faBriefcase}
-                                className="text-white inline-block"
-                              />
-                              <span>Employee</span>
-                            </NavLink>
-                          </li>
+                       
                         </>
                       )}
 
@@ -378,8 +364,42 @@ export default function Authenticated({ user, header, children }) {
                               <span>Drop Student</span>
                             </NavLink>
                           </li>
+                          <li className="nav-item text-white my-1 py-2 py-sm-0 ms-3 hover:bg-blue-700">
+                            <NavLink
+                              href={route("graguatedstudents.index")}
+                              active={route("").current("graguatedstudents.index")}
+                              className="fs-6 text-white nav-link nav-link-hover-sub ms-3 d-none d-sm-inline flex items-center space-x-2"
+                            >
+                              <FontAwesomeIcon
+                                icon={faChalkboardTeacher}
+                                className="text-white inline-block"
+                              />
+                              <span>Graduated Student</span>
+                            </NavLink>
+                          </li>
                         </>
                       )}
+
+
+                  <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
+                        <a
+                          className="nav-link nav-link-hover text-white text-center text-sm-start"
+                          aria-current="page"
+                        >
+                          <span className="ms-2 d-none d-sm-inline">
+                            <FontAwesomeIcon icon={faGraduationCap} />
+                            <NavLink
+                              href={route("student.attendence")}
+                              active={route("").current("student.attendence")}
+                              className="fs-6 text-white ms-2 text-decoration-none d-none d-sm-inline"
+                            >
+                              Student Attendence
+                            </NavLink>
+                          </span>
+                        </a>
+                      </li>
+
+
 
                     </ul>
                   ) : usertype == 0 ? (
@@ -387,23 +407,9 @@ export default function Authenticated({ user, header, children }) {
                       className="nav nav-pills flex-column  mt-2 mt-sm-0"
                       id="parentM"
                     >
-                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
-                        <a
-                          className="nav-link text-white text-center text-sm-start"
-                          aria-current="page"
-                        >
-                          <i className="bi bi-speedometer2"></i>
-                          <NavLink
-                            href={route("dashboard")}
-                            active={route("").current("dashboard")}
-                            className="fs-6 text-white   ms-3 d-none d-sm-inline"
-                          >
-                            Dashboard
-                          </NavLink>
-                        </a>
-                      </li>
 
-                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
+
+                <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
                         <a
                           className="nav-link nav-link-hover text-white text-center text-sm-start"
                           aria-current="page"
@@ -413,56 +419,39 @@ export default function Authenticated({ user, header, children }) {
                             <NavLink
                               href={route("myprofile")}
                               active={route("").current("myprofile")}
-                              className="fs-6 text-white ms-2 d-none d-sm-inline"
+                              className="fs-6 text-white ms-2 text-decoration-none d-none d-sm-inline"
                             >
                               My Info
                             </NavLink>
                           </span>
                         </a>
                       </li>
-
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
+                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
                         <a
-                          className="nav-link text-white text-center text-sm-start"
+                          className="nav-link nav-link-hover text-white text-center text-sm-start"
                           aria-current="page"
                         >
-                          <i className="bi bi-house"></i>
                           <span className="ms-2 d-none d-sm-inline">
+                            <FontAwesomeIcon icon={faBook} />
                             <NavLink
-                              href={route("dashboard")}
-                              active={route("").current("dashboard")}
-                              className="fs-6 text-white   ms-2 d-none d-sm-inline"
+                              href={route("student.marks")}
+                              active={route("").current("student.marks")}
+                              className="fs-6 text-white ms-2 text-decoration-none d-none d-sm-inline"
                             >
-                              Exams
+                              Marks
                             </NavLink>
                           </span>
                         </a>
                       </li>
 
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
-                        <a
-                          className="nav-link text-white text-center text-sm-start"
-                          aria-current="page"
-                        >
-                          <i className="bi bi-people"></i>
-                          <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              href={route("dashboard")}
-                              active={route("").current("dashboard")}
-                              className="fs-6 text-white   ms-2 d-none d-sm-inline"
-                            >
-                              Class
-                            </NavLink>
-                          </span>
-                        </a>
-                      </li>
+
                     </ul>
                   ) : usertype == 2 ? (
                     <ul
                       className="nav nav-pills flex-column  mt-2 mt-sm-0"
                       id="parentM"
                     >
-                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
+                  {/*    <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
                         <a
                           className="nav-link text-white text-center text-sm-start"
                           aria-current="page"
@@ -471,24 +460,25 @@ export default function Authenticated({ user, header, children }) {
                           <NavLink
                             href={route("dashboard")}
                             active={route("").current("dashboard")}
-                            className="fs-6 text-white   ms-3 d-none d-sm-inline"
+                            className="fs-6 text-white text-decoration-none  ms-3 d-none d-sm-inline"
                           >
                             Dashboard
                           </NavLink>
                         </a>
                       </li>
+                  */}
 
                       <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-700">
                         <a
                           className="nav-link nav-link-hover text-white text-center text-sm-start"
                           aria-current="page"
                         >
-                          <span className="ms-2 d-none d-sm-inline">
-                            <FontAwesomeIcon icon={faGraduationCap} />
+                          <span className="ms-1 d-none d-sm-inline">
+                            <FontAwesomeIcon icon={faBook} />
                             <NavLink
                               href={route("mysubjects")}
                               active={route("").current("mysubjects")}
-                              className="fs-6 text-white ms-2 d-none d-sm-inline"
+                              className="fs-6 text-white text-decoration-none ms-2 d-none d-sm-inline"
                             >
                               My Subjects
                             </NavLink>
@@ -504,54 +494,56 @@ export default function Authenticated({ user, header, children }) {
                       className="nav nav-pills flex-column  mt-2 mt-sm-0"
                       id="parentM"
                     >
-                      <li className="nav-item text-white my-1 py-2 py-sm-0 hover:bg-blue-900">
+                      <li className="nav-item text-white my-1  py-2 py-sm-0 hover:bg-blue-700">
                         <a
-                          className="nav-link text-white text-center text-sm-start"
+                          className="nav-link text-white nav-link-hover text-center text-sm-start"
                           aria-current="page"
                         >
-                          <i className="bi bi-speedometer2"></i>
+                          <i className="bi bi-speedometer2 ms-2"></i>
+                          <span className="ms-2 d-none d-sm-inline">
                           <NavLink
                             href={route("dashboard")}
                             active={route("").current("dashboard")}
-                            className="fs-6 text-white   ms-3 d-none d-sm-inline"
+                            className="fs-6 text-white text-decoration-none  ms-1 d-none d-sm-inline"
                           >
                             Dashboard
                           </NavLink>
-                        </a>
-                      </li>
-
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
-                        <a
-                          className="nav-link text-white text-center text-sm-start"
-                          aria-current="page"
-                        >
-                          <FontAwesomeIcon icon={faEnvelope} />
-                          <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              href={route("faculty.index")}
-                              active={route("").current("faculty.index")}
-                              className="fs-6 text-white text-decoration-none  ms-2 d-none d-sm-inline"
-                            >
-                              Faculty
-                            </NavLink>
                           </span>
                         </a>
                       </li>
 
-                      <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
+                      <li className="nav-item text-white my-1  py-2 py-sm-0 hover:bg-blue-700">
                         <a
-                          className="nav-link text-white text-center text-sm-start"
+                          className="nav-link text-white nav-link-hover text-center text-sm-start"
                           aria-current="page"
                         >
-                          <FontAwesomeIcon icon={faUser} />
+                          <i className="bi bi-speedometer2 ms-2"></i>
                           <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              href={route("manager.index")}
-                              active={route("").current("manager.index")}
-                              className="fs-6 text-white  ms-2 text-decoration-none d-none d-sm-inline"
-                            >
-                              Faculty manager
-                            </NavLink>
+                          <NavLink
+                            href={route("faculty.index")}
+                            active={route("").current("faculty.index")}
+                            className="fs-6 text-white text-decoration-none  ms-1 d-none d-sm-inline"
+                          >
+                            Faculty
+                          </NavLink>
+                          </span>
+                        </a>
+                      </li>
+
+                      <li className="nav-item text-white my-1  py-2 py-sm-0 hover:bg-blue-700">
+                        <a
+                          className="nav-link text-white nav-link-hover text-center text-sm-start"
+                          aria-current="page"
+                        >
+                           <FontAwesomeIcon icon={faUser} className="ms-2" />
+                          <span className="ms-2 d-none d-sm-inline">
+                          <NavLink
+                            href={route("manager.index")}
+                            active={route("").current("manager.index")}
+                            className="fs-6 text-white text-decoration-none  ms-1 d-none d-sm-inline"
+                          >
+                            Faculty Manager
+                          </NavLink>
                           </span>
                         </a>
                       </li>
@@ -606,7 +598,7 @@ export default function Authenticated({ user, header, children }) {
                           }
                         >
                           <FontAwesomeIcon icon={fas.faChalkboardTeacher} />
-                          <span className="ms-2 d-none d-sm-inline">
+                          <span className="ms-1 d-none d-sm-inline">
                             <span className="fs-6 text-white ms-3 d-none d-sm-inline nab-link">
                               Teachers
                             </span>
@@ -646,21 +638,20 @@ export default function Authenticated({ user, header, children }) {
 
 
                       )}
-
-                  <li className="nav-item  my-1 py-2 py-sm-0 hover:bg-blue-700">
+               <li className="nav-item text-white my-1  py-2 py-sm-0 hover:bg-blue-700">
                         <a
-                          className="nav-link text-white  text-center text-sm-start"
+                          className="nav-link text-white nav-link-hover text-center text-sm-start"
                           aria-current="page"
                         >
-                          <FontAwesomeIcon icon={faBook} />
+                           <FontAwesomeIcon icon={faBook} className="ms-2" />
                           <span className="ms-2 d-none d-sm-inline">
-                            <NavLink
-                              href={route("subject.index")}
-                              active={route("").current("subject.index")}
-                              className="fs-6 text-white text-decoration-none  ms-2 d-none d-sm-inline"
-                            >
-                              Subject
-                            </NavLink>
+                          <NavLink
+                            href={route("subject.index")}
+                            active={route("").current("subject.index")}
+                            className="fs-6 text-white text-decoration-none  ms-1 d-none d-sm-inline"
+                          >
+                            Subject
+                          </NavLink>
                           </span>
                         </a>
                       </li>

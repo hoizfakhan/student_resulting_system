@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +59,8 @@ class StudentController extends Controller
 
 
         $students = $query->orderBy($sortField,$sortDirection)->paginate(10);
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("admin/student/Index",[
             'usertype' => $usertype,
             'success' => session('success'),
@@ -77,7 +79,7 @@ class StudentController extends Controller
     {
         $user =  $request->user();
         $departments =  $user->faculty->departments()->get();
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         $studentusers = User::where("usertype",0)->get();
 
         return Inertia("admin/student/Create",[
@@ -139,14 +141,14 @@ class StudentController extends Controller
      */
 
 
-    public function show(Student $student)
+    public function show(Student $student,Request $request)
     {
 
       $student->load(['semesters' => function ($query){
           $query->wherePivot('status',1);
       }]);
-
-        $usertype=Auth()->user()->usertype;
+      $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("admin/student/StudentDetails",props: [
           'student' => new StudentResource(resource: $student),
           'usertype' => $usertype,
@@ -163,7 +165,8 @@ class StudentController extends Controller
         $user =  $request->user();
         $departments =  $user->faculty->departments()->get();
         $studentusers = User::where("usertype",0)->get();
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("admin/student/Edit",[
             'student' => new StudentResource($student),
             'departments' => $departments->toArray(),
@@ -179,9 +182,7 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
 
-
          $data = $request->validated();
-
          $image = $data['image'] ?? null;
 
          try{
@@ -235,9 +236,10 @@ class StudentController extends Controller
         $user =  $request->user();
         $student = $user->student;
 
-        $usertype=Auth()->user()->usertype;
+        $user = Auth::user();
+        $usertype=$user->usertype;
         return Inertia("student/Information",[
-         'student' => $student,
+         'student' => new StudentResource($student),
          'usertype' => $usertype,
 
         ]);

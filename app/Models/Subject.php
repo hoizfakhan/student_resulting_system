@@ -22,7 +22,7 @@ class Subject extends Model
     ];
 
 
-   // Subject.php
+   
 
 public function assignSubjects()
 {

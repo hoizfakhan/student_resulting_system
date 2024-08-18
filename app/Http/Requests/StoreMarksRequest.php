@@ -25,7 +25,6 @@ class StoreMarksRequest extends FormRequest
 
         'marks' => ['required', 'array'],
         'marks.*.student_id' => ['required', 'integer'],
-       // 'marks.*.chance' => ['required', 'integer'],
         'marks.*.homework' => ['nullable', 'integer', 'min:0', 'max:100'],
         'marks.*.class_activity' => ['nullable','required', 'integer', 'min:0','max:100'],
         'marks.*.midterm' => ['nullable', 'integer', 'min:0','max:100'],

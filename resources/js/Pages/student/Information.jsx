@@ -22,13 +22,7 @@ export default function Information({auth,student}) {
           <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="container-fluid">
                 <div className="row">
-                  <div className="col text-center bg-secondary h-[200px]">
-                    <img
-                      src={student.image_path}
-                      className="img-fluid img-thumbnail object-cover rounded h-[200px] w-64"
-                      alt="Thumbnail"
-                    ></img>
-                  </div>
+                 
                 </div>
               </div>
               <div className="mt-3 space-y-6">
@@ -44,7 +38,7 @@ export default function Information({auth,student}) {
                           Student ID
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.id}
+                          {student.data.id}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -52,7 +46,7 @@ export default function Information({auth,student}) {
                           Student Name
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.name}
+                          {student.data.name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -60,7 +54,7 @@ export default function Information({auth,student}) {
                           Last Name
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.last_name}
+                          {student.data.last_name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -68,7 +62,7 @@ export default function Information({auth,student}) {
                           Father Name
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.father_name}
+                          {student.data.father_name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -76,7 +70,7 @@ export default function Information({auth,student}) {
                           Grandfather Name
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.grandfather_name}
+                          {student.data.grandfather_name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -84,7 +78,7 @@ export default function Information({auth,student}) {
                           Birth Date
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.birth_date}
+                          {student.data.birth_date}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -92,7 +86,7 @@ export default function Information({auth,student}) {
                           Kankor ID
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.kankor_id}
+                          {student.data.kankor_id}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -100,7 +94,7 @@ export default function Information({auth,student}) {
                           Phone Number
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.phone_number}
+                          {student.data.phone_number}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -108,7 +102,7 @@ export default function Information({auth,student}) {
                           NIC Number
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.nic_number}
+                          {student.data.nic_number}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white">
@@ -116,7 +110,7 @@ export default function Information({auth,student}) {
                           Identity Cart Number
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.identity_cart_number}
+                          {student.data.identity_cart_number}
                         </td>
                       </tr>
                     </tbody>
@@ -135,7 +129,7 @@ export default function Information({auth,student}) {
                           School Name
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.school_name}
+                          {student.data.school_name}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -143,7 +137,7 @@ export default function Information({auth,student}) {
                           School Graduation Year
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.school_graduation_year}
+                          {student.data.school_graduation_year}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -151,7 +145,7 @@ export default function Information({auth,student}) {
                           Kankor Marks
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.kankor_marks}
+                          {student.data.kankor_marks}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -159,7 +153,7 @@ export default function Information({auth,student}) {
                           Admission Date
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.admission_date}
+                          {student.data.admission_date}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -167,19 +161,12 @@ export default function Information({auth,student}) {
                           Department
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {/*
-                          {student.department.name}
-                          */}
+
+                          {student.data.department.name}
+
                         </td>
                       </tr>
-                      <tr className="odd:bg-gray-50 even:bg-white">
-                        <th className="text-left px-4 py-3 font-semibold text-gray-800">
-                          Current Semester
-                        </th>
-                        <td className="px-4 py-3 text-gray-600">
-                          {student.current_semester}
-                        </td>
-                      </tr>
+
                     </tbody>
                   </table>
                 </div>
@@ -206,7 +193,7 @@ export default function Information({auth,student}) {
                           Province
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.original_province}
+                          {student.data.original_province}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -214,7 +201,7 @@ export default function Information({auth,student}) {
                           District
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.original_district}
+                          {student.data.original_district}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white">
@@ -222,7 +209,7 @@ export default function Information({auth,student}) {
                           Village
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.original_village}
+                          {student.data.original_village}
                         </td>
                       </tr>
                     </tbody>
@@ -242,7 +229,7 @@ export default function Information({auth,student}) {
                           Province
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.current_province}
+                          {student.data.current_province}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -250,7 +237,7 @@ export default function Information({auth,student}) {
                           District
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.current_district}
+                          {student.data.current_district}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white">
@@ -258,7 +245,7 @@ export default function Information({auth,student}) {
                           Village
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.current_village}
+                          {student.data.current_village}
                         </td>
                       </tr>
                     </tbody>
@@ -277,7 +264,7 @@ export default function Information({auth,student}) {
                           د امتحاناتو ادارې ته د لیږل شوي مکتوب شمیره:
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.number_maktob_sent_exam_commettee}
+                          {student.data.number_maktob_sent_exam_commettee}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -285,7 +272,7 @@ export default function Information({auth,student}) {
                           تاجیل مکتوب شمیره:
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.number_maktob_tajeel}
+                          {student.data.number_maktob_tajeel}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white border-b">
@@ -293,7 +280,7 @@ export default function Information({auth,student}) {
                           منفک مکتوب شمیره:
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.number_maktob_monfak}
+                          {student.data.number_maktob_monfak}
                         </td>
                       </tr>
                       <tr className="odd:bg-gray-50 even:bg-white">
@@ -301,7 +288,7 @@ export default function Information({auth,student}) {
                           د لیلیې د مکتوب شمیره:
                         </th>
                         <td className="px-4 py-3 text-gray-600">
-                          {student.number_maktob_lailia}
+                          {student.data.number_maktob_lailia}
                         </td>
                       </tr>
                     </tbody>

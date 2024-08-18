@@ -42,7 +42,6 @@ class UpdateStudentRequest extends FormRequest
             'admission_date' => ['required','date'],
             'department_id' => ['required','integer'],
             'user_id' => ['nullable','integer'],
-            'current_semester' => ['required','integer','between:1,10'],
             'identity_cart_number' => ['nullable','string','max:255'],
             'number_maktob_sent_exam_commettee' => ['nullable','integer'],
             'number_maktob_tajeel' => ['nullable','integer'],

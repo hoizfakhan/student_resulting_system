@@ -96,7 +96,7 @@ class TeacherSubjectController extends Controller
         $semesters = Department_Semester::all();
         $subjects = Assign_Subject::all();
 
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia("admin/assign-subject-teacher/Create",[
             'teachers' => TeacherResource::collection($teachers),
             'departments' => DepartmentResource::collection($departments),

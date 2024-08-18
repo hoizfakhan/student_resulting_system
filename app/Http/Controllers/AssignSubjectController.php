@@ -12,6 +12,7 @@ use App\Models\Semester;
 use App\Models\Subject;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AssignSubjectController extends Controller
 {
@@ -20,11 +21,13 @@ class AssignSubjectController extends Controller
      */
     public function index(Request $request)
     {
+
+        $user = Auth::user();
         $departments = $request->user()->faculty->departments()->get();
         $semesters = Department_Semester::all();
         $subjects = Assign_Subject::all();
 
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia("admin/assign-subject-semester/Index",[
             'departments' => $departments->toArray(),
             'semesters' => DepartmentSemesterResource::collection($semesters),
@@ -35,14 +38,15 @@ class AssignSubjectController extends Controller
          ]);
     }
 
-  
+
     public function create(Request $request)
     {
 
+        $user = Auth::user();
         $departments = $request->user()->faculty->departments()->get();
         $semesters = Department_Semester::all();
         $subjects =  Subject::all();
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia("admin/assign-subject-semester/Create",[
             'subjects' => $subjects,
             'departments' => $departments->toArray(),

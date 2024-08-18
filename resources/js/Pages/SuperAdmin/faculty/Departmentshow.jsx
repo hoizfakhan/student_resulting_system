@@ -3,6 +3,7 @@ import DangerButton from '@/Components/DangerButton';
 import Pagination from '@/Components/Pagination';
 import { Head, Link, router } from '@inertiajs/react';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Departmentshow({auth,success,departments,fname}){
 

@@ -5,6 +5,9 @@ import TextInput from "@/Components/TextInput";
 import { Head,Link,useForm } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'jalali-moment';
 
 
 export default function Create({ auth,departments,studentusers}) {
@@ -38,6 +41,12 @@ export default function Create({ auth,departments,studentusers}) {
     department_id:"",
     user_id:"",
      });
+
+
+     const handleDateChange = (date) => {
+         setData('birth_date', date);
+         setBirthDate(date); // Update local state if needed
+     };
 
   const onSubmit = (e) => {
 
@@ -427,7 +436,7 @@ export default function Create({ auth,departments,studentusers}) {
                 </div>
 
 
-               
+
               </div>
 
               <div className="row form-row">

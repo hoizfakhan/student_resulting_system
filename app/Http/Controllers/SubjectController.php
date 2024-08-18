@@ -39,7 +39,8 @@ class SubjectController extends Controller
 
 
         $subjects = $query->paginate(10);
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/subject/Index",[
             'subjects' => SubjectResource::collection($subjects),
             'success' => session('success'),
@@ -98,8 +99,8 @@ class SubjectController extends Controller
     public function create(Request $request)
     {
 
-
-        $usertype=Auth()->user()->usertype;
+        $user = $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/subject/Create",[
             'usertype' => $usertype,
         ]);
@@ -147,10 +148,10 @@ class SubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Subject  $subject)
+    public function edit(Subject  $subject,Request $request)
     {
-
-        $usertype=Auth()->user()->usertype;
+       $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/subject/Edit",[
             'subject' => new SubjectResource($subject),
             'usertype' => $usertype,

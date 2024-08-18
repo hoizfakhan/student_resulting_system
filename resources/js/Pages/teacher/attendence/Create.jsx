@@ -131,6 +131,7 @@ export default function Create({ auth, students, subject, subjectid, semester,se
                   <table className='w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300'>
                     <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500'>
                       <tr className='text-nowrap bg-gray-500 text-white align-middle'>
+                      <th className='px-3 py-2'>ID</th>
                         <th className='px-3 py-2'>Name</th>
                         <th className='px-3 py-2'>Father Name</th>
                         <th className='px-3 py-2'>Total Hours</th>
@@ -140,14 +141,15 @@ export default function Create({ auth, students, subject, subjectid, semester,se
                       </tr>
                     </thead>
                     <tbody>
-                      {students.data.map((student) => (
+                      {students.data.map((student,index) => (
                         <tr key={student.id}>
+                         <td className='px-3 py-2'>{index + 1}</td> {/* Dynamically generated ID */}
                           <td className='px-3 py-2'>{student.name}</td>
                           <td className='px-3 py-2'>{student.father_name}</td>
                           <td className='px-3 py-2'>
                             <TextInput
                               className="form-control"
-                              type="text"
+                              type="number"
                               name={`total_hours_${student.id}`}
                               value={data.attendances.find(a => a.student_id === student.id)?.total_hours || ''}
                               placeholder="Total hours"
@@ -158,7 +160,7 @@ export default function Create({ auth, students, subject, subjectid, semester,se
                           <td className='px-3 py-2'>
                             <TextInput
                               className="form-control"
-                              type="text"
+                              type="number"
                               name={`absent_hours_${student.id}`}
                               value={data.attendances.find(a => a.student_id === student.id)?.absent_hours || ''}
                               placeholder="Absent hours"
@@ -194,7 +196,7 @@ export default function Create({ auth, students, subject, subjectid, semester,se
                   </div>
                 </form>
               ) : (
-                <p>Loading...</p>
+                <p className="text-center">Loading...</p>
               )}
             </div>
           </div>

@@ -31,15 +31,7 @@ export default function StudentDetails({ auth, student }) {
                     </div>
                   </div>
 
-                  {/* Center Section: Student Image */}
-                  <div className="w-1/3 flex justify-center flex-shrink-0">
-                    <img
-                      src={student.data.image_path}
-                      className="img-fluid img-thumbnail object-cover rounded h-[200px] w-64"
-                      alt="Thumbnail"
-                    />
-                  </div>
-
+                 
                   {/* Right Section: Back to Students List Button */}
                   <div className="w-1/3 flex justify-end items-start">
                     <Link
@@ -199,7 +191,7 @@ export default function StudentDetails({ auth, student }) {
                           {student.data.current_semester ? (
                            <span>
                             {student.data.current_semester.name}
-                           
+
                            </span>
 
                           ):(

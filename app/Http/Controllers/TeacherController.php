@@ -26,6 +26,8 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
 
+       $user = $request->user();
+
         $departments = Department::all();
         $facultys = Faculty::all();
 
@@ -55,7 +57,7 @@ class TeacherController extends Controller
 
         }
        $teachers =  $query->paginate(10);
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/teacher/Index",[
             'usertype' => $usertype,
             'teachers' => TeacherResource::collection($teachers),
@@ -71,10 +73,11 @@ class TeacherController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+         $user = $request->user();
         $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         $Departments =   Department::all();
         $teacherusers = User::where("usertype",2)->get();
 
@@ -123,11 +126,12 @@ class TeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Teacher $teacher)
+    public function edit(Teacher $teacher,Request $request)
     {
+        $user =  $request->user();
         $departments  = Department::all();
         $teacherusers = User::where("usertype",2)->get();
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/teacher/Edit",[
             'teacher' => new TeacherResource($teacher),
             'teacherusers' => $teacherusers->toArray(),
@@ -194,7 +198,8 @@ class TeacherController extends Controller
        ->get();
 
 
-    $usertype = Auth()->user()->usertype;
+
+    $usertype = $user->usertype;
 
     // Transform the collection of subjects using SubjectResource
     $transformedSubjects = SubjectResource::collection($teachersubjects);

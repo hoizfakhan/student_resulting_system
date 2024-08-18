@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DropStudentResource;
-use App\Models\Drop_Student;
+use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\GraduatedStudentsResource;
+use App\Models\Graduated_Student;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DropStudentController extends Controller
+class GraduatedStudentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $user =  $request->user();
+        $user = $request->user();
+        $query = Graduated_Student::with('student.department');
 
-        $query = Drop_Student::with('student.department');
 
         if ($request->has('name') && $request->input('name') !== '') {
             $studentName = $request->input('name');
@@ -34,19 +35,26 @@ class DropStudentController extends Controller
         }
 
 
-        $dropStudents = $query->get();
 
 
 
+        $graduatedStudents = $query->get();
 
-      $dropStudents = DropStudentResource::collection($dropStudents);
+
+
+        $departments   =   $request->user()->faculty->departments()->get();
+        $graduatedStudents = GraduatedStudentsResource::collection($graduatedStudents);
+
         $usertype = $user->usertype;
-        return Inertia::render("admin/Result/drop_student/Index", [
+        return Inertia::render("admin/Result/graduated_student/Index", [
             'success' => session('success'),
             'error' => session('error'),
-            'dropStudents' => $dropStudents,
+            'graduatedStudents' => $graduatedStudents,
+            'departments' => DepartmentResource::collection($departments),
+            'queryparams' => request()->query() ?: null,
             'usertype' => $usertype,
         ]);
+
     }
 
     /**

@@ -43,7 +43,7 @@ class Student extends Model
 
     ];
 
-
+  //student model
     public function department(){
 
         return $this->belongsTo(Department::class);
@@ -67,7 +67,7 @@ class Student extends Model
     }
 
 
-    //student
+
 
     public function semesters()
         {
@@ -88,11 +88,44 @@ class Student extends Model
          return $this->hasOne(Graduated_Student::class);
      }
 
-     //student
+
      public function dropedStudents()
      {
          return $this->hasOne(Drop_Student::class);
      }
 
+
+    static public function gettotalStudents(){
+
+        return self::select('students')
+                    ->count();
+    }
+
+
+    static public function getNewStudents(){
+
+          // Get the ID for the first semester
+    $firstSemester = Semester::where('name', 'first semester')->first();
+
+    if (!$firstSemester) {
+        // Handle the case where the first semester is not found
+        return 0;
+    }
+
+    // Count the number of students registered in the first semester
+    $newStudents = Student_Semester::where('semester_id', $firstSemester->id)
+       ->where('status', 1)
+        ->count();
+
+    return $newStudents;
+    }
+
+    static public function getgraduatedstudents(){
+
+
+        return self::select('students')
+                     ->where('status',2)
+                     ->count();
+    }
 
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Faculty extends Model
 {
     use HasFactory;
+
+    //faculty model
     protected $table="faculties";
 
     protected $fillable = ['faculty_name','faculty_boss'];
@@ -33,9 +35,6 @@ class Faculty extends Model
       return $this->belongsToMany(Subject::class,Assign_Subject::class)
                          ->withPivot('semester_id','department_id');
     }
-
-
-
 
     public function teachers(){
 

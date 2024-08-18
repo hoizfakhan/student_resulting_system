@@ -11,8 +11,9 @@ import SuccessModal from "@/Pages/SuccessModal";
 import { useEffect, useState } from "react";
 import { faEdit, faGraduationCap, faRedo, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SelectInput from "@/Components/SelectInput";
 
-export default function Index({ auth,dropStudents, queryparams = null,success, error }) {
+export default function Index({ auth,graduatedStudents, queryparams = null, departments,success, error }) {
 
 
   const [successMessage, setSuccessMessage] = useState(success || null);
@@ -30,6 +31,8 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
     }
   }, [error]);
 
+
+
   queryparams = queryparams || {};
   const searchfeildchanged = (name, value) => {
     if (value) {
@@ -38,7 +41,7 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
       delete queryparams[name];
     }
 
-    router.get(route("dropstudents.index"), queryparams);
+    router.get(route("graguatedstudents.index"), queryparams);
   };
 
   const onKeyPress = (name, e) => {
@@ -48,17 +51,16 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
 
 
 
-
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-          Drop Students
+          Graduated Student
         </h2>
       }
     >
-      <Head title="drop_student" />
+      <Head title="graduated_student" />
 
       <div className="py-12">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
@@ -116,7 +118,7 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
             <div className="col-md-2 mt-5">
                <Link
                  className="btn hover:bg-gray-500 btn-outline-secondary"
-                 href={route("dropstudents.index")}
+                 href={route("graguatedstudents.index")}
                >
                 <FontAwesomeIcon icon={faRedo} className="ms-2" />
                </Link>
@@ -126,6 +128,7 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
             </div>
             </div>
             </div>
+
             <div className="overflow-auto">
               <table
                 className="w-full text-md text-left rtl:text-right
@@ -138,32 +141,31 @@ export default function Index({ auth,dropStudents, queryparams = null,success, e
                   <tr className="text-nowrap bg-gray-500 text-white">
                     <th className="px-3 py-2 ">Name</th>
                     <th className="px-3 py-2">Department</th>
-                    <th className="px-3 py-2">Drop Semester</th>
-                    <th className="px-3 py-2">Drop Year</th>
+                    <th className="px-3 py-2"> Graduated Date</th>
+                    <th className="px-3 py-2">Education Degree</th>
                     <th className="px-3 py-2">Show Marks</th>
 
                   </tr>
                 </thead>
 
                 <tbody>
-                {dropStudents.data.map(dropStudent => (
+                {graduatedStudents.data.map(graduatedStudent => (
                         <tr
                         className="bg-gray border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200"
-                        key={dropStudent.id}>
-                            <td className="px-3 py-2">{dropStudent.student ? dropStudent.student.name : 'N/A'}</td>
-                            <td className="px-3 py-2">{dropStudent.student && dropStudent.student.department ? dropStudent.student.department.name : 'N/A'}</td>
-                            <td className="px-3 py-2">{dropStudent.semester ? dropStudent.semester.name : 'N/A'}</td>
-                            <td className="px-3 py-2">{dropStudent.droped_year}</td>
+                        key={graduatedStudent.id}>
+                            <td className="px-3 py-2">{graduatedStudent.student ? graduatedStudent.student.name : 'N/A'}</td>
+                            <td className="px-3 py-2">{graduatedStudent.student && graduatedStudent.student.department ? graduatedStudent.student.department.name : 'N/A'}</td>
+                            <td className="px-3 py-2">{graduatedStudent.graduated_date}</td>
+                            <td className="px-3 py-2">{graduatedStudent.education_degree}</td>
                             <td className="px-4 py-2 flex space-x-2">
                             <Link
-                              href={route("ShowMarks", dropStudent.student.id)}
+                              href={route("ShowMarks", graduatedStudent.student.id)}
                               className="text-blue-500 hover:text-blue-700"
                             >
                               <FontAwesomeIcon icon={faGraduationCap} />
                             </Link>
 
                           </td>
-
                         </tr>
                     ))}
                 </tbody>

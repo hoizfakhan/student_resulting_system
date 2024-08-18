@@ -16,10 +16,11 @@ export default function ShowMarks({
   Lname,
   Sdepartment,
   isLastSemester,
-  studentDropStatus,
+  studentStatus,
+  averagePercentage
 }) {
 
-  console.log(studentDropStatus);
+
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(success || null);
   const [errorMessage, setErrorMessage] = useState(error || null);
@@ -162,7 +163,7 @@ export default function ShowMarks({
                             )}
                           </tbody>
                         </table>
-                        <p className="text-center mt-4 text-lg font-semibold text-gray-500">Overall Percentage: {percentage.toFixed(2)}%</p>
+                        <p className="text-center mt-4 text-lg font-semibold text-gray-500">Semester Percentage: {percentage.toFixed(2)}%</p>
                       </div>
                     );
                   })
@@ -171,23 +172,31 @@ export default function ShowMarks({
                 )}
               </form>
 
+
+               {/* Display the average percentage before the promote button */}
+               <div className="text-center mt-6">
+                <p className="text-lg font-semibold text-gray-700">Average Percentage Across Passed Semesters: {averagePercentage.toFixed(2)}%</p>
+              </div>
+
               {/* Conditionally render the promote button */}
               <div className="text-center mt-6 mb-2">
-              {studentDropStatus !== 4 ? (
-                  <button
-                    type="button"
-                    onClick={() => handlePromoteStudent(semesterId)}
-                    disabled={isLastSemester || loading}
-                    className={`px-4 py-2 rounded ${isLastSemester ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'} text-white`}
-                  >
-                    {loading ? 'Promoting...' : 'Promote Student'}
-                  </button>
-                ):(
-                  <span className="text-red-300">Student has been droped at this semester, because has many failures!</span>
-                )
+                {studentStatus === 4 ? (
+                <span className="text-red-500 text-lg">Student has been dropped at this semester, because of many failures!</span>
+                ) : studentStatus === 2 ? (
+                <span className="text-green-500 text-lg">Student '{Sname}' has been graduated successfully!</span>
+               ) : (
+              <button
+               type="button"
+               onClick={() => handlePromoteStudent(semesterId)}
+               disabled={isLastSemester || loading}
+              className={`px-4 py-2 rounded ${isLastSemester ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'} text-white`}
+             >
+             {loading ? 'Promoting...' : 'Promote Student'}
+             </button>
+          )}
+            </div>
 
-              }
-              </div>
+
 
             </div>
           </div>

@@ -13,6 +13,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentAccountController;
 use App\Http\Controllers\EmployeeAccountController;
+use App\Http\Controllers\GraduatedStudentController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherAccountController;
@@ -22,12 +23,6 @@ use Inertia\Inertia;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\MarksController;
 use App\Models\Marks;
-
-//Route::middleware(['auth','verified'])->group(function(){
-  //  Route::get('/dashboard',fn() => Inertia::render('Dashboard'))->name('dashboard');
-
-
-//});
 
 Route::redirect('/','/login');
 
@@ -42,6 +37,8 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
 
     Route::resource('student',StudentController::class);
     Route::resource('studentaccount', StudentAccountController::class);
+    Route::put('/updatestudent/update', [StudentController::class, 'update'])
+    ->name('student.update');
     Route::get('blockstudentaccount/{studentaccountid}',[StudentAccountController::class,'BlockStudentAccount'])->name("blockstudentaccount");
     Route::resource('employeeaccount', EmployeeAccountController::class);
     Route::resource('assginsubject',TeacherSubjectController::class);
@@ -51,13 +48,17 @@ Route::get('/teacher',[DashboardController::class,'teacher'])->name('teacher');
     Route::put('/assignsubject/{teacher_id}/{faculty_id}/{department_id}/{semester}/{subject_id}/update', [TeacherSubjectController::class, 'update'])
      ->name('assignsubject.update');
     Route::resource('semestersubject',AssignSubjectController::class);
+//    Route::get('students',[MarksController::class,'ShowStudents'])->name('show-students');
     Route::get('students',[MarksController::class,'ShowStudents'])->name('showstudents');
+    
     Route::get("studentmarks/{student_id}",[MarksController::class,'ShowMarks'])->name('ShowMarks');
     Route::post('/promote-student', [MarksController::class, 'PromoteStudent'])->name("promote-student");
     Route::resource("dropstudents",DropStudentController::class);
+    Route::resource('graguatedstudents',GraduatedStudentController::class);
     Route::get('/drop-form', [MarksController::class, 'promoteStudent'])->name('dropForm');
     Route::post('/submit-drop', [MarksController::class, 'submitDropForm'])->name('dropStudent.submit');
-
+    Route::get('exportstudents',[AttendenceController::class,'export_students'])->name('students.export');
+    Route::get('studentattendence',[AttendenceController::class,'getStudents'])->name('student.attendence');
 
     // all admin routes
 
@@ -83,6 +84,7 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::get("myprofile",[StudentController::class,"MyProfile"])->name("myprofile");
+    Route::get('mymarks',[MarksController::class,'student_marks'])->name('student.marks');
    // all student routes
 
  });

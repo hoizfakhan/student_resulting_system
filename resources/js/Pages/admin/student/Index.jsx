@@ -174,25 +174,16 @@ export default function Index({
               </div>
 
               {/* Semester Dropdown */}
-              <div className="flex flex-col">
-                <label className="text-gray-500 dark:text-gray-400 mb-2">
-                  Semester
-                </label>
-                <SelectInput
-                  className="form-control w-full p-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
-                  placeholder="Search..."
-                  defaultValue={queryparams.semester}
-                  onChange={(e) =>
-                    searchFieldChanged("semester", e.target.value)
-                  }
+              <div className="flex flex-col mt-3">
+
+              <div className="mt-4">
+                <Link
+                  href={route("student.index")}
+                  className="bg-gray-400 hover:bg-gray-600 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
                 >
-                  <option value="">Select Semester</option>
-                  {[...Array(10).keys()].map((num) => (
-                    <option value={num + 1} key={num + 1}>
-                      Semester {num + 1}
-                    </option>
-                  ))}
-                </SelectInput>
+                  <FontAwesomeIcon icon={faRedo} className="ms-2" />
+                </Link>
+              </div>
               </div>
             </div>
 
@@ -206,44 +197,12 @@ export default function Index({
                   <FontAwesomeIcon icon={faUserPlus} className="ms-2" />
                 </Link>
               </div>
-              <div>
-                <Link
-                  href={route("student.index")}
-                  className="bg-gray-400 hover:bg-gray-600 text-gray-700 py-2 px-4 rounded-lg shadow-lg transition-all duration-300"
-                >
-                  <FontAwesomeIcon icon={faRedo} className="ms-2" />
-                </Link>
-              </div>
+
             </div>
           {/* </div> */}
 
           {/* Additional Filter */}
-          <div className="flex mb-4">
-            <div className="w-full md:w-1/3">
-              <label className="text-gray-500 dark:text-gray-400 mb-2">
-                Make Attendance for First Semesters
-              </label>
-              <SelectInput
-                className="form-control w-full p-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
-                placeholder="Search..."
-                defaultValue={queryparams.department}
-                onChange={(e) =>
-                  searchDepartmentFieldChanged("department", e.target.value)
-                }
-              >
-                <option>Select Department</option>
-                {departments.map((department) => (
-                  <option
-                    value={department.name}
-                    key={department.id}
-                    className="dark:bg-gray-700"
-                  >
-                    {department.name}
-                  </option>
-                ))}
-              </SelectInput>
-            </div>
-          </div>
+
 
           {/* Student List Table */}
           {/* <div className="overflow-auto shadow-lg rounded-lg"> */}

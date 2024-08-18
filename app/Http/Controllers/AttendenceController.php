@@ -6,8 +6,11 @@ use App\Models\Attendence;
 use App\Http\Requests\StoreAttendenceRequest;
 use App\Http\Requests\UpdateAttendenceRequest;
 use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\DepartmentSemesterResource;
 use App\Http\Resources\StudentResource;
+use App\Models\Assign_Subject;
 use App\Models\Department;
+use App\Models\Department_Semester;
 use App\Models\Marks;
 use App\Models\Semester;
 use App\Models\Student;
@@ -16,6 +19,9 @@ use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Exports\ExportStudent;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class AttendenceController extends Controller
 {
@@ -32,14 +38,17 @@ class AttendenceController extends Controller
      */
     public function create(Request $request)
     {
+        $user =  $request->user();
 
         $department_id = $request->department_id;
         $semester_id = $request->semester_id;
         $subject_id = $request->subject_id;
 
         $students = Student::where('department_id', $department_id)
-        ->whereHas('semesters', function ($query) use ($semester_id) {
-            $query->where('semester_id', $semester_id);
+                 ->where('students.status',1)
+                ->whereHas('semesters', function ($query) use ($semester_id) {
+            $query->where('semester_id', $semester_id)
+                       ->where('status', 1);
         })
         ->with(['attendence' => function ($query) use ($subject_id) {
             $query->where('subject_id', $subject_id);
@@ -54,7 +63,7 @@ class AttendenceController extends Controller
         $department = Department::findOrFail($department_id);
 
 
-       $usertype=Auth()->user()->usertype;
+       $usertype=$user->usertype;
        return Inertia::render("teacher/attendence/Create",[
 
         'subject' => $subject->name,
@@ -170,5 +179,64 @@ class AttendenceController extends Controller
     public function destroy(Attendence $attendence)
     {
         //
+    }
+
+
+    public function getStudents(Request $request){
+
+
+        $user =  $request->user();
+        $departments = $request->user()->faculty->departments()->get();
+        $semesters = Department_Semester::all();
+        $students =  $request->user()->faculty->students()
+                         ->where('students.status',1)
+                         ->get();
+
+
+        $usertype=$user->usertype;
+        return Inertia("admin/attendence/Index",[
+            'departments' => $departments->toArray(),
+            'semesters' => DepartmentSemesterResource::collection($semesters),
+            'students' => StudentResource::collection($students),
+            'success' => session('success'),
+            'error' => session('error'),
+            'usertype' => $usertype,
+         ]);
+
+
+    }
+
+    public function export_students(Request $request){
+
+        $departmentId = $request->query('department_id');
+        $semesterId = $request->query('semester_id');
+
+    if (!$departmentId || !$semesterId) {
+        return response()->json(['error' => 'Department ID and Semester ID are required'], 400);
+    }
+
+    // Fetch the current semester to get its order
+    $currentSemester = Semester::find($semesterId);
+
+    if (!$currentSemester) {
+        return response()->json(['error' => 'Invalid Semester ID'], 400);
+    }
+
+    // Fetch the students with the specified department, current semester, and status
+    $students = Student::where('department_id', $departmentId)
+        ->where('status', 1)
+        ->whereHas('semesters', function ($query) use ($semesterId) {
+            $query->where('semester_id', $semesterId)
+                ->where('status', 1);
+        })
+        ->with('marks.subject')
+        ->get();
+
+
+
+
+
+     return Excel::download(new ExportStudent($students,$currentSemester->semester_order), 'studentattendece.xlsx');
+
     }
 }

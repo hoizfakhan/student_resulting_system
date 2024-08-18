@@ -14,12 +14,12 @@ class SemesterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
       $semesters =  Semester::all();
-
-        $usertype=Auth()->user()->usertype;
+      $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/semester/Index",[
             'semesters' => $semesters,
             'success'=>session('success'),
@@ -31,10 +31,11 @@ class SemesterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
 
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia('SuperAdmin/semester/Create',[
          'usertype' => $usertype,
         ]);
@@ -76,10 +77,10 @@ class SemesterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Semester $semester)
+    public function edit(Semester $semester,Request $request)
     {
-
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/semester/Edit",[
             'semester' => $semester,
             'usertype' => $usertype,

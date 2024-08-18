@@ -10,7 +10,9 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "maatwebsite/excel": "^3.1.48",
+        "maatwebsite/excel": "3.1.54",
+        "morilog/jalali": "^3.4",
+        "nesbot/carbon": "^3.7",
         "tightenco/ziggy": "^2.1"
     },
     "require-dev": {

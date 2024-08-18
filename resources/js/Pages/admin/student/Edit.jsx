@@ -8,7 +8,7 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({ auth,departments,student,studentusers}) {
+export default function Edit({ auth,departments,student,studentusers}) {
 
    const {data,setData,post,errors,reset} =  useForm({
 
@@ -30,7 +30,6 @@ export default function Create({ auth,departments,student,studentusers}) {
     kankor_id:student.data.kankor_id ||  "",
     kankor_marks:student.data.kankor_marks ||  "",
     admission_date:student.data.admission_date ||  "",
-    current_semester:student.data.current_semester ||  "",
     number_maktob_sent_exam_commettee:student.data. number_maktob_sent_exam_commettee ||  "",
     number_maktob_tajeel:student.data. number_maktob_tajeel || "",
     number_maktob_monfak:student.data. number_maktob_monfak || "",
@@ -451,29 +450,7 @@ export default function Create({ auth,departments,student,studentusers}) {
                 </div>
 
 
-                <div className="from-group col-md-6">
-                  <div className="mt-3">
-                    <InputLabel>
-                      Semester:<span className="text-red-300 text-lg">*</span>
-                    </InputLabel>
-                    <select
-                      id="semester"
-                      name="current_semester"
-                      value={data && data.current_semester}
-                      className="form-control mt-1"
-                      onChange={(e) => setData("current_semester",e.target.value)}
-                    >
-                      <option value="">Select a semester</option>
-                      {[...Array(10)].map((_, index) => (
-                        <option key={index + 1} value={index + 1}>
-                          {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                    <InputError message={errors.current_semester} className='mt-2'/>
 
-                  </div>
-                </div>
               </div>
 
               <div className="row form-row">

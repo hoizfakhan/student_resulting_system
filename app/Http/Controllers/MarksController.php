@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportStudent;
 use App\Models\Marks;
 use App\Http\Requests\StoreMarksRequest;
 use App\Http\Requests\UpdateMarksRequest;
@@ -13,15 +14,18 @@ use App\Models\Assign_Subject;
 use App\Models\Department;
 use App\Models\Department_Semester;
 use App\Models\Drop_Student;
+use App\Models\Graduated_Student;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Student_Semester;
 use App\Models\Student_Subject;
 use App\Models\Subject;
 use Carbon\Carbon;
+use Morilog\Jalali\Jalalian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MarksController extends Controller
 {
@@ -36,7 +40,8 @@ class MarksController extends Controller
   //teacher part
     public function create(Request $request)
     {
-      $teacher_name = Auth()->user()->name;
+      $user =  $request->user();
+      $teacher_name = $user->name;
 
 
         $department_id = $request->department_id;
@@ -46,7 +51,9 @@ class MarksController extends Controller
         // Fetch students with their attendance records for the specific department and semester
         $students = Student::where('department_id', $department_id)
             ->whereHas('semesters', function ($query) use ($semester_id) {
-                $query->where('semester_id', $semester_id);
+                $query->where('semester_id', $semester_id)
+                       ->where('status',1);
+
             })
             ->with(['attendence' => function ($query) use ($semester_id, $subject_id) {
                 // Filter attendance records for the specific semester and subject
@@ -76,7 +83,7 @@ class MarksController extends Controller
         $semester = Semester::findOrFail($semester_id);
         $department = Department::findOrFail($department_id);
 
-        $usertype = Auth()->user()->usertype;
+        $usertype = $user->usertype;
 
         return Inertia::render("teacher/marks/create/CreateChance1", [
             'subject' => $subject->name,
@@ -443,7 +450,9 @@ class MarksController extends Controller
     // Query to fetch students who failed at the previous chance
     $failedStudentsQuery = Student::where('department_id', $department_id)
         ->whereHas('semesters', function ($query) use ($semester_id) {
-            $query->where('semester_id', $semester_id);
+            $query->where('semester_id', $semester_id)
+                   ->where('status',2);
+
         })
         ->whereHas('marks', function ($query) use ($subject_id, $previousChance) {
             $query->where('subject_id', $subject_id)
@@ -454,7 +463,8 @@ class MarksController extends Controller
     // Query to fetch students with an absent percentage greater than 25%
     $studentsWithHighAbsenteeism = Student::where('department_id', $department_id)
         ->whereHas('semesters', function ($query) use ($semester_id) {
-            $query->where('semester_id', $semester_id);
+            $query->where('semester_id', $semester_id)
+                      ->where('status', 2);
         })
         ->with(['attendence' => function ($query) use ($subject_id) {
             $query->where('subject_id', $subject_id);
@@ -486,8 +496,8 @@ class MarksController extends Controller
     $subject = Subject::findOrFail($subject_id);
     $semester = Semester::findOrFail($semester_id);
     $department = Department::findOrFail($department_id);
-
-    $usertype = Auth()->user()->usertype;
+    $user =  $request->user();
+    $usertype = $user->usertype;
 
     return Inertia::render("teacher/marks/create/CreateChance2", [
         'subject' => $subject->name,
@@ -518,7 +528,8 @@ class MarksController extends Controller
         // Fetch students based on department and semester
         $studentsQuery = Student::where('department_id', $department_id)
             ->whereHas('semesters', function ($query) use ($semester_id) {
-                $query->where('semester_id', $semester_id);
+                $query->where('semester_id', $semester_id)
+                       ->where('status',2);
             });
 
         // Define the chance value for the previous attempt
@@ -539,8 +550,8 @@ class MarksController extends Controller
         $subject = Subject::findOrFail($subject_id);
         $semester = Semester::findOrFail($semester_id);
         $department = Department::findOrFail($department_id);
-
-        $usertype = Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype = $user->usertype;
 
         return Inertia::render("teacher/marks/create/CreateChance3", [
             'subject' => $subject->name,
@@ -571,7 +582,8 @@ class MarksController extends Controller
         // Fetch students based on department and semester
         $studentsQuery = Student::where('department_id', $department_id)
             ->whereHas('semesters', function ($query) use ($semester_id) {
-                $query->where('semester_id', $semester_id);
+                $query->where('semester_id', $semester_id)
+                       ->where('status',2);
             });
 
         // Define the chance value for the previous attempt
@@ -592,8 +604,8 @@ class MarksController extends Controller
         $subject = Subject::findOrFail($subject_id);
         $semester = Semester::findOrFail($semester_id);
         $department = Department::findOrFail($department_id);
-
-        $usertype = Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype = $user->usertype;
 
         return Inertia::render("teacher/marks/create/CreateChance4", [
             'subject' => $subject->name,
@@ -620,6 +632,7 @@ class MarksController extends Controller
 
         // Fetch all students with semesters
         $students = $user->faculty->students()
+            ->where('students.status', 1)
             ->with(['semesters' => function ($query) {
                 $query->orderBy('status'); // Ensure that the current semester appears first
             }])
@@ -634,6 +647,7 @@ class MarksController extends Controller
 
         $departments = $user->faculty->departments()->get();
         $departmentsemesters = Department_Semester::all();
+         $user =  $request->user();
         $usertype = Auth()->user()->usertype;
 
         return Inertia::render("admin/Result/student/ShowStudent", [
@@ -663,17 +677,17 @@ class MarksController extends Controller
         $department = $student->department;
         $semesters = $student->semesters()->get();
 
-        $currentSemesterId = $semesters->firstWhere('pivot.status', 1);
-        $current_semester_id = $currentSemesterId->id;
+        // Identify the current semester
+        $currentSemester = $semesters->firstWhere('pivot.status', 1);
+        $current_semester_id = $currentSemester ? $currentSemester->id : null;
 
+        // Calculate the marks and percentage for each semester
         $marks = $semesters->mapWithKeys(function ($semester) use ($student, $department) {
-            // Fetch subjects assigned to the student's department and the current semester
             $assignedSubjects = Assign_Subject::where('department_id', $department->id)
                                                ->where('semester_id', $semester->id)
                                                ->pluck('subject_id')
                                                ->toArray();
 
-            // Fetch marks for the student in these subjects for the current semester
             $marks = $student->marks()
                              ->whereIn('subject_id', $assignedSubjects)
                              ->whereHas('subject', function ($query) use ($semester) {
@@ -683,13 +697,11 @@ class MarksController extends Controller
                              })
                              ->get();
 
-            // Count the number of times the student failed this semester
             $failuresCount = $student->semesters()
                                       ->where('semester_id', $semester->id)
                                       ->where('status', 3) // Status 3 indicates failure
                                       ->count();
 
-            // Group marks by subject
             $subjectMarks = $marks->groupBy('subject_id')->map(function ($subjectMarks) {
                 $latestMark = $subjectMarks->sortByDesc('chance')->first();
                 return [
@@ -704,15 +716,13 @@ class MarksController extends Controller
                                      ($latestMark->attendence_and_class_activity_marks) +
                                      ($latestMark->midterm_marks) +
                                      ($latestMark->final_marks),
-
-                   'weighted_marks' => (($latestMark->home_work_marks) +
-                          ($latestMark->attendence_and_class_activity_marks) +
-                          ($latestMark->midterm_marks) +
-                          ($latestMark->final_marks)) * $latestMark->subject->credit
+                    'weighted_marks' => (($latestMark->home_work_marks) +
+                            ($latestMark->attendence_and_class_activity_marks) +
+                            ($latestMark->midterm_marks) +
+                            ($latestMark->final_marks)) * $latestMark->subject->credit
                 ];
             })->values();
 
-            // Calculate total weighted marks and percentage
             $totalWeightedMarks = $subjectMarks->sum('weighted_marks');
             $totalCredits = $subjectMarks->sum('credit');
             $percentage = $totalCredits > 0 ? ($totalWeightedMarks / ($totalCredits * 100)) * 100 : 0;
@@ -727,6 +737,19 @@ class MarksController extends Controller
             ];
         })->toArray();
 
+        // Calculate the average percentage across all passed semesters
+        $passedSemesters = $semesters->filter(function ($semester) {
+            return $semester->pivot->status == 2; // Status 2 indicates passed
+        });
+
+        $totalPercentage = $passedSemesters->map(function ($semester) use ($marks) {
+            $semesterMarks = $marks[$semester->name] ?? [];
+            return $semesterMarks['percentage'] ?? 0;
+        })->sum();
+
+        $totalSemesters = $passedSemesters->count();
+        $averagePercentage = $totalSemesters > 0 ? ($totalPercentage / $totalSemesters) : 0;
+
         $usertype = Auth()->user()->usertype;
 
         return Inertia::render("admin/Result/student/ShowMarks", [
@@ -736,12 +759,14 @@ class MarksController extends Controller
             'Lname' => $student->last_name,
             'Sdepartment' => $department ? $department->name : 'Unknown',
             'semesterId' => $current_semester_id,
-            'studentDropStatus' => $student->status,
+            'studentStatus' => $student->status,
             'success' => session('success'),
             'error' => session('error'),
             'usertype' => $usertype,
+            'averagePercentage' => $averagePercentage // Add this to the view
         ]);
     }
+
 
 
 
@@ -833,12 +858,11 @@ class MarksController extends Controller
 }
 
 
-  public function promoteStudent(Request $request)
+public function promoteStudent(Request $request)
 {
     $student_id = $request->input('student_id');
     $current_semester_id = $request->input('current_semester_id');
     $current_semester = Semester::find($current_semester_id);
-
 
 
     $gregorainYear = date('Y');
@@ -848,6 +872,9 @@ class MarksController extends Controller
     if ($currentDate < $startOfIranianYear) {
         $iranianYear--;
     }
+
+    $iranianDate = Jalalian::fromCarbon($currentDate);
+    $iranianFullDate = $iranianDate->format('Y/m/d');
 
     // Validate input
     $request->validate([
@@ -906,101 +933,109 @@ class MarksController extends Controller
     // Determine status based on credits
     $status = ($totalCredits > 0 && ($passedCredits / $totalCredits >= 0.5)) ? 2 : 0;
 
-     // Check previous failures in the current semester
-     $previousFailures = Student_Semester::where('student_id', $student_id)
-     ->where('semester_id', $current_semester_id)
-     ->where('status', 3)
-     ->count();
-
+    // Check previous failures in the current semester
+    $previousFailures = Student_Semester::where('student_id', $student_id)
+        ->where('semester_id', $current_semester_id)
+        ->where('status', 3)
+        ->count();
 
     // Update current semester status
     $stu_sem = Student_Semester::where('student_id', $student_id)
         ->where('semester_id', $current_semester_id)
         ->first();
 
-
-       if ($previousFailures > 0) {
-
+    if ($previousFailures > 0) {
+        // Handle previous failures
         $stu_sem = Student_Semester::where('student_id', $student_id)
-        ->where('semester_id', $current_semester_id)
-        ->where('status', 1)
-        ->first();
-
-       }
-
-    if ($status == 2) {
-        if ($stu_sem) {
-            $stu_sem->status = $status;
-            $stu_sem->save();
-            $next_semester = NULL;
-
-            switch($current_semester->name){
-                case 'first semester' :
-                    $next_semester = Semester::where('name', 'second semester')->first();
-                    break;
-                case 'second semester':
-                    $next_semester = Semester::where('name', 'third semester')->first();
-                    break;
-
-                case 'third semester':
-                     $next_semester = Semester::where('name', 'fourth semester')->first();
-                     break;
-
-                case 'fourth semester':
-                   $next_semester = Semester::where('name', 'fifth semester')->first();
-                   break;
-
-                 case 'fifth semester':
-                    $next_semester = Semester::where('name', 'sixth semester')->first();
-                    break;
-
-                case 'sixth semester':
-                        $next_semester = Semester::where('name', 'seventh semester')->first();
-                        break;
-
-                case 'seventh semester':
-                        $next_semester = Semester::where('name', 'eighth semester')->first();
-                        break;
-
-                 case 'eighth semester':
-                       $next_semester = Semester::where('name', 'ninth semester')->first();
-                       break;
-
-                 case 'ninth semester':
-                        $next_semester = Semester::where('name', 'tenth semester')->first();
-                        break;
-
-                default:
-            }
-
-            Student_Semester::create([
-                'semester_id' => $next_semester->id,
-                'student_id' => $student_id,
-                'status' => 1
-            ]);
-
-
-
-         }
-
-        return redirect()->back()->with('success',"Student \"$student->name\" has been promoted to next semester successfully!");
-  }
-        else {
-
-        // Check total failures in all semesters
-           $totalFailures = Student_Semester::where('student_id', $student_id)
-          ->where('status', 3)
-          ->count();
-
-        if ($previousFailures > 0) {
-
-            $stu_sem = Student_Semester::where('student_id', $student_id)
             ->where('semester_id', $current_semester_id)
             ->where('status', 1)
             ->first();
+    }
 
+    if ($status == 2) {
+        // Promotion logic
+        if ($stu_sem) {
+            $stu_sem->status = $status;
+            $stu_sem->save();
+
+            // Determine the next semester using switch
+            switch ($current_semester->name) {
+                case 'first semester':
+                    $next_semester_name = 'second semester';
+                    break;
+                case 'second semester':
+                    $next_semester_name = 'third semester';
+                    break;
+                case 'third semester':
+                    $next_semester_name = 'fourth semester';
+                    break;
+                case 'fourth semester':
+                    $next_semester_name = 'fifth semester';
+                    break;
+                case 'fifth semester':
+                    $next_semester_name = 'sixth semester';
+                    break;
+                case 'sixth semester':
+                    $next_semester_name = 'seventh semester';
+                    break;
+                case 'seventh semester':
+                    $next_semester_name = 'eighth semester';
+                    break;
+                case 'eighth semester':
+                    $next_semester_name = 'ninth semester';
+                    break;
+                case 'ninth semester':
+                    $next_semester_name = 'tenth semester';
+                    break;
+                default:
+                    $next_semester_name = null;
+            }
+
+            // Fetch the next semester based on department constraints
+            $next_semester = Semester::where('name', $next_semester_name)
+                ->whereIn('id', Department_Semester::where('department_id', $department_id)->pluck('semester_id'))
+                ->first();
+
+            if ($next_semester) {
+                Student_Semester::create([
+                    'semester_id' => $next_semester->id,
+                    'student_id' => $student_id,
+                    'status' => 1
+                ]);
+            }
+
+            // Check for graduation
+            $lastSemester = Department_Semester::join('semesters', 'department_semesters.semester_id', '=', 'semesters.id')
+                ->where('department_semesters.department_id', $department_id)
+                ->orderBy('semesters.semester_order', 'desc')
+                ->first();
+
+            if ($current_semester_id == $lastSemester->semester_id && $status == 2) {
+
+                $student->status = 2;
+                $student->save();
+
+                Graduated_Student::create([
+                    'student_id' => $student_id,
+                    'graduated_date' => $iranianFullDate,
+                    'education_degree' => 'bacholer' // Replace with actual degree
+                ]);
+
+
+                return redirect()->back()->with('success', "Student \"$student->name\" has graduated successfully!");
+            }
+
+            return redirect()->back()->with('success', "Student \"$student->name\" has been promoted to next semester successfully!");
+        }
+    } else {
+        // Failure logic
+        $totalFailures = Student_Semester::where('student_id', $student_id)
+            ->where('status', 3)
+            ->count();
+
+        if ($previousFailures > 0) {
+            // Update the status and check total failures
             $stu_sem->status = 3;
-
             $stu_sem->save();
 
             Student_Semester::create([
@@ -1009,82 +1044,155 @@ class MarksController extends Controller
                 'status' => 1
             ]);
 
-             // Check total failures in all semesters
-             $totalFailures = Student_Semester::where('student_id', $student_id)
+            $totalFailures = Student_Semester::where('student_id', $student_id)
             ->where('status', 3)
             ->count();
 
-            if ($totalFailures >=4){
+            if ($totalFailures >= 4) {
+                $stu_sem->status = 4; // Dropped status
+                $stu_sem->save();
 
+                $student->status = 4;
+                $student->save();
 
-               // If student has previously failed the same semester or total failures reach the threshold
-               $stu_sem->status = 4; // Dropped status
-               $stu_sem->save();
-
-
-               $student->status = 4;
-               $student->save();
-
-
-               Drop_Student::create([
+                Drop_Student::create([
                     'student_id' => $student_id,
                     'semester_id' => $current_semester_id,
                     'droped_year' => $iranianYear,
-
                 ]);
 
-
                 return redirect()->back()->with('error', "Student \"$student->name\" has been dropped from the university due to multiple failures.");
-                }
-
-
-
+            }
         } else {
-            // If it's the first failure for this semester
+            // Handle first-time failure
             if ($stu_sem) {
                 $stu_sem->status = 3;
                 $stu_sem->save();
             }
 
-         // Create a new record for the current semester with status 1 (current)
-        Student_Semester::create([
-            'semester_id' => $current_semester_id,
-            'student_id' => $student_id,
-            'status' => 1
-        ]);
+            Student_Semester::create([
+                'semester_id' => $current_semester_id,
+                'student_id' => $student_id,
+                'status' => 1
+            ]);
 
-        return redirect()->back()->with('error', "Student \"$student->name\" has not completed the credits, cannot be promoted to the next semester (repeat Semester)!");
-      }
-
+            return redirect()->back()->with('error', "Student \"$student->name\" has not completed the credits, cannot be promoted to the next semester (Repeat Semester)!");
         }
-
-        }
-
-
-        public function submitDropForm(Request $request)
-      {
-    $request->validate([
-        'student_id' => 'required',
-        'semester_id' => 'required',
-        'drop_reason' => 'required|string',
-        'maktob_number' => 'required|string'
-    ]);
-
-    Drop_Student::create([
-        'student_id' => $request->input('student_id'),
-        'semester_id' => $request->input('semester_id'),
-        'drop_year' => $request->input('drop_year'),
-        'drop_reason' => $request->input('drop_reason'),
-        'maktob_number' => $request->input('maktob_number')
-    ]);
-
-    // Update the student's status to dropped
-    $student = Student::find($request->input('student_id'));
-    $student->status = 4; // Dropped
-    $student->save();
-
-    return redirect()->route('student.index')->with('error', 'Student has been dropped successfully.');
+    }
 }
+
+   //student part
+
+
+   public function student_marks(Request $request){
+
+
+     $userId =  Auth()->user()->id;
+
+     $student = Student::where('user_id', $userId)->first();
+
+    if (!$student) {
+        return response()->json(['message' => 'Student not found'], 404);
+    }
+
+    // Proceed to fetch and show marks
+    return $this->showStudentMarks($student);
+
+   }
+
+   private function showStudentMarks($student)
+   {
+       // Fetch semesters in ascending order
+       $semesters = $student->semesters()->orderBy('semester_order')->get();
+
+       // Determine the current semester
+       $currentSemester = $semesters->firstWhere('pivot.status', 1);
+       if ($currentSemester) {
+           $currentSemesterOrder = $currentSemester->semester_order;
+           // Filter semesters up to the current one
+           $filteredSemesters = $semesters->filter(function ($semester) use ($currentSemesterOrder) {
+               return $semester->semester_order < $currentSemesterOrder;
+           });
+       } else {
+           // No current semester found
+           $filteredSemesters = collect();
+       }
+
+       // Fetch and process marks for these semesters
+       $marks = $filteredSemesters->mapWithKeys(function ($semester) use ($student) {
+           $assignedSubjects = Assign_Subject::where('semester_id', $semester->id)
+                                              ->pluck('subject_id')
+                                              ->toArray();
+
+           $marks = $student->marks()
+                            ->whereIn('subject_id', $assignedSubjects)
+                            ->whereHas('subject', function ($query) use ($semester) {
+                                $query->whereHas('semesters', function ($query) use ($semester) {
+                                    $query->where('semester_id', $semester->id);
+                                });
+                            })
+                            ->get();
+
+           $failuresCount = $student->semesters()
+                                    ->where('semester_id', $semester->id)
+                                    ->where('status', 3) // Status 3 indicates failure
+                                    ->count();
+
+           $subjectMarks = $marks->groupBy('subject_id')->map(function ($subjectMarks) {
+               $latestMark = $subjectMarks->sortByDesc('chance')->first();
+               return [
+                   'subject' => $latestMark->subject->name,
+                   'credit' => $latestMark->subject->credit,
+                   'home_work' => $latestMark->home_work_marks,
+                   'class_activity' => $latestMark->attendence_and_class_activity_marks,
+                   'midterm' => $latestMark->midterm_marks,
+                   'final' => $latestMark->final_marks,
+                   'chance' => $latestMark->chance,
+                   'total_marks' => $latestMark->home_work_marks +
+                                    $latestMark->attendence_and_class_activity_marks +
+                                    $latestMark->midterm_marks +
+                                    $latestMark->final_marks,
+                   'weighted_marks' => ($latestMark->home_work_marks +
+                                         $latestMark->attendence_and_class_activity_marks +
+                                         $latestMark->midterm_marks +
+                                         $latestMark->final_marks) * $latestMark->subject->credit
+               ];
+           })->values();
+
+           $totalWeightedMarks = $subjectMarks->sum('weighted_marks');
+           $totalCredits = $subjectMarks->sum('credit');
+           $percentage = $totalCredits > 0 ? ($totalWeightedMarks / ($totalCredits * 100)) * 100 : 0;
+
+           return [
+               $semester->name => [
+                   'semester_id' => $semester->id,
+                   'subjectMarks' => $subjectMarks->toArray(),
+                   'percentage' => $percentage,
+                   'failures_count' => $failuresCount
+               ]
+           ];
+       })->toArray();
+
+
+
+       $usertype = Auth()->user()->usertype;
+       return Inertia::render("student/marks/ShowMarks", [
+           'marks' => $marks,
+           'Sname' => $student->name,
+           'studentId' => $student->id,
+           'Lname' => $student->last_name,
+           'Sdepartment' => $student->department ? $student->department->name : 'Unknown',
+           'semesterId' => $currentSemester ? $currentSemester->id : null,
+           'studentStatus' => $student->status,
+           'usertype' => $usertype,
+           'success' => session('success'),
+           'error' => session('error'),
+       ]);
+   }
+
+
+
+
 
     }
 

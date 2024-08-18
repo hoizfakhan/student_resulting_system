@@ -35,5 +35,12 @@ class Teacher extends Model
      return $this->belongsToMany(Subject::class,TeacherSubject::class)
                                   ->withPivot('faculty_id','department_id', 'semester_id');
    }
-                                                                                                
+
+   static public function getTotalTeachers(){
+
+
+    return self::select('teachers')
+                ->count();
+    }
+
 }

@@ -20,12 +20,12 @@ class ManagerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
        try {
         $managers = User::where('usertype','=',1)->paginate(4);
-
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/user/Index",[
             'usertype' => $usertype,
             'managers' => ManagerResource::collection($managers),
@@ -44,9 +44,10 @@ class ManagerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-          $usertype=Auth()->user()->usertype;
+          $user =  $request->user();
+          $usertype=$user->usertype;
           $facultys =  Faculty::query()->orderBy('faculty_name','asc')->get();
            return Inertia("SuperAdmin/user/Create",[
             'usertype' => $usertype,
@@ -97,11 +98,12 @@ class ManagerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $manager)
+    public function edit(User $manager,Request $request)
     {
 
+        $user =  $request->user();
          $facultys= Faculty::paginate(4);
-          $usertype=Auth()->user()->usertype;
+          $usertype=$user->usertype;
           return Inertia("SuperAdmin/user/Edit",[
             'manager' => new ManagerResource($manager),
             'usertype' => $usertype,

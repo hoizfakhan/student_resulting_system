@@ -18,16 +18,17 @@ class FacultyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // hi, i want to make attendence for students , i have student list, and the user can search them by their department and semester, when the user retrive the students of first semester, he should be able to to export the students name and father name to excel and arrange them by their kankor_marks, i dont save attendence , just i want to export the retirved students data to excel, iam using laravel with react using inertia, can you give the complete code
 
 
         try{
 
+        $user =  $request->user();
         $facultys= Faculty::paginate(4);
 
-        $usertype=Auth()->user()->usertype;
+        $usertype=$user->usertype;
         return Inertia('SuperAdmin/faculty/Index',[
             'usertype' => $usertype,
             'success' => session('success'),
@@ -47,9 +48,10 @@ class FacultyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia('SuperAdmin/faculty/Create',[
          'usertype' => $usertype,
         ]);
@@ -62,7 +64,7 @@ class FacultyController extends Controller
     {
        try {
        $request->validate([
-        
+
               'name' => 'required|unique:faculties,faculty_name',
               'boss' => 'required',
 
@@ -88,14 +90,15 @@ class FacultyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Faculty $faculty)
+    public function show(Faculty $faculty,Request $request)
     {
         $fname=$faculty->faculty_name;
+        $user =  $request->user();
 
         $departments  = $faculty->departments();
         $departments  = $departments->paginate(4);
 
-         $usertype=Auth()->user()->usertype;
+         $usertype=$user->usertype;
 
         return inertia("SuperAdmin/faculty/Departmentshow",[
             'usertype' => $usertype,
@@ -109,9 +112,10 @@ class FacultyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Faculty $faculty)
+    public function edit(Faculty $faculty,Request $request)
     {
-        $usertype=Auth()->user()->usertype;
+        $user =  $request->user();
+        $usertype=$user->usertype;
         return Inertia("SuperAdmin/faculty/Edit",[
             'faculty' => new FacultyResource($faculty),
             'usertype' => $usertype,
@@ -167,5 +171,235 @@ class FacultyController extends Controller
 
        }
 
-    }
+
+
+     {/*  public function promoteStudent(Request $request)
+       {
+           $student_id = $request->input('student_id');
+           $current_semester_id = $request->input('current_semester_id');
+           $current_semester = Semester::find($current_semester_id);
+
+           $gregorainYear = date('Y');
+           $iranianYear = $gregorainYear - 621;
+           $currentDate = Carbon::now();
+           $startOfIranianYear = Carbon::create($gregorainYear, 3, 21);
+           if ($currentDate < $startOfIranianYear) {
+               $iranianYear--;
+           }
+
+           // Validate input
+           $request->validate([
+               'student_id' => 'required',
+               'current_semester_id' => 'required'
+           ]);
+
+           // Find the student and related department
+           $student = Student::find($student_id);
+           if (!$student) {
+               return redirect()->back()->with('error', 'Student not found');
+           }
+
+           $department = $student->department;
+           if (!$department) {
+               return redirect()->back()->with('error', 'Department not found');
+           }
+           $department_id = $department->id;
+
+           // Fetch the student's current semester record
+           $studentSemester = $student->semesters()->where('semester_id', $current_semester_id)->first();
+
+           // Check if the student is already promoted
+           if ($studentSemester && $studentSemester->pivot->status == 2) {
+               return redirect()->back()->with('success', 'Student has already been promoted!');
+           }
+
+           // Calculate total credits for subjects in the current semester and department
+           $subjects = Subject::join('assign-_subjects', 'subjects.id', '=', 'assign-_subjects.subject_id')
+               ->where('assign-_subjects.semester_id', $current_semester_id)
+               ->where('assign-_subjects.department_id', $department_id)
+               ->select('subjects.id', 'subjects.credit')
+               ->get();
+
+           $totalCredits = $subjects->sum('credit');
+
+           // Calculate passed credits based on the student's marks
+           $firstAttemptMarks = $student->marks()
+               ->join('subjects', 'marks.subject_id', '=', 'subjects.id')
+               ->join('assign-_subjects', 'subjects.id', '=', 'assign-_subjects.subject_id')
+               ->where('assign-_subjects.semester_id', $current_semester_id)
+               ->where('assign-_subjects.department_id', $department_id)
+               ->where('marks.chance', 1) // Consider only the first attempt
+               ->select('subjects.id', 'subjects.credit', 'marks.home_work_marks', 'marks.attendence_and_class_activity_marks', 'marks.midterm_marks', 'marks.final_marks')
+               ->get();
+
+           $passedCredits = $firstAttemptMarks->filter(function ($mark) {
+               $totalMarks = $mark->home_work_marks
+                   + $mark->attendence_and_class_activity_marks
+                   + $mark->midterm_marks
+                   + $mark->final_marks;
+
+               return $totalMarks >= 55;
+           })->sum('credit');
+
+           // Determine status based on credits
+           $status = ($totalCredits > 0 && ($passedCredits / $totalCredits >= 0.5)) ? 2 : 0;
+
+            // Check previous failures in the current semester
+            $previousFailures = Student_Semester::where('student_id', $student_id)
+            ->where('semester_id', $current_semester_id)
+            ->where('status', 3)
+            ->count();
+
+
+           // Update current semester status
+           $stu_sem = Student_Semester::where('student_id', $student_id)
+               ->where('semester_id', $current_semester_id)
+               ->first();
+
+
+              if ($previousFailures > 0) {
+
+               $stu_sem = Student_Semester::where('student_id', $student_id)
+               ->where('semester_id', $current_semester_id)
+               ->where('status', 1)
+               ->first();
+
+              }
+
+           if ($status == 2) {
+               if ($stu_sem) {
+                   $stu_sem->status = $status;
+                   $stu_sem->save();
+                   $next_semester = NULL;
+
+                   switch($current_semester->name){
+                       case 'first semester' :
+                           $next_semester = Semester::where('name', 'second semester')->first();
+                           break;
+                       case 'second semester':
+                           $next_semester = Semester::where('name', 'third semester')->first();
+                           break;
+
+                       case 'third semester':
+                            $next_semester = Semester::where('name', 'fourth semester')->first();
+                            break;
+
+                       case 'fourth semester':
+                          $next_semester = Semester::where('name', 'fifth semester')->first();
+                          break;
+
+                        case 'fifth semester':
+                           $next_semester = Semester::where('name', 'sixth semester')->first();
+                           break;
+
+                       case 'sixth semester':
+                               $next_semester = Semester::where('name', 'seventh semester')->first();
+                               break;
+
+                       case 'seventh semester':
+                               $next_semester = Semester::where('name', 'eighth semester')->first();
+                               break;
+
+                        case 'eighth semester':
+                              $next_semester = Semester::where('name', 'ninth semester')->first();
+                              break;
+
+                        case 'ninth semester':
+                               $next_semester = Semester::where('name', 'tenth semester')->first();
+                               break;
+
+                       default:
+                   }
+
+                   Student_Semester::create([
+                       'semester_id' => $next_semester->id,
+                       'student_id' => $student_id,
+                       'status' => 1
+                   ]);
+
+
+
+                }
+
+               return redirect()->back()->with('success',"Student \"$student->name\" has been promoted to next semester successfully!");
+         }
+               else {
+
+               // Check total failures in all semesters
+                  $totalFailures = Student_Semester::where('student_id', $student_id)
+                 ->where('status', 3)
+                 ->count();
+
+               if ($previousFailures > 0) {
+
+                   $stu_sem = Student_Semester::where('student_id', $student_id)
+                   ->where('semester_id', $current_semester_id)
+                   ->where('status', 1)
+                   ->first();
+
+                   $stu_sem->status = 3;
+
+                   $stu_sem->save();
+
+                   Student_Semester::create([
+                       'semester_id' => $current_semester_id,
+                       'student_id' => $student_id,
+                       'status' => 1
+                   ]);
+
+                    // Check total failures in all semesters
+                    $totalFailures = Student_Semester::where('student_id', $student_id)
+                   ->where('status', 3)
+                   ->count();
+
+                   if ($totalFailures >=4){
+
+
+                      // If student has previously failed the same semester or total failures reach the threshold
+                      $stu_sem->status = 4; // Dropped status
+                      $stu_sem->save();
+
+
+                      $student->status = 4;
+                      $student->save();
+
+
+                      Drop_Student::create([
+                           'student_id' => $student_id,
+                           'semester_id' => $current_semester_id,
+                           'droped_year' => $iranianYear,
+
+                       ]);
+
+
+                       return redirect()->back()->with('error', "Student \"$student->name\" has been dropped from the university due to multiple failures.");
+                       }
+
+
+
+               } else {
+                   // If it's the first failure for this semester
+                   if ($stu_sem) {
+                       $stu_sem->status = 3;
+                       $stu_sem->save();
+                   }
+
+                // Create a new record for the current semester with status 1 (current)
+               Student_Semester::create([
+                   'semester_id' => $current_semester_id,
+                   'student_id' => $student_id,
+                   'status' => 1
+               ]);
+
+               return redirect()->back()->with('error', "Student \"$student->name\" has not completed the credits, cannot be promoted to the next semester (repeat Semester)!");
+             }
+
+               }
+
+               }
+            }
+
+                        */}
+
+                    }
 }

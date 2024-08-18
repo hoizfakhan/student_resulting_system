@@ -215,19 +215,20 @@ export default function CreateChance1({
                 <div className="col-md-3 ms-1">
                   Chance:<span className="mt-3 text-gray-500">First</span>
                 </div>
-                <div className="col-md-3 ms-1">
-                  Year:{" "}
-                  <span className="mt-3 text-gray-500"></span>
-                </div>
 
-                <div className="col-md-3 ms-1 mt-2">
-                  <button
-                    className="btn btn-sm btn-outline-primary ms-2"
-                    onClick={() => setChance(2)}
-                  >
-                    Chance 2
-                  </button>
-                </div>
+
+                {/* Conditionally render the Chance 2 button */}
+
+                  <div className="col-md-3 ms-1 mt-2">
+                    <button
+                      className="btn btn-sm btn-outline-primary ms-2"
+                      onClick={() => setChance(2)}
+                    >
+                      Chance 2
+                    </button>
+                  </div>
+
+
               </div>
             </div>
             <div className="overflow-auto">
@@ -237,6 +238,7 @@ export default function CreateChance1({
                   <table className="w-full text-md text-left rtl:text-right dark:bg-gray-700 dark:text-gray-300">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400 border-b-2 border-gray-500">
                       <tr className="text-nowrap bg-gray-500 text-white align-middle">
+                      <th className="px-3 py-2">ID</th>
                         <th className="px-3 py-2">Name</th>
                         <th className="px-3 py-2">Father Name</th>
                         <th className="px-3 py-2">Home Work (10%)</th>
@@ -250,8 +252,9 @@ export default function CreateChance1({
                       </tr>
                     </thead>
                     <tbody>
-                      {students.data.map((student) => (
+                      {students.data.map((student,index) => (
                         <tr key={student.id}>
+                           <td className='px-3 py-2'>{index + 1}</td>
                           <td className="px-3 py-2">{student.name}</td>
                           <td className="px-3 py-2">{student.father_name}</td>
 
@@ -260,6 +263,7 @@ export default function CreateChance1({
                               className="form-control"
                               type="number"
                               min="0"
+                              max="100"
                               name={`homework_${student.id}`}
                               value={data.marks.find(
                                 (m) => m.student_id === student.id
@@ -275,6 +279,7 @@ export default function CreateChance1({
                               className="form-control"
                               type="number"
                               min="0"
+                              max="0"
                               name={`class_activity_${student.id}`}
                               value={data.marks.find(
                                 (m) => m.student_id === student.id
@@ -290,6 +295,7 @@ export default function CreateChance1({
                               className="form-control"
                               type="number"
                               min="0"
+                              max="100"
                               name={`midterm_${student.id}`}
                               value={data.marks.find(
                                 (m) => m.student_id === student.id
@@ -305,6 +311,7 @@ export default function CreateChance1({
                               className="form-control"
                               type="number"
                               min="0"
+                              max="100"
                               name={`final_${student.id}`}
                               value={data.marks.find(
                                 (m) => m.student_id === student.id
